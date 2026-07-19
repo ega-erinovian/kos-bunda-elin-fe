@@ -20,10 +20,10 @@ export function RentInfoCard({
   status,
   month,
 }: RentInfoCardProps) {
-  const statusMap = {
-    active: { label: "Aktif", variant: "success" as const },
-    overdue: { label: "Terlambat", variant: "destructive" as const },
-    paid: { label: "Lunas", variant: "success" as const },
+  const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+    active: { label: "Aktif", variant: "default" },
+    overdue: { label: "Terlambat", variant: "destructive" },
+    paid: { label: "Lunas", variant: "default" },
   };
 
   const s = statusMap[status] || statusMap.active;

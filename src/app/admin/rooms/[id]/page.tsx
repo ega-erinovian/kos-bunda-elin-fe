@@ -13,11 +13,11 @@ export default function RoomDetailPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/admin/rooms">
+        <Link href="/admin/rooms">
+          <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Detail Kamar</h2>
           <p className="text-sm text-slate-500 mt-1">Kamar #{id}</p>

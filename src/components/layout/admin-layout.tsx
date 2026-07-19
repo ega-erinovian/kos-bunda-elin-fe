@@ -4,7 +4,7 @@ import { type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sidebar } from "./sidebar";
-import { Navbar } from "./navbar";
+import { Navbar } from "./navbar/navbar";
 import { cn } from "@/lib/utils";
 import { mobileNavItems } from "./consts";
 
@@ -19,7 +19,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       <Sidebar />
       <Navbar />
 
-      <main className="min-h-screen bg-background pb-28 pt-16 md:ml-64 md:pb-8 md:pt-0">
+      <main className="min-h-screen bg-background pb-28 pt-16 md:ml-64 md:pb-8 md:pt-16">
         <div className="mx-auto max-w-300 px-4 py-6 md:px-10 md:py-12">{children}</div>
       </main>
 

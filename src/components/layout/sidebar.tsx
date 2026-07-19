@@ -11,7 +11,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLogout } from "@/hooks/use-auth";
+import { useLogout } from "@/hooks/api/use-auth";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },

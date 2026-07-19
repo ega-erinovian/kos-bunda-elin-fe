@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { House, CreditCard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLogout } from "@/hooks/use-auth";
+import { useLogout } from "@/hooks/api/use-auth";
 import { useAuth } from "@/providers/auth-provider";
 import { type ReactNode } from "react";
 

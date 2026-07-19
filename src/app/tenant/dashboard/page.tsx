@@ -1,8 +1,8 @@
 "use client";
 
-import { RentInfoCard } from "@/components/tenant/rent-info-card";
+import { RentInfoCard } from "@/components/features/tenant/rent-info-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PushNotificationManager } from "@/components/pwa/push-notification-manager";
+import { PushNotificationManager } from "@/components/features/pwa/push-notification-manager";
 import { Bell } from "lucide-react";
 
 export default function TenantDashboardPage() {

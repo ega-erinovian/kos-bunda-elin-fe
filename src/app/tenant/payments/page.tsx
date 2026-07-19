@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PaymentHistoryTable } from "@/components/tenant/payment-history-table";
+import { PaymentHistoryTable } from "@/components/features/tenant/payment-history-table";
 
 export default function TenantPaymentsPage() {
   return (

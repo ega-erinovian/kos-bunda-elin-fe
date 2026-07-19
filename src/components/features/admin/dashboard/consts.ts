@@ -78,7 +78,6 @@ export const pushLogs = [
     statusClass: "text-primary",
     detail: "Kamar 201 - Andi",
     time: "10:05 AM",
-    dotColor: "bg-primary",
   },
   {
     label: "Peringatan Tunggakan",
@@ -87,7 +86,6 @@ export const pushLogs = [
     statusClass: "text-error",
     detail: "Kamar 104 - Budi (Device Offline)",
     time: "09:30 AM",
-    dotColor: "bg-error",
   },
   {
     label: "Broadcast Info",
@@ -96,7 +94,6 @@ export const pushLogs = [
     statusClass: "text-primary",
     detail: "Semua Penghuni (Pemeliharaan Air)",
     time: "Kemarin, 15:00",
-    dotColor: "bg-primary",
   },
 ];
 

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { PageHeader } from "@/components/ui/page-header";
-import { CalendarDays, ChevronDown, Plus } from "lucide-react";
+import { CalendarDays, ChevronDown, Megaphone, Plus, StickyNotePlus, UserPlus } from "lucide-react";
 import { ActivityFeedDesktop } from "./activity-feed";
 import { metrics } from "./consts";
 import { DesktopMetricCard } from "./metric-card";
@@ -29,7 +29,7 @@ export function DashboardDesktop() {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <button className="flex items-center gap-2 rounded-xl bg-primary-container px-6 py-3 text-label-md text-on-primary-container shadow-sm transition-colors hover:bg-primary/90 hover:text-white" />
+              <button className="flex cursor-pointer items-center gap-2 rounded-xl bg-primary-container px-6 py-3 text-label-md text-on-primary-container shadow-sm transition-colors hover:bg-primary/90 hover:text-white" />
             }
           >
             <Plus className="h-5 w-5" />
@@ -38,15 +38,15 @@ export function DashboardDesktop() {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-48 rounded-xl p-1">
             <DropdownMenuItem className="rounded-lg px-4 py-3 text-label-md cursor-pointer">
-              Tambah Penghuni
+              <UserPlus /> Tambah Penghuni
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="rounded-lg px-4 py-3 text-label-md cursor-pointer">
-              Catat Pembayaran
+              <StickyNotePlus /> Catat Pembayaran
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="rounded-lg px-4 py-3 text-label-md cursor-pointer">
-              Kirim Broadcast
+              <Megaphone /> Kirim Broadcast
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

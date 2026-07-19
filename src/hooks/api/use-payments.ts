@@ -9,7 +9,10 @@ const PAYMENTS_KEY = ["payments"];
 export function usePayments(params?: { tenantId?: string; month?: number; year?: number }) {
   return useQuery({
     queryKey: [...PAYMENTS_KEY, params],
-    queryFn: () => api.get<Payment[]>("/payments", { params: params as Record<string, string | number | undefined> }),
+    queryFn: () =>
+      api.get<Payment[]>("/payments", {
+        params: params as Record<string, string | number | undefined>,
+      }),
   });
 }
 

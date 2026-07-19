@@ -4,10 +4,7 @@ interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | undefined>;
 }
 
-async function request<T>(
-  endpoint: string,
-  options: RequestOptions = {}
-): Promise<T> {
+async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { params, ...fetchOptions } = options;
 
   let url = `${API_BASE_URL}${endpoint}`;

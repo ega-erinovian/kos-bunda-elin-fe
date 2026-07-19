@@ -1,64 +1,80 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useLogout } from "@/hooks/api/use-auth";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard,
-  DoorOpen,
-  Users,
-  CreditCard,
   LogOut,
+  Plus,
+  Settings
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLogout } from "@/hooks/api/use-auth";
-
-const navItems = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/rooms", label: "Kamar", icon: DoorOpen },
-  { href: "/admin/tenants", label: "Penghuni", icon: Users },
-  { href: "/admin/payments", label: "Pembayaran", icon: CreditCard },
-];
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { navItems } from "./consts";
 
 export function Sidebar() {
   const pathname = usePathname();
   const logout = useLogout();
 
+  const isActive = (href: string) =>
+    href !== "#" && (pathname === href || pathname.startsWith(href + "/"));
+
   return (
-    <aside className="hidden lg:flex lg:flex-col w-64 bg-slate-900 text-white shrink-0">
-      <div className="p-6">
-        <h1 className="text-lg font-bold">Kos Bunda Elin</h1>
-        <p className="text-sm text-slate-400 mt-1">Panel Admin</p>
+    <aside className="fixed left-0 top-0 z-40 hidden h-full w-64 flex-col border-r border-border bg-sidebar p-6 md:flex">
+      <div className="mb-8 flex items-center gap-4 px-2 border-b border-border pb-4">
+        <div>
+          <p className="font-heading text-2xl font-bold text-primary">KosCare Admin</p>
+        </div>
       </div>
-      <nav className="flex-1 px-3 space-y-1">
+
+      <nav className="flex flex-1 flex-col gap-2">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const active = isActive(item.href);
           return (
             <Link
-              key={item.href}
+              key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
-                isActive
-                  ? "bg-slate-800 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800"
+                buttonVariants({ variant: active ? "default" : "ghost" }),
+                "w-full justify-start gap-3 rounded-xl",
+                !active && "text-muted-foreground",
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-5 w-5 shrink-0" />
               {item.label}
             </Link>
           );
         })}
       </nav>
-      <div className="p-3 border-t border-slate-800">
+
+      <div className="mb-6 mt-auto">
+        <Button className="w-full rounded-2xl py-5 shadow-ambient-md">
+          <Plus className="h-4.5 w-4.5" />
+          New Entry
+        </Button>
+      </div>
+
+      <Separator className="my-4" />
+      <div className="flex flex-col gap-1">
+        <Link
+          href="#"
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "w-full justify-start gap-3 rounded-xl text-muted-foreground",
+          )}
+        >
+          <Settings className="h-5 w-5" />
+          Settings
+        </Link>
         <Button
           variant="ghost"
-          className="w-full justify-start text-slate-400 hover:text-white"
           onClick={() => logout.mutate()}
+          className="w-full justify-start gap-3 rounded-xl text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
         >
-          <LogOut className="h-4 w-4 mr-2" />
-          Keluar
+          <LogOut className="h-5 w-5" />
+          Logout
         </Button>
       </div>
     </aside>

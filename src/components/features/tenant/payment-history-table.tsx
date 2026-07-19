@@ -17,18 +17,19 @@ interface PaymentHistoryTableProps {
 }
 
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
-  const statusMap: Record<string, { label: string; variant: "success" | "warning" | "destructive" | "secondary" }> = {
-    paid: { label: "Lunas", variant: "success" },
-    pending: { label: "Menunggu", variant: "warning" },
+  const statusMap: Record<
+    string,
+    { label: string; variant: "default" | "secondary" | "destructive" | "outline" }
+  > = {
+    paid: { label: "Lunas", variant: "default" },
+    pending: { label: "Menunggu", variant: "secondary" },
     late: { label: "Terlambat", variant: "destructive" },
-    partial: { label: "Sebagian", variant: "secondary" },
+    partial: { label: "Sebagian", variant: "outline" },
   };
 
   if (payments.length === 0) {
     return (
-      <div className="text-center py-8 text-sm text-slate-500">
-        Belum ada riwayat pembayaran.
-      </div>
+      <div className="text-center py-8 text-sm text-slate-500">Belum ada riwayat pembayaran.</div>
     );
   }
 

@@ -10,23 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PageHeader } from "@/components/ui/page-header";
 import { Plus } from "lucide-react";
 
 export default function RoomsPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Kamar</h2>
-          <p className="text-sm text-slate-500 mt-1">
-            Kelola data kamar kos.
-          </p>
-        </div>
+      <PageHeader title="Kamar" subtitle="Kelola data kamar kos.">
         <Button>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4" />
           Tambah Kamar
         </Button>
-      </div>
+      </PageHeader>
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Daftar Kamar</CardTitle>

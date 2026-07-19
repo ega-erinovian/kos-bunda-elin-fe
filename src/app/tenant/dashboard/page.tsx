@@ -2,18 +2,14 @@
 
 import { RentInfoCard } from "@/components/features/tenant/rent-info-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader } from "@/components/ui/page-header";
 import { PushNotificationManager } from "@/components/features/pwa/push-notification-manager";
 import { Bell } from "lucide-react";
 
 export default function TenantDashboardPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold tracking-tight">Tagihan Saya</h2>
-        <p className="text-sm text-slate-500 mt-1">
-          Informasi tagihan kos Anda.
-        </p>
-      </div>
+      <PageHeader title="Tagihan Saya" subtitle="Informasi tagihan kos Anda." />
 
       <RentInfoCard price={0} dueDate={10} status="active" />
 

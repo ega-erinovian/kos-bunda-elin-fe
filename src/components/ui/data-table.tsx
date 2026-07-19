@@ -37,11 +37,8 @@ export function DataTable<TData, TValue>({
   pageSize = 10,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
@@ -76,10 +73,7 @@ export function DataTable<TData, TValue>({
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -95,10 +89,7 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -119,13 +110,9 @@ export function DataTable<TData, TValue>({
       {table.getPageCount() > 1 && (
         <div className="flex items-center justify-between border-t px-6 py-4">
           <span className="text-sm text-muted-foreground">
-            Menampilkan{" "}
-            {table.getState().pagination.pageIndex * pageSize + 1}-
-            {Math.min(
-              (table.getState().pagination.pageIndex + 1) * pageSize,
-              data.length
-            )}{" "}
-            dari {data.length} penghuni
+            Menampilkan {table.getState().pagination.pageIndex * pageSize + 1}-
+            {Math.min((table.getState().pagination.pageIndex + 1) * pageSize, data.length)} dari{" "}
+            {data.length} penghuni
           </span>
           <div className="flex items-center gap-1">
             <Button

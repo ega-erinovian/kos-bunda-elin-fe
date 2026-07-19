@@ -22,9 +22,7 @@ export function LoginForm() {
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
         <CardTitle className="text-xl">Masuk</CardTitle>
-        <CardDescription>
-          Panel Admin Kos Bunda Elin
-        </CardDescription>
+        <CardDescription>Panel Admin Kos Bunda Elin</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

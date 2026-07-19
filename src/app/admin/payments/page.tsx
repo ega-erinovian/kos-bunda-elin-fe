@@ -9,9 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PageHeader } from "@/components/ui/page-header";
 import { Badge } from "@/components/ui/badge";
 
-const statusMap: Record<string, { label: string; variant: "success" | "warning" | "destructive" | "secondary" }> = {
+const statusMap: Record<
+  string,
+  { label: string; variant: "success" | "warning" | "destructive" | "secondary" }
+> = {
   paid: { label: "Lunas", variant: "success" },
   pending: { label: "Menunggu", variant: "warning" },
   late: { label: "Terlambat", variant: "destructive" },
@@ -21,12 +25,7 @@ const statusMap: Record<string, { label: string; variant: "success" | "warning" 
 export default function PaymentsPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">Pembayaran</h2>
-        <p className="text-sm text-slate-500 mt-1">
-          Pantau status pembayaran penghuni.
-        </p>
-      </div>
+      <PageHeader title="Pembayaran" subtitle="Pantau status pembayaran penghuni." />
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Riwayat Pembayaran</CardTitle>

@@ -2,9 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { PageHeader } from "@/components/ui/page-header";
 
 export default function TenantDetailPage() {
   const params = useParams();
@@ -12,25 +10,13 @@ export default function TenantDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link href="/admin/tenants">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Detail Penghuni</h2>
-          <p className="text-sm text-slate-500 mt-1">Penghuni #{id}</p>
-        </div>
-      </div>
+      <PageHeader title="Detail Penghuni" subtitle={`Penghuni #${id}`} backHref="/admin/tenants" />
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Informasi Penghuni</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-slate-500">
-            Data penghuni akan ditampilkan di sini.
-          </p>
+          <p className="text-sm text-slate-500">Data penghuni akan ditampilkan di sini.</p>
         </CardContent>
       </Card>
     </div>

@@ -38,7 +38,7 @@ export function TenantLayout({ children }: { children: ReactNode }) {
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
                     isActive
                       ? "bg-slate-100 text-slate-900"
-                      : "text-slate-500 hover:text-slate-900"
+                      : "text-slate-500 hover:text-slate-900",
                   )}
                 >
                   <Icon className="h-3.5 w-3.5" />
@@ -49,12 +49,7 @@ export function TenantLayout({ children }: { children: ReactNode }) {
           </nav>
           <div className="flex-1" />
           <p className="text-xs text-slate-500">{user?.name}</p>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => logout.mutate()}
-          >
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => logout.mutate()}>
             <LogOut className="h-4 w-4" />
           </Button>
         </div>

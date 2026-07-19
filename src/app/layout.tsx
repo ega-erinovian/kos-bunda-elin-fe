@@ -40,10 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="id"
-      className={cn("h-full antialiased", inter.variable, plusJakartaSans.variable)}
-    >
+    <html lang="id" className={cn("h-full antialiased", inter.variable, plusJakartaSans.variable)}>
       <body className="min-h-full flex flex-col">
         <QueryProvider>
           <AuthProvider>{children}</AuthProvider>

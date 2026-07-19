@@ -2,14 +2,8 @@
 
 import { useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import {
-  Search,
-  Plus,
-  Pencil,
-  DoorOpen,
-  Trash2,
-  Filter,
-} from "lucide-react";
+import { Search, Plus, Pencil, DoorOpen, Trash2, Filter } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,12 +102,9 @@ export default function TenantsPage() {
       tenant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tenant.room.toLowerCase().includes(searchQuery.toLowerCase());
     if (statusFilter === "all") return matchesSearch;
-    if (statusFilter === "lunas")
-      return matchesSearch && tenant.dueVariant === "default";
-    if (statusFilter === "telat")
-      return matchesSearch && tenant.dueVariant === "destructive";
-    if (statusFilter === "menunggak")
-      return matchesSearch && tenant.dueVariant === "secondary";
+    if (statusFilter === "lunas") return matchesSearch && tenant.dueVariant === "default";
+    if (statusFilter === "telat") return matchesSearch && tenant.dueVariant === "destructive";
+    if (statusFilter === "menunggak") return matchesSearch && tenant.dueVariant === "secondary";
     return matchesSearch;
   });
 
@@ -126,18 +117,14 @@ export default function TenantsPage() {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
             {row.original.initials}
           </div>
-          <span className="font-medium text-card-foreground">
-            {row.original.name}
-          </span>
+          <span className="font-medium text-card-foreground">{row.original.name}</span>
         </div>
       ),
     },
     {
       accessorKey: "phone",
       header: "No. Telepon",
-      cell: ({ row }) => (
-        <span className="text-muted-foreground">{row.original.phone}</span>
-      ),
+      cell: ({ row }) => <span className="text-muted-foreground">{row.original.phone}</span>,
     },
     {
       accessorKey: "room",
@@ -151,29 +138,19 @@ export default function TenantsPage() {
     {
       accessorKey: "checkInDate",
       header: "Tanggal Masuk",
-      cell: ({ row }) => (
-        <span className="text-muted-foreground">
-          {row.original.checkInDate}
-        </span>
-      ),
+      cell: ({ row }) => <span className="text-muted-foreground">{row.original.checkInDate}</span>,
     },
     {
       accessorKey: "rentCost",
       header: "Biaya Sewa",
       cell: ({ row }) => (
-        <span className="text-muted-foreground">
-          {formatCurrency(row.original.rentCost)}
-        </span>
+        <span className="text-muted-foreground">{formatCurrency(row.original.rentCost)}</span>
       ),
     },
     {
       accessorKey: "dueDate",
       header: "Jatuh Tempo Berikutnya",
-      cell: ({ row }) => (
-        <Badge variant={row.original.dueVariant}>
-          {row.original.dueLabel}
-        </Badge>
-      ),
+      cell: ({ row }) => <Badge variant={row.original.dueVariant}>{row.original.dueLabel}</Badge>,
     },
     {
       id: "actions",
@@ -205,46 +182,36 @@ export default function TenantsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h1 className="font-heading text-heading-lg-mobile text-on-surface md:text-heading-lg">
-            Manajemen Penghuni
-          </h1>
-          <p className="mt-1 text-muted-foreground">
-            Kelola data penghuni kos, status pembayaran, dan informasi kamar.
-          </p>
+      <PageHeader
+        title="Manajemen Penghuni"
+        subtitle="Kelola data penghuni kos, status pembayaran, dan informasi kamar."
+      >
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Cari nama atau kamar..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9"
+          />
         </div>
-        <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center md:w-auto">
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Cari nama atau kamar..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9"
-            />
-          </div>
-          <Select
-            value={statusFilter}
-            onValueChange={(v) => setStatusFilter(v ?? "all")}
-          >
-            <SelectTrigger className="w-full sm:w-auto">
-              <Filter className="h-4 w-4" />
-              <SelectValue placeholder="Status Bayar" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Semua</SelectItem>
-              <SelectItem value="lunas">Lunas</SelectItem>
-              <SelectItem value="telat">Telat</SelectItem>
-              <SelectItem value="menunggak">Menunggak</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button className="w-full rounded-2xl sm:w-auto">
-            <Plus className="h-4 w-4" />
-            Tambah Penghuni
-          </Button>
-        </div>
-      </div>
+        <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
+          <SelectTrigger className="w-full sm:w-auto">
+            <Filter className="h-4 w-4" />
+            <SelectValue placeholder="Status Bayar" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Semua</SelectItem>
+            <SelectItem value="lunas">Lunas</SelectItem>
+            <SelectItem value="telat">Telat</SelectItem>
+            <SelectItem value="menunggak">Menunggak</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button className="w-full rounded-2xl sm:w-auto">
+          <Plus className="h-4 w-4" />
+          Tambah Penghuni
+        </Button>
+      </PageHeader>
 
       <div className="overflow-hidden rounded-[24px] border border-border/30 bg-card shadow-ambient-md">
         <DataTable columns={columns} data={filteredData} pageSize={5} />
@@ -252,4 +219,3 @@ export default function TenantsPage() {
     </div>
   );
 }
-

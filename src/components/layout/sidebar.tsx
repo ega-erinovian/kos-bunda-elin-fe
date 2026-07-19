@@ -41,9 +41,7 @@ export function Sidebar() {
           </AvatarFallback>
         </Avatar>
         <div>
-          <p className="font-heading text-base font-bold text-primary">
-            KosCare Admin
-          </p>
+          <p className="font-heading text-base font-bold text-primary">KosCare Admin</p>
           <p className="text-xs text-muted-foreground">Superuser</p>
         </div>
       </div>
@@ -60,7 +58,7 @@ export function Sidebar() {
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                 active
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />

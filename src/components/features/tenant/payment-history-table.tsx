@@ -17,7 +17,10 @@ interface PaymentHistoryTableProps {
 }
 
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
-  const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+  const statusMap: Record<
+    string,
+    { label: string; variant: "default" | "secondary" | "destructive" | "outline" }
+  > = {
     paid: { label: "Lunas", variant: "default" },
     pending: { label: "Menunggu", variant: "secondary" },
     late: { label: "Terlambat", variant: "destructive" },
@@ -26,9 +29,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
 
   if (payments.length === 0) {
     return (
-      <div className="text-center py-8 text-sm text-slate-500">
-        Belum ada riwayat pembayaran.
-      </div>
+      <div className="text-center py-8 text-sm text-slate-500">Belum ada riwayat pembayaran.</div>
     );
   }
 

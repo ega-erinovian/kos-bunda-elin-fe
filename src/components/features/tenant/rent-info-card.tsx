@@ -13,14 +13,11 @@ interface RentInfoCardProps {
   month?: string;
 }
 
-export function RentInfoCard({
-  roomNumber,
-  price,
-  dueDate,
-  status,
-  month,
-}: RentInfoCardProps) {
-  const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+export function RentInfoCard({ roomNumber, price, dueDate, status, month }: RentInfoCardProps) {
+  const statusMap: Record<
+    string,
+    { label: string; variant: "default" | "secondary" | "destructive" | "outline" }
+  > = {
     active: { label: "Aktif", variant: "default" },
     overdue: { label: "Terlambat", variant: "destructive" },
     paid: { label: "Lunas", variant: "default" },

@@ -13,7 +13,7 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 
 export async function getPushSubscription(
   swRegistration: ServiceWorkerRegistration,
-  vapidPublicKey: string
+  vapidPublicKey: string,
 ): Promise<PushSubscriptionBody | null> {
   try {
     const key = urlBase64ToUint8Array(vapidPublicKey) as unknown as BufferSource;
@@ -45,9 +45,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);

@@ -41,12 +41,7 @@ export function PushNotificationManager() {
   if (!supported) return null;
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={handleSubscribe}
-      disabled={subscribed}
-    >
+    <Button variant="outline" size="sm" onClick={handleSubscribe} disabled={subscribed}>
       {subscribed ? (
         <>
           <BellOff className="h-4 w-4 mr-2" />

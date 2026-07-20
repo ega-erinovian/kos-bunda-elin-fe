@@ -2,10 +2,8 @@
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useLogout } from "@/hooks/api/use-auth";
 import { cn } from "@/lib/utils";
 import {
-  LogOut,
   Plus,
   Settings
 } from "lucide-react";
@@ -15,7 +13,6 @@ import { navItems } from "./consts";
 
 export function Sidebar() {
   const pathname = usePathname();
-  const logout = useLogout();
 
   const isActive = (href: string) =>
     href !== "#" && (pathname === href || pathname.startsWith(href + "/"));
@@ -65,14 +62,6 @@ export function Sidebar() {
             <Settings className="h-5 w-5" />
             Settings
           </Link>
-          <Button
-            variant="ghost"
-            onClick={() => logout.mutate()}
-            className="w-full justify-start gap-3 rounded-xl text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-          >
-            <LogOut className="h-5 w-5" />
-            Logout
-          </Button>
         </div>
       </div>
     </aside>

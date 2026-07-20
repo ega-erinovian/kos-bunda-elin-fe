@@ -1,8 +1,8 @@
 "use client";
 
-import { CircleUser, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 import { NotificationSection } from "./NotificationSection";
+import { ProfileDropdown } from "./ProfileDropdown";
 
 export function Navbar() {
   return (
@@ -24,9 +24,7 @@ export function Navbar() {
 
       <div className="flex items-center gap-2">
         <NotificationSection />
-        <Button variant="ghost" size="icon" className="rounded-full text-primary" aria-label="Profile">
-          <CircleUser className="h-5 w-5" />
-        </Button>
+        <ProfileDropdown />
       </div>
     </header>
   );

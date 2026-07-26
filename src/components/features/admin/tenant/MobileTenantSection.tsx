@@ -88,7 +88,7 @@ export function MobileTenantSection() {
         </div>
       )}
 
-      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
+      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
         <Plus className="h-6 w-6" />
       </button>
 

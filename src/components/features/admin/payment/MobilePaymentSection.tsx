@@ -48,7 +48,7 @@ export function MobilePaymentSection() {
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-heading text-heading-md text-on-surface">Log Komunikasi</h2>
-          <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-primary/5">
+          <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-primary/5">
             <Filter className="h-5 w-5 text-on-surface-variant" />
           </button>
         </div>

@@ -14,7 +14,7 @@ export function QuickActionsMobile() {
             return (
               <button
                 key={action.label}
-                className="flex w-full items-center justify-between rounded-xl bg-card p-4 text-left transition-colors hover:bg-primary/5"
+                className="flex w-full cursor-pointer items-center justify-between rounded-xl bg-card p-4 text-left transition-colors hover:bg-primary/5"
                 style={{
                   boxShadow: "0 4px 20px -2px rgba(134, 167, 137, 0.08)",
                 }}
@@ -38,10 +38,10 @@ export function QuickActionsMobile() {
       </section>
 
       <div className="fixed bottom-24 right-4 z-40 flex flex-col gap-3">
-        <button className="flex items-center justify-center rounded-full bg-secondary p-4 text-secondary-foreground shadow-lg transition-transform hover:scale-105">
+        <button className="flex cursor-pointer items-center justify-center rounded-full bg-secondary p-4 text-secondary-foreground shadow-lg transition-transform hover:scale-105">
           <UserPlus className="h-5 w-5" />
         </button>
-        <button className="flex items-center justify-center rounded-full bg-primary p-4 text-primary-foreground shadow-lg transition-transform hover:scale-105">
+        <button className="flex cursor-pointer items-center justify-center rounded-full bg-primary p-4 text-primary-foreground shadow-lg transition-transform hover:scale-105">
           <CreditCard className="h-5 w-5" />
         </button>
       </div>

@@ -85,6 +85,8 @@ export const dummyPayments: Payment[] = [
   },
 ]
 
+export const LOGS_PAGE_SIZE = 8
+
 export const dummyBroadcastLogs: BroadcastLog[] = [
   {
     id: "1",
@@ -106,6 +108,69 @@ export const dummyBroadcastLogs: BroadcastLog[] = [
     type: "push",
     time: "Oct 12, 10:00 AM",
     status: "failed",
+  },
+  {
+    id: "4",
+    recipient: "Citra Dewi (305)",
+    type: "sms",
+    time: "Oct 11, 08:15 AM",
+    status: "success",
+  },
+  {
+    id: "5",
+    recipient: "Lantai 1 (Group)",
+    type: "push",
+    time: "Oct 10, 04:45 PM",
+    status: "success",
+  },
+  {
+    id: "6",
+    recipient: "Doni Prasetyo (201)",
+    type: "email",
+    time: "Oct 09, 11:30 AM",
+    status: "failed",
+  },
+  {
+    id: "7",
+    recipient: "Lantai 3 (Group)",
+    type: "sms",
+    time: "Oct 08, 09:00 AM",
+    status: "success",
+  },
+  {
+    id: "8",
+    recipient: "Eka Fitriani (103)",
+    type: "push",
+    time: "Oct 07, 01:20 PM",
+    status: "success",
+  },
+  {
+    id: "9",
+    recipient: "Semua Penghuni",
+    type: "sms",
+    time: "Oct 06, 10:00 AM",
+    status: "success",
+  },
+  {
+    id: "10",
+    recipient: "Fajar Nugroho (301)",
+    type: "email",
+    time: "Oct 05, 03:10 PM",
+    status: "failed",
+  },
+  {
+    id: "11",
+    recipient: "Lantai 2 (Group)",
+    type: "push",
+    time: "Oct 04, 07:45 AM",
+    status: "success",
+  },
+  {
+    id: "12",
+    recipient: "Gita Permata (202)",
+    type: "sms",
+    time: "Oct 03, 12:00 PM",
+    status: "success",
   },
 ]
 

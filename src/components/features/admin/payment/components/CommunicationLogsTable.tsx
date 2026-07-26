@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { MessageSquare, Mail, Bell, ArrowRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import type { BroadcastLog } from "../types"
@@ -15,10 +16,13 @@ export function CommunicationLogsTable({ logs }: CommunicationLogsTableProps) {
     <div className="col-span-12 mt-4 overflow-hidden rounded-xl border border-outline-variant/20 bg-surface shadow-ambient-md">
       <div className="flex items-center justify-between border-b border-outline-variant/30 bg-surface-container-lowest/50 px-6 py-4">
         <h3 className="font-heading text-[18px] text-on-surface">Communication Logs</h3>
-        <button className="flex items-center gap-1 text-label-sm text-on-surface-variant transition-colors hover:text-primary">
+        <Link
+          href="/admin/payments/logs"
+          className="flex items-center gap-1 text-label-sm text-on-surface-variant transition-colors hover:text-primary"
+        >
           View All
           <ArrowRight className="h-4 w-4" />
-        </button>
+        </Link>
       </div>
 
       <div className="overflow-x-auto">

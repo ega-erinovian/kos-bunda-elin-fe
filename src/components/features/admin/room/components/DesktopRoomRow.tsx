@@ -36,13 +36,13 @@ export function DesktopRoomRow({ room }: { room: Room }) {
 
       <div className="flex w-full justify-end gap-2 md:w-24">
         <button
-          className="rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
+          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
           title="Edit"
         >
           <Pencil className="h-4 w-4" />
         </button>
         <button
-          className="rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
+          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
           title="Hapus"
         >
           <Trash2 className="h-4 w-4" />

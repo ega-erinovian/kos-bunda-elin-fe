@@ -36,7 +36,7 @@ export function PaymentTrackingCard({
       <div className="mb-6 flex gap-4 border-b border-outline-variant/30">
         <button
           onClick={() => onTabChange("approaching")}
-          className={`px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
+          className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
             activeTab === "approaching"
               ? "border-b-2 border-primary text-primary"
               : "text-on-surface-variant hover:text-primary"
@@ -46,7 +46,7 @@ export function PaymentTrackingCard({
         </button>
         <button
           onClick={() => onTabChange("overdue")}
-          className={`px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
+          className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
             activeTab === "overdue"
               ? "border-b-2 border-primary text-primary"
               : "text-on-surface-variant hover:text-primary"

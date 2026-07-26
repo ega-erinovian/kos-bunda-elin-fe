@@ -67,7 +67,7 @@ export function MobileRoomSection() {
         <button
           onClick={openFilterSheet}
           className={cn(
-            "relative flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-xl border transition-colors",
+            "relative flex h-[46px] w-[46px] shrink-0 cursor-pointer items-center justify-center rounded-xl border transition-colors",
             hasActiveFilter()
               ? "border-primary bg-primary/10 text-primary"
               : "border-outline-variant bg-surface text-on-surface-variant",
@@ -110,7 +110,7 @@ export function MobileRoomSection() {
         onPageChange={handlePageChange}
       />
 
-      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
+      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
         <Plus className="h-6 w-6" />
       </button>
     </div>

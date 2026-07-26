@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { Room, FilterOption, FloorFilter } from "../types";
-import { PAGE_SIZE } from "../constants";
+import type { Room, FilterOption, FloorFilter } from "../../../components/features/admin/room/types";
+import { PAGE_SIZE } from "../../../components/features/admin/room/constants";
 
 export function useRooms(rooms: Room[], pageSize: number = PAGE_SIZE) {
   const [searchQuery, setSearchQuery] = useState("");

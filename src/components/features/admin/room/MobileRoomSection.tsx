@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { FilterOption, FloorFilter } from "./types";
 import { dummyRooms, PAGE_SIZE } from "./constants";
-import { useRooms } from "./hooks/useRooms";
+import { useRooms } from "../../../../hooks/features/admin/useRooms";
 import { FilterSheet } from "./components/FilterSheet";
 import { MobileRoomCard } from "./components/MobileRoomCard";
 import { EmptyState } from "./components/EmptyState";

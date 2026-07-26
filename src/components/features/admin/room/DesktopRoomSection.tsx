@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { dummyRooms, PAGE_SIZE } from "./constants";
-import { useRooms } from "./hooks/useRooms";
+import { useRooms } from "../../../../hooks/features/admin/useRooms";
 import { DesktopRoomRow } from "./components/DesktopRoomRow";
 import { Pagination } from "./components/Pagination";
 
@@ -51,7 +51,7 @@ export function DesktopRoomSection() {
             value={filterStatus}
             onValueChange={(v) => handleFilterStatusChange(v as typeof filterStatus)}
           >
-            <SelectTrigger className="w-[140px] border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
+            <SelectTrigger className="w-35 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
               <Filter className="h-4 w-4 shrink-0" />
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -66,7 +66,7 @@ export function DesktopRoomSection() {
             value={filterFloor === "semua" ? "semua" : String(filterFloor)}
             onValueChange={(v) => handleFilterFloorChange(v === "semua" ? "semua" : Number(v))}
           >
-            <SelectTrigger className="w-[155px] border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
+            <SelectTrigger className="w-38.75 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
               <Layers className="h-4 w-4 shrink-0" />
               <SelectValue placeholder="Lantai" />
             </SelectTrigger>

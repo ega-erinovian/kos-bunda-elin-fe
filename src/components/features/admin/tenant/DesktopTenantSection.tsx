@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select"
 import { formatCurrency } from "@/lib/utils"
 import { dummyTenants, PAGE_SIZE, filterOptions } from "./constants"
-import { useTenants } from "./hooks/useTenants"
+import { useTenants } from "../../../../hooks/features/admin/useTenants"
 import { TenantDetailDialog } from "./components/TenantDetailDialog"
 import type { Tenant } from "./types"
 import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"

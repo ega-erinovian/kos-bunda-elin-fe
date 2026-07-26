@@ -1,7 +1,9 @@
 "use client"
 
-import { Search, Filter } from "lucide-react"
+import Link from "next/link"
+import { Search, Filter, ArrowRight } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { SectionHeader } from "@/components/ui/section-header"
 import { MobilePaymentCard } from "./components/MobilePaymentCard"
 import { MobileBroadcastForm } from "./components/MobileBroadcastForm"
 import { MobileLogEntry } from "./components/MobileLogEntry"
@@ -25,10 +27,15 @@ export function MobilePaymentSection() {
 
       {/* Tagihan Menunggu */}
       <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-heading text-heading-md text-on-surface">Tagihan Menunggu</h2>
-          <span className="text-label-sm font-semibold text-primary">Lihat Semua</span>
-        </div>
+        <SectionHeader title="Tagihan Menunggu">
+          <Link
+            href="/admin/payments/tagihan-menunggu"
+            className="flex items-center gap-1 text-label-sm font-semibold text-primary transition-colors hover:text-primary/80"
+          >
+            Lihat Semua
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </SectionHeader>
         <div className="space-y-3">
           {dummyPayments
             .filter((p) => p.tab === "approaching")
@@ -46,12 +53,11 @@ export function MobilePaymentSection() {
 
       {/* Log Komunikasi */}
       <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-heading text-heading-md text-on-surface">Log Komunikasi</h2>
+        <SectionHeader title="Log Komunikasi">
           <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-primary/5">
             <Filter className="h-5 w-5 text-on-surface-variant" />
           </button>
-        </div>
+        </SectionHeader>
         <div className="space-y-2">
           {dummyBroadcastLogs.map((log) => (
             <MobileLogEntry key={log.id} log={log} />

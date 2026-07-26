@@ -1,6 +1,7 @@
 "use client"
 
-import { FilePen } from "lucide-react"
+import Link from "next/link"
+import { FilePen, ArrowRight } from "lucide-react"
 import { PageHeader } from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
 import { PaymentTrackingCard } from "./components/PaymentTrackingCard"
@@ -48,6 +49,15 @@ export function DesktopPaymentSection() {
           empty={empty}
           from={from}
           to={to}
+          headerAction={
+            <Link
+              href="/admin/payments/tagihan-menunggu"
+              className="flex shrink-0 items-center gap-1 pb-3 text-label-sm font-semibold text-primary transition-colors hover:text-primary/80"
+            >
+              Lihat Semua
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
         />
         <BroadcastCard />
         <CommunicationLogsTable logs={dummyBroadcastLogs} />

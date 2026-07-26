@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { PaymentRow } from "./PaymentRow"
@@ -16,6 +17,7 @@ type PaymentTrackingCardProps = {
   empty: boolean
   from: number
   to: number
+  headerAction?: ReactNode
 }
 
 export function PaymentTrackingCard({
@@ -29,34 +31,34 @@ export function PaymentTrackingCard({
   empty,
   from,
   to,
+  headerAction,
 }: PaymentTrackingCardProps) {
   return (
     <div className="col-span-12 flex flex-col rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md transition-shadow hover:shadow-ambient-lg lg:col-span-8">
-      {/* Tabs */}
-      <div className="mb-6 flex gap-4 border-b border-outline-variant/30">
-        <button
-          onClick={() => onTabChange("approaching")}
-          className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
-            activeTab === "approaching"
-              ? "border-b-2 border-primary text-primary"
-              : "text-on-surface-variant hover:text-primary"
-          }`}
-        >
-          Mendekati Jatuh Tempo (H-3)
-        </button>
-        <button
-          onClick={() => onTabChange("overdue")}
-          className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
-            activeTab === "overdue"
-              ? "border-b-2 border-primary text-primary"
-              : "text-on-surface-variant hover:text-primary"
-          }`}
-        >
-          Menunggak (H+)
-        </button>
+      <div className="mb-6 flex items-center justify-between gap-4 border-b border-outline-variant/30">
+        <div className="flex gap-4">
+          <button
+            onClick={() => onTabChange("approaching")}
+            className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${activeTab === "approaching"
+                ? "border-b-2 border-primary text-primary"
+                : "text-on-surface-variant hover:text-primary"
+              }`}
+          >
+            Mendekati Jatuh Tempo (H-3)
+          </button>
+          <button
+            onClick={() => onTabChange("overdue")}
+            className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${activeTab === "overdue"
+                ? "border-b-2 border-primary text-primary"
+                : "text-on-surface-variant hover:text-primary"
+              }`}
+          >
+            Menunggak (H+)
+          </button>
+        </div>
+        {headerAction}
       </div>
 
-      {/* Payment List */}
       <div className="flex-1 space-y-3 overflow-y-auto pr-2">
         {!empty ? (
           paginatedPayments.map((payment) => (
@@ -71,7 +73,6 @@ export function PaymentTrackingCard({
         )}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between border-t border-outline-variant/30 px-1 pt-4">
           <span className="text-label-sm text-on-surface-variant">

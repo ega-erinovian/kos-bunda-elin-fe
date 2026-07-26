@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import type { Tenant, FilterOption } from "../types"
-import { PAGE_SIZE } from "../constants"
+import type { Tenant, FilterOption } from "../../../components/features/admin/tenant/types"
+import { PAGE_SIZE } from "../../../components/features/admin/tenant/constants"
 
 export function useTenants(tenants: Tenant[], pageSize: number = PAGE_SIZE) {
   const [searchQuery, setSearchQuery] = useState("")

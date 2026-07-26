@@ -54,7 +54,7 @@ export function MobileRoomCard({ room }: { room: Room }) {
               {formatCurrency(room.price)}
             </p>
           </div>
-          <button className="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary">
+          <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary">
             <MoreVertical className="h-5 w-5" />
           </button>
         </div>

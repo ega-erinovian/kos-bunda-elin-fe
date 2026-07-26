@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select"
 import { formatCurrency } from "@/lib/utils"
 import { dummyTenants, PAGE_SIZE, filterOptions } from "./constants"
-import { useTenants } from "./hooks/useTenants"
+import { useTenants } from "../../../../hooks/features/admin/useTenants"
 import { TenantDetailDialog } from "./components/TenantDetailDialog"
 import type { Tenant } from "./types"
 import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
@@ -181,7 +181,7 @@ function DesktopTenantRow({
       <div className="flex flex-2 items-center gap-3">
         <button
           onClick={onDetailClick}
-          className="flex items-center gap-3 text-left"
+          className="flex cursor-pointer items-center gap-3 text-left"
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
             {tenant.initials}
@@ -213,14 +213,14 @@ function DesktopTenantRow({
       <div className="flex w-full justify-end gap-2 md:w-24">
         <button
 
-          className="rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
+          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
           title="Edit"
         >
           <Pencil className="h-4 w-4" />
         </button>
         <button
 
-          className="rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
+          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
           title="Hapus"
         >
           <Trash2 className="h-4 w-4" />

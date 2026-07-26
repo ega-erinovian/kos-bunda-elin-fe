@@ -18,6 +18,7 @@ export const navItems = [
 
 export const mobileNavItems = [
     { href: "/admin/dashboard", label: "Home", icon: Home },
+    { href: "/admin/rooms", label: "Rooms", icon: DoorOpen },
     { href: "/admin/tenants", label: "Tenants", icon: Users },
     { href: "/admin/payments", label: "History", icon: History },
     { href: "#", label: "Profile", icon: User },

@@ -72,7 +72,7 @@ export function DesktopTenantSection() {
             value={filterStatus}
             onValueChange={(v) => handleFilterStatusChange(v as typeof filterStatus)}
           >
-            <SelectTrigger className="w-[155px] border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
+            <SelectTrigger className="w-38.75 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
               <Filter className="h-4 w-4 shrink-0" />
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -89,7 +89,7 @@ export function DesktopTenantSection() {
 
       <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-ambient-md">
         <div className="hidden items-center bg-muted/50 md:flex">
-          <div className="flex-[2] px-6 py-4 text-label-md text-muted-foreground">
+          <div className="flex-2 px-6 py-4 text-label-md text-muted-foreground">
             Nama Penghuni
           </div>
           <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
@@ -178,7 +178,7 @@ function DesktopTenantRow({
 
   return (
     <div className="flex flex-col gap-4 border-t border-border/30 px-6 py-4 transition-colors hover:bg-muted/30 md:flex-row md:items-center md:gap-0">
-      <div className="flex flex-[2] items-center gap-3">
+      <div className="flex flex-2 items-center gap-3">
         <button
           onClick={onDetailClick}
           className="flex items-center gap-3 text-left"

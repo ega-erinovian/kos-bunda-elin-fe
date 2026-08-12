@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={cn("h-full antialiased", inter.variable, plusJakartaSans.variable)}>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col w-full">
         <QueryProvider>
           <AuthProvider>{children}</AuthProvider>
         </QueryProvider>

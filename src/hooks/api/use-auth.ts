@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/auth-provider";
-import { loginAdmin, loginTenant, logout as logoutApi } from "@/lib/auth";
+import { loginAdmin, logout as logoutApi } from "@/lib/auth";
 
 export function useAdminLogin() {
   const router = useRouter();
@@ -12,23 +12,9 @@ export function useAdminLogin() {
   return useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       loginAdmin(email, password),
-    onSuccess: (data) => {
-      setUser(data.user);
+    onSuccess: (user) => {
+      setUser(user);
       router.push("/admin/dashboard");
-    },
-  });
-}
-
-export function useTenantLogin() {
-  const router = useRouter();
-  const { setUser } = useAuth();
-
-  return useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      loginTenant(email, password),
-    onSuccess: (data) => {
-      setUser(data.user);
-      router.push("/tenant/dashboard");
     },
   });
 }

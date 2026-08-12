@@ -1,18 +1,25 @@
 import { api } from "./api";
-import type { AuthResponse, User } from "@/types";
+import type { AdminUser, AuthResponse, LogoutResponse, MeResponse, User } from "@/types";
+
+function toUser(admin: AdminUser): User {
+  return {
+    id: admin.id,
+    name: admin.nama,
+    email: admin.email,
+    role: "admin",
+  };
+}
 
 export async function loginAdmin(email: string, password: string) {
-  return api.post<AuthResponse>("/auth/admin/login", { email, password });
-}
-
-export async function loginTenant(email: string, password: string) {
-  return api.post<AuthResponse>("/auth/tenant/login", { email, password });
-}
-
-export async function logout() {
-  return api.post<{ message: string }>("/auth/logout");
+  const res = await api.post<AuthResponse>("/auth/login", { email, password });
+  return toUser(res.data.admin);
 }
 
 export async function getCurrentUser() {
-  return api.get<User>("/auth/me");
+  const res = await api.get<MeResponse>("/auth/me");
+  return toUser(res.data);
+}
+
+export async function logout() {
+  return api.post<LogoutResponse>("/auth/logout");
 }

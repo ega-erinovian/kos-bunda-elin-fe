@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { getCurrentUser } from "@/lib/auth";
+import { onUnauthorized } from "@/lib/api";
 import type { User } from "@/types";
 
 interface AuthContextType {
@@ -20,30 +22,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("user");
-    if (stored) {
+    let active = true;
+
+    async function restoreSession() {
       try {
-        setUser(JSON.parse(stored));
+        const currentUser = await getCurrentUser();
+        if (active) setUser(currentUser);
       } catch {
-        sessionStorage.removeItem("user");
+        if (active) setUser(null);
+      } finally {
+        if (active) setIsLoading(false);
       }
     }
-    setIsLoading(false);
+
+    restoreSession();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const handleSetUser = (u: User | null) => {
-    setUser(u);
-    if (u) {
-      sessionStorage.setItem("user", JSON.stringify(u));
-    } else {
-      sessionStorage.removeItem("user");
-    }
-  };
+  const handleUnauthorized = useCallback(() => setUser(null), []);
+  useEffect(() => onUnauthorized(handleUnauthorized), [handleUnauthorized]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, setUser: handleSetUser }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, isLoading, setUser }}>{children}</AuthContext.Provider>
   );
 }
 

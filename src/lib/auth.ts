@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api, ApiError } from "./api";
 import type { AdminUser, AuthResponse, LogoutResponse, MeResponse, User } from "@/types";
 
 function toUser(admin: AdminUser): User {
@@ -13,6 +13,13 @@ function toUser(admin: AdminUser): User {
 export async function loginAdmin(email: string, password: string) {
   const res = await api.post<AuthResponse>("/auth/login", { email, password });
   return toUser(res.data.admin);
+}
+
+export async function loginTenant(_email: string, _password: string): Promise<User> {
+  // TODO: Replace with the real tenant endpoint once the backend is ready.
+  void _email;
+  void _password;
+  throw new ApiError("Login penyewa belum tersedia.", 501);
 }
 
 export async function getCurrentUser() {

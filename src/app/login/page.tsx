@@ -1,9 +1,10 @@
-import { LoginForm } from "@/components/features/admin/login-form";
+import { AdminLoginPage } from "@/components/features/admin/auth/login/AdminLoginPage";
 
-export default function LoginPage() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
-      <LoginForm />
-    </div>
-  );
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reason?: string }>;
+}) {
+  const { reason } = await searchParams;
+  return <AdminLoginPage reason={reason} />;
 }

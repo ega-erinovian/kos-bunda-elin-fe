@@ -1,11 +1,55 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | undefined>;
+  skipAuthRefresh?: boolean;
+}
+
+const AUTH_EXCLUDED_ENDPOINTS = ["/auth/login", "/auth/logout", "/auth/refresh"];
+
+const UNAUTHORIZED_EVENT = "auth:unauthorized";
+
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
+export function onUnauthorized(handler: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener(UNAUTHORIZED_EVENT, handler);
+  return () => window.removeEventListener(UNAUTHORIZED_EVENT, handler);
+}
+
+function dispatchUnauthorized() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+  }
+}
+
+let refreshPromise: Promise<boolean> | null = null;
+
+function refreshSession(): Promise<boolean> {
+  if (!refreshPromise) {
+    refreshPromise = fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => res.ok)
+      .catch(() => false)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
 }
 
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
-  const { params, ...fetchOptions } = options;
+  const { params, skipAuthRefresh = false, ...fetchOptions } = options;
 
   let url = `${API_BASE_URL}${endpoint}`;
 
@@ -20,20 +64,30 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     if (qs) url += `?${qs}`;
   }
 
-  const res = await fetch(url, {
+  const buildInit = () => ({
     headers: {
       "Content-Type": "application/json",
-      ...fetchOptions.headers,
+      ...(fetchOptions.headers ?? {}),
     },
-    credentials: "include",
+    credentials: "include" as const,
     ...fetchOptions,
   });
+
+  const res = await fetch(url, buildInit());
+
+  if (res.status === 401 && !skipAuthRefresh && !AUTH_EXCLUDED_ENDPOINTS.includes(endpoint)) {
+    const refreshed = await refreshSession();
+    if (refreshed) {
+      return request<T>(endpoint, { ...options, skipAuthRefresh: true });
+    }
+    dispatchUnauthorized();
+  }
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({
       message: "An unexpected error occurred",
     }));
-    throw new Error(error.message || `Request failed with status ${res.status}`);
+    throw new ApiError(error.message || `Request failed with status ${res.status}`, res.status);
   }
 
   return res.json();

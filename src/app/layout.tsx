@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
+import { Toaster } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
@@ -41,10 +42,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={cn("h-full antialiased", inter.variable, plusJakartaSans.variable)}>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col w-full">
         <QueryProvider>
           <AuthProvider>{children}</AuthProvider>
         </QueryProvider>
+        <Toaster />
       </body>
     </html>
   );

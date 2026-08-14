@@ -1,6 +1,6 @@
-import User from "./User";
+import type AdminUser from "./AdminUser";
 
 export default interface AuthResponse {
-  token: string;
-  user: User;
+  success: boolean;
+  data: { admin: AdminUser };
 }

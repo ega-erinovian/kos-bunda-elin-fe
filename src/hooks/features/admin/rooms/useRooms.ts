@@ -1,14 +1,36 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import type { Room, FilterOption, FloorFilter } from "../../../components/features/admin/room/types";
-import { PAGE_SIZE } from "../../../components/features/admin/room/constants";
+import { useMemo, useState } from "react";
+import { useRooms as useRoomsApi } from "@/hooks/api/use-rooms";
+import type {
+  FilterOption,
+  FloorFilter,
+  FloorOption,
+} from "@/components/features/admin/room/types";
+import { PAGE_SIZE } from "@/components/features/admin/room/constants";
+import { mapRoom } from "@/components/features/admin/room/mappers";
 
-export function useRooms(rooms: Room[], pageSize: number = PAGE_SIZE) {
+const ROOMS_LIMIT = 100;
+
+export function useRooms(pageSize: number = PAGE_SIZE) {
+  const { data, isLoading, isError, refetch } = useRoomsApi({ limit: ROOMS_LIMIT });
+
+  const rooms = useMemo(() => (data?.data ?? []).map(mapRoom), [data]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterOption>("semua");
   const [filterFloor, setFilterFloor] = useState<FloorFilter>("semua");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const floorOptions = useMemo<FloorOption[]>(
+    () => [
+      { key: "semua", label: "Semua Lantai" },
+      ...[...new Set(rooms.map((room) => room.floor))]
+        .sort((a, b) => a - b)
+        .map((floor) => ({ key: floor, label: `Lantai ${floor}` })),
+    ],
+    [rooms],
+  );
 
   const filteredRooms = useMemo(() => {
     return rooms.filter((room) => {
@@ -66,14 +88,15 @@ export function useRooms(rooms: Room[], pageSize: number = PAGE_SIZE) {
   }
 
   return {
+    rooms,
+    floorOptions,
+    isLoading,
+    isError,
+    refetch,
     searchQuery,
-    setSearchQuery,
     filterStatus,
-    setFilterStatus,
     filterFloor,
-    setFilterFloor,
     currentPage,
-    setCurrentPage,
     filteredRooms,
     totalPages,
     paginatedRooms,

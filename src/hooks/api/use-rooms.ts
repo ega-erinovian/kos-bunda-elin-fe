@@ -2,21 +2,37 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import type { Room } from "@/types";
+import type { PaginatedResponse, Room } from "@/types";
 
 const ROOMS_KEY = ["rooms"];
 
-export function useRooms() {
+export type RoomListParams = {
+  page?: number;
+  limit?: number;
+  status?: Room["status"];
+  search?: string;
+};
+
+export type CreateRoomInput = {
+  nomor: string;
+  lantai: string;
+  harga: number;
+  status?: Room["status"];
+};
+
+export type UpdateRoomInput = Partial<CreateRoomInput>;
+
+export function useRooms(params?: RoomListParams) {
   return useQuery({
-    queryKey: ROOMS_KEY,
-    queryFn: () => api.get<Room[]>("/rooms"),
+    queryKey: [...ROOMS_KEY, params],
+    queryFn: () => api.get<PaginatedResponse<Room>>("/kamar", { params }),
   });
 }
 
 export function useRoom(id: string) {
   return useQuery({
     queryKey: [...ROOMS_KEY, id],
-    queryFn: () => api.get<Room>(`/rooms/${id}`),
+    queryFn: () => api.get<Room>(`/kamar/${id}`),
     enabled: !!id,
   });
 }
@@ -24,8 +40,7 @@ export function useRoom(id: string) {
 export function useCreateRoom() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: Omit<Room, "id" | "createdAt" | "updatedAt">) =>
-      api.post<Room>("/rooms", data),
+    mutationFn: (data: CreateRoomInput) => api.post<Room>("/kamar", data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ROOMS_KEY }),
   });
 }
@@ -33,8 +48,8 @@ export function useCreateRoom() {
 export function useUpdateRoom() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...data }: Partial<Room> & { id: string }) =>
-      api.put<Room>(`/rooms/${id}`, data),
+    mutationFn: ({ id, ...data }: UpdateRoomInput & { id: string }) =>
+      api.patch<Room>(`/kamar/${id}`, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ROOMS_KEY }),
   });
 }
@@ -42,7 +57,7 @@ export function useUpdateRoom() {
 export function useDeleteRoom() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api.delete(`/rooms/${id}`),
+    mutationFn: (id: string) => api.delete<Room>(`/kamar/${id}`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ROOMS_KEY }),
   });
 }

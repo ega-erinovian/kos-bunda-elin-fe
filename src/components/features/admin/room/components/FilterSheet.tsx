@@ -1,13 +1,14 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import type { FilterOption, FloorFilter } from "../types";
-import { statusFilterOptions, floorFilterOptions } from "../constants";
+import type { FilterOption, FloorFilter, FloorOption } from "../types";
+import { statusFilterOptions } from "../constants";
 
 type FilterSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   draftStatus: FilterOption;
   draftFloor: FloorFilter;
+  floorOptions: FloorOption[];
   onDraftStatusChange: (v: FilterOption) => void;
   onDraftFloorChange: (v: FloorFilter) => void;
   onApply: () => void;
@@ -19,6 +20,7 @@ export function FilterSheet({
   onOpenChange,
   draftStatus,
   draftFloor,
+  floorOptions,
   onDraftStatusChange,
   onDraftFloorChange,
   onApply,
@@ -59,7 +61,7 @@ export function FilterSheet({
               Lantai
             </h3>
             <div className="flex flex-wrap gap-2">
-              {floorFilterOptions.map((opt) => (
+              {floorOptions.map((opt) => (
                 <button
                   key={String(opt.key)}
                   onClick={() => onDraftFloorChange(opt.key)}

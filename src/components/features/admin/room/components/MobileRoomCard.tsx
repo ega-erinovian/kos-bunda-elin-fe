@@ -6,7 +6,7 @@ import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
 export function MobileRoomCard({ room }: { room: Room }) {
-  const isMaintenance = room.status === "perbaikan";
+  const isMaintenance = room.status === "nonaktif";
   const hasTenant = room.status === "terisi" && room.tenant;
 
   return (

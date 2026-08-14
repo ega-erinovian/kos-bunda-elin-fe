@@ -5,13 +5,19 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { dummyRooms, PAGE_SIZE } from "./constants";
-import { useRooms } from "../../../../hooks/features/admin/useRooms";
+import { PAGE_SIZE, statusFilterOptions } from "./constants";
+import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
 import { DesktopRoomRow } from "./components/DesktopRoomRow";
 import { Pagination } from "./components/Pagination";
+import { RoomListSkeleton } from "./components/RoomListSkeleton";
+import { RoomListError } from "./components/RoomListError";
 
 export function DesktopRoomSection() {
   const {
+    floorOptions,
+    isLoading,
+    isError,
+    refetch,
     searchQuery,
     filterStatus,
     filterFloor,
@@ -23,7 +29,7 @@ export function DesktopRoomSection() {
     handlePageChange,
     handleFilterStatusChange,
     handleFilterFloorChange,
-  } = useRooms(dummyRooms);
+  } = useRooms();
 
   const empty = paginatedRooms.length === 0;
 
@@ -56,10 +62,11 @@ export function DesktopRoomSection() {
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent align="start">
-              <SelectItem value="semua">Semua</SelectItem>
-              <SelectItem value="terisi">Terisi</SelectItem>
-              <SelectItem value="kosong">Kosong</SelectItem>
-              <SelectItem value="perbaikan">Perbaikan</SelectItem>
+              {statusFilterOptions.map((opt) => (
+                <SelectItem key={opt.key} value={opt.key}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Select
@@ -71,26 +78,33 @@ export function DesktopRoomSection() {
               <SelectValue placeholder="Lantai" />
             </SelectTrigger>
             <SelectContent align="start">
-              <SelectItem value="semua">Semua Lantai</SelectItem>
-              <SelectItem value="1">Lantai 1</SelectItem>
-              <SelectItem value="2">Lantai 2</SelectItem>
-              <SelectItem value="3">Lantai 3</SelectItem>
+              {floorOptions.map((opt) => (
+                <SelectItem key={String(opt.key)} value={String(opt.key)}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
       <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-ambient-md">
-        <div className="hidden items-center bg-muted/50 md:flex">
-          <div className="flex-2 px-6 py-4 text-label-md text-muted-foreground">Kamar</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Penghuni</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Lantai</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Harga</div>
-          <div className="flex-[1.5] px-6 py-4 text-label-md text-muted-foreground">Status</div>
-          <div className="w-24 px-6 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
+        <div className="hidden items-center bg-muted/50 px-6 md:flex">
+          <div className="w-56 py-4 text-label-md text-muted-foreground">Kamar</div>
+          <div className="w-100 py-4 text-label-md text-muted-foreground">Penghuni</div>
+          <div className="w-24 py-4 text-label-md text-muted-foreground">Lantai</div>
+          <div className="w-36 py-4 text-label-md text-muted-foreground">Harga</div>
+          <div className="w-28 py-4 text-label-md text-muted-foreground">Status</div>
+          <div className="w-24 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
         </div>
 
-        {!empty ? (
+        {isLoading ? (
+          <RoomListSkeleton variant="desktop" />
+        ) : isError ? (
+          <div className="border-t border-border/30 px-6 py-6">
+            <RoomListError onRetry={refetch} />
+          </div>
+        ) : !empty ? (
           paginatedRooms.map((room) => <DesktopRoomRow key={room.id} room={room} />)
         ) : (
           <div className="py-12 text-center text-body-md text-muted-foreground">

@@ -4,16 +4,21 @@ import { useState } from "react";
 import { Search, Plus, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import type { FilterOption, FloorFilter } from "./types";
-import { dummyRooms, PAGE_SIZE } from "./constants";
-import { useRooms } from "../../../../hooks/features/admin/useRooms";
+import { PAGE_SIZE } from "./constants";
+import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
 import { FilterSheet } from "./components/FilterSheet";
 import { MobileRoomCard } from "./components/MobileRoomCard";
 import { EmptyState } from "./components/EmptyState";
 import { Pagination } from "./components/Pagination";
+import { RoomListSkeleton } from "./components/RoomListSkeleton";
+import { RoomListError } from "./components/RoomListError";
 
 export function MobileRoomSection() {
   const {
+    floorOptions,
+    isLoading,
+    isError,
+    refetch,
     searchQuery,
     filterStatus,
     filterFloor,
@@ -23,29 +28,17 @@ export function MobileRoomSection() {
     paginatedRooms,
     handleSearch,
     handlePageChange,
-    applyFilters,
+    handleFilterStatusChange,
+    handleFilterFloorChange,
     hasActiveFilter,
     activeFilterCount,
-  } = useRooms(dummyRooms);
+  } = useRooms();
 
   const [filterOpen, setFilterOpen] = useState(false);
-  const [draftStatus, setDraftStatus] = useState<FilterOption>(filterStatus);
-  const [draftFloor, setDraftFloor] = useState<FloorFilter>(filterFloor);
-
-  function openFilterSheet() {
-    setDraftStatus(filterStatus);
-    setDraftFloor(filterFloor);
-    setFilterOpen(true);
-  }
-
-  function onApplyFilters() {
-    applyFilters(draftStatus, draftFloor);
-    setFilterOpen(false);
-  }
 
   function onResetFilters() {
-    setDraftStatus("semua");
-    setDraftFloor("semua");
+    handleFilterStatusChange("semua");
+    handleFilterFloorChange("semua");
   }
 
   return (
@@ -61,13 +54,13 @@ export function MobileRoomSection() {
             placeholder="Cari kamar..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="h-[46px] w-full rounded-xl border-secondary-container pl-10 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
+            className="h-11.5 w-full rounded-xl border-secondary-container pl-10 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
           />
         </div>
         <button
-          onClick={openFilterSheet}
+          onClick={() => setFilterOpen(true)}
           className={cn(
-            "relative flex h-[46px] w-[46px] shrink-0 cursor-pointer items-center justify-center rounded-xl border transition-colors",
+            "relative flex h-11.5 w-11.5 shrink-0 cursor-pointer items-center justify-center rounded-xl border transition-colors",
             hasActiveFilter()
               ? "border-primary bg-primary/10 text-primary"
               : "border-outline-variant bg-surface text-on-surface-variant",
@@ -85,16 +78,20 @@ export function MobileRoomSection() {
       <FilterSheet
         open={filterOpen}
         onOpenChange={setFilterOpen}
-        draftStatus={draftStatus}
-        draftFloor={draftFloor}
-        onDraftStatusChange={setDraftStatus}
-        onDraftFloorChange={setDraftFloor}
-        onApply={onApplyFilters}
+        filterStatus={filterStatus}
+        filterFloor={filterFloor}
+        floorOptions={floorOptions}
+        onStatusChange={handleFilterStatusChange}
+        onFloorChange={handleFilterFloorChange}
         onReset={onResetFilters}
       />
 
       <div className="flex flex-col gap-4 pb-4">
-        {paginatedRooms.length > 0 ? (
+        {isLoading ? (
+          <RoomListSkeleton variant="mobile" />
+        ) : isError ? (
+          <RoomListError onRetry={refetch} />
+        ) : paginatedRooms.length > 0 ? (
           paginatedRooms.map((room) => <MobileRoomCard key={room.id} room={room} />)
         ) : (
           <EmptyState />

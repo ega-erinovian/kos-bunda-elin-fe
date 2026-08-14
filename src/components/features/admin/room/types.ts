@@ -1,4 +1,4 @@
-export type RoomStatus = "terisi" | "kosong" | "perbaikan";
+export type RoomStatus = "terisi" | "kosong" | "nonaktif";
 
 export type Room = {
   id: string;
@@ -14,3 +14,4 @@ export type Room = {
 
 export type FilterOption = "semua" | RoomStatus;
 export type FloorFilter = "semua" | number;
+export type FloorOption = { key: FloorFilter; label: string };

@@ -1,27 +1,27 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import type { FilterOption, FloorFilter } from "../types";
-import { statusFilterOptions, floorFilterOptions } from "../constants";
+import type { FilterOption, FloorFilter, FloorOption } from "../types";
+import { statusFilterOptions } from "../constants";
 
 type FilterSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  draftStatus: FilterOption;
-  draftFloor: FloorFilter;
-  onDraftStatusChange: (v: FilterOption) => void;
-  onDraftFloorChange: (v: FloorFilter) => void;
-  onApply: () => void;
+  filterStatus: FilterOption;
+  filterFloor: FloorFilter;
+  floorOptions: FloorOption[];
+  onStatusChange: (v: FilterOption) => void;
+  onFloorChange: (v: FloorFilter) => void;
   onReset: () => void;
 };
 
 export function FilterSheet({
   open,
   onOpenChange,
-  draftStatus,
-  draftFloor,
-  onDraftStatusChange,
-  onDraftFloorChange,
-  onApply,
+  filterStatus,
+  filterFloor,
+  floorOptions,
+  onStatusChange,
+  onFloorChange,
   onReset,
 }: FilterSheetProps) {
   return (
@@ -40,10 +40,10 @@ export function FilterSheet({
               {statusFilterOptions.map((opt) => (
                 <button
                   key={opt.key}
-                  onClick={() => onDraftStatusChange(opt.key)}
+                  onClick={() => onStatusChange(opt.key)}
                   className={cn(
                     "rounded-lg border px-4 py-2 text-label-md transition-colors cursor-pointer",
-                    draftStatus === opt.key
+                    filterStatus === opt.key
                       ? "border-primary bg-primary text-on-primary"
                       : "border-outline-variant bg-surface text-on-surface-variant",
                   )}
@@ -59,13 +59,13 @@ export function FilterSheet({
               Lantai
             </h3>
             <div className="flex flex-wrap gap-2">
-              {floorFilterOptions.map((opt) => (
+              {floorOptions.map((opt) => (
                 <button
                   key={String(opt.key)}
-                  onClick={() => onDraftFloorChange(opt.key)}
+                  onClick={() => onFloorChange(opt.key)}
                   className={cn(
                     "rounded-lg border px-4 py-2 text-label-md transition-colors cursor-pointer",
-                    draftFloor === opt.key
+                    filterFloor === opt.key
                       ? "border-primary bg-primary text-on-primary"
                       : "border-outline-variant bg-surface text-on-surface-variant",
                   )}
@@ -83,12 +83,6 @@ export function FilterSheet({
             className="flex-1 cursor-pointer rounded-lg border border-outline-variant py-3 text-label-md text-on-surface-variant transition-colors"
           >
             Reset
-          </button>
-          <button
-            onClick={onApply}
-            className="flex-1 cursor-pointer rounded-lg bg-primary py-3 text-label-md text-on-primary transition-colors"
-          >
-            Terapkan
           </button>
         </div>
       </SheetContent>

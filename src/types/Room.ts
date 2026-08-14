@@ -1,10 +1,11 @@
 export default interface Room {
   id: string;
-  number: string;
-  floor: number;
-  price: number;
-  status: "occupied" | "available" | "maintenance";
-  tenantId?: string;
+  nomor: string;
+  lantai?: string;
+  harga: number;
+  status: "KOSONG" | "TERISI" | "NONAKTIF";
+  _count?: { penyewa: number };
+  penyewa?: { id: string; nama: string }[];
   createdAt: string;
   updatedAt: string;
 }

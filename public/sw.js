@@ -1,4 +1,4 @@
-const CACHE_NAME = "kos-bunda-elin-v1";
+const CACHE_NAME = "kos-bunda-elin-v2";
 
 const PRECACHE_URLS = ["/", "/offline"];
 
@@ -24,6 +24,28 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  // Navigations must be network-first so deploys and code changes (e.g.
+  // updated JS chunks) are always served, falling back to the cache offline.
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+          return response;
+        })
+        .catch(() =>
+          caches.match(event.request).then(
+            (cached) => cached || caches.match("/offline") || new Response("Offline", { status: 503 })
+          )
+        )
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)

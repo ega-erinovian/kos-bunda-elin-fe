@@ -10,6 +10,7 @@ import { AuthInputField } from "./components/login/AuthInputField";
 
 interface LoginFormProps {
   variant?: LoginRole;
+  reason?: string;
 }
 
 const VARIANT_COPY: Record<LoginRole, { title: string; description: string; emailPlaceholder: string }> = {
@@ -25,7 +26,13 @@ const VARIANT_COPY: Record<LoginRole, { title: string; description: string; emai
   },
 };
 
-export function LoginForm({ variant = "admin" }: LoginFormProps) {
+const REASON_MESSAGES: Record<string, string> = {
+  unauthorized: "Anda harus masuk terlebih dahulu untuk mengakses halaman admin.",
+  forbidden: "Akun Anda tidak memiliki izin untuk mengakses halaman admin.",
+  expired: "Sesi Anda telah berakhir. Silakan masuk kembali.",
+};
+
+export function LoginForm({ variant = "admin", reason }: LoginFormProps) {
   const router = useRouter();
   const { user, isLoading } = useAuth();
   const login = useLogin(variant);
@@ -53,6 +60,12 @@ export function LoginForm({ variant = "admin" }: LoginFormProps) {
         </h1>
         <p className="text-body-md text-on-surface-variant">{copy.description}</p>
       </div>
+
+      {reason && REASON_MESSAGES[reason] && (
+        <p role="alert" className="text-center text-label-md text-destructive">
+          {REASON_MESSAGES[reason]}
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <AuthInputField

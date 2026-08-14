@@ -1,8 +1,10 @@
+"use client"
+
 import { LoginForm } from "@/components/features/auth/LoginForm";
 import { BrandLogo } from "./components/BrandLogo";
 import { FeaturesSection } from "./components/FeaturesSection";
 
-export function AdminLoginPage() {
+export function AdminLoginPage({ reason }: { reason?: string }) {
   return (
     <main className="min-h-dvh bg-surface">
       <div className="grid min-h-dvh lg:grid-cols-2">
@@ -17,7 +19,7 @@ export function AdminLoginPage() {
             <div className="mb-8 w-full lg:hidden">
               <BrandLogo variant="mobile" />
             </div>
-            <LoginForm />
+            <LoginForm reason={reason} />
           </div>
         </div>
       </div>

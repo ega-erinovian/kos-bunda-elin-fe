@@ -10,6 +10,7 @@ export type RoomListParams = {
   page?: number;
   limit?: number;
   status?: Room["status"];
+  lantai?: string;
   search?: string;
 };
 

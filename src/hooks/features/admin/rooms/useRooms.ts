@@ -1,35 +1,52 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRooms as useRoomsApi } from "@/hooks/api/use-rooms";
+import {
+  useRooms as useRoomsApi,
+  type RoomListParams,
+} from "@/hooks/api/use-rooms";
 import type {
   FilterOption,
   FloorFilter,
   FloorOption,
 } from "@/components/features/admin/room/types";
+import type { Room as ApiRoom } from "@/types";
 import { PAGE_SIZE } from "@/components/features/admin/room/constants";
 import { mapRoom } from "@/components/features/admin/room/mappers";
 
 const ROOMS_LIMIT = 100;
 
 export function useRooms(pageSize: number = PAGE_SIZE) {
-  const { data, isLoading, isError, refetch } = useRoomsApi({ limit: ROOMS_LIMIT });
-
-  const rooms = useMemo(() => (data?.data ?? []).map(mapRoom), [data]);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterOption>("semua");
   const [filterFloor, setFilterFloor] = useState<FloorFilter>("semua");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const apiParams = useMemo<RoomListParams>(() => {
+    const params: RoomListParams = { limit: ROOMS_LIMIT };
+    if (filterStatus !== "semua") {
+      params.status = filterStatus.toUpperCase() as ApiRoom["status"];
+    }
+    if (filterFloor !== "semua") {
+      params.lantai = String(filterFloor);
+    }
+    return params;
+  }, [filterStatus, filterFloor]);
+
+  const { data, isLoading, isError, refetch } = useRoomsApi(apiParams);
+  const { data: optionsData } = useRoomsApi({ limit: ROOMS_LIMIT });
+
+  const rooms = useMemo(() => (data?.data ?? []).map(mapRoom), [data]);
+  const allRooms = useMemo(() => (optionsData?.data ?? []).map(mapRoom), [optionsData]);
+
   const floorOptions = useMemo<FloorOption[]>(
     () => [
       { key: "semua", label: "Semua Lantai" },
-      ...[...new Set(rooms.map((room) => room.floor))]
+      ...[...new Set(allRooms.map((room) => room.floor))]
         .sort((a, b) => a - b)
         .map((floor) => ({ key: floor, label: `Lantai ${floor}` })),
     ],
-    [rooms],
+    [allRooms],
   );
 
   const filteredRooms = useMemo(() => {
@@ -42,11 +59,9 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
         )
           return false;
       }
-      if (filterStatus !== "semua" && room.status !== filterStatus) return false;
-      if (filterFloor !== "semua" && room.floor !== filterFloor) return false;
       return true;
     });
-  }, [rooms, searchQuery, filterStatus, filterFloor]);
+  }, [rooms, searchQuery]);
 
   const totalPages = Math.ceil(filteredRooms.length / pageSize);
   const paginatedRooms = filteredRooms.slice(
@@ -70,12 +85,6 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
 
   function handleFilterFloorChange(value: FloorFilter) {
     setFilterFloor(value);
-    setCurrentPage(1);
-  }
-
-  function applyFilters(status: FilterOption, floor: FloorFilter) {
-    setFilterStatus(status);
-    setFilterFloor(floor);
     setCurrentPage(1);
   }
 
@@ -104,7 +113,6 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
     handlePageChange,
     handleFilterStatusChange,
     handleFilterFloorChange,
-    applyFilters,
     hasActiveFilter,
     activeFilterCount,
   };

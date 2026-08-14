@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Search, Plus, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import type { FilterOption, FloorFilter } from "./types";
 import { PAGE_SIZE } from "./constants";
 import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
 import { FilterSheet } from "./components/FilterSheet";
@@ -29,29 +28,17 @@ export function MobileRoomSection() {
     paginatedRooms,
     handleSearch,
     handlePageChange,
-    applyFilters,
+    handleFilterStatusChange,
+    handleFilterFloorChange,
     hasActiveFilter,
     activeFilterCount,
   } = useRooms();
 
   const [filterOpen, setFilterOpen] = useState(false);
-  const [draftStatus, setDraftStatus] = useState<FilterOption>(filterStatus);
-  const [draftFloor, setDraftFloor] = useState<FloorFilter>(filterFloor);
-
-  function openFilterSheet() {
-    setDraftStatus(filterStatus);
-    setDraftFloor(filterFloor);
-    setFilterOpen(true);
-  }
-
-  function onApplyFilters() {
-    applyFilters(draftStatus, draftFloor);
-    setFilterOpen(false);
-  }
 
   function onResetFilters() {
-    setDraftStatus("semua");
-    setDraftFloor("semua");
+    handleFilterStatusChange("semua");
+    handleFilterFloorChange("semua");
   }
 
   return (
@@ -71,7 +58,7 @@ export function MobileRoomSection() {
           />
         </div>
         <button
-          onClick={openFilterSheet}
+          onClick={() => setFilterOpen(true)}
           className={cn(
             "relative flex h-11.5 w-11.5 shrink-0 cursor-pointer items-center justify-center rounded-xl border transition-colors",
             hasActiveFilter()
@@ -91,12 +78,11 @@ export function MobileRoomSection() {
       <FilterSheet
         open={filterOpen}
         onOpenChange={setFilterOpen}
-        draftStatus={draftStatus}
-        draftFloor={draftFloor}
+        filterStatus={filterStatus}
+        filterFloor={filterFloor}
         floorOptions={floorOptions}
-        onDraftStatusChange={setDraftStatus}
-        onDraftFloorChange={setDraftFloor}
-        onApply={onApplyFilters}
+        onStatusChange={handleFilterStatusChange}
+        onFloorChange={handleFilterFloorChange}
         onReset={onResetFilters}
       />
 

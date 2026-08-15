@@ -3,7 +3,15 @@ import { formatCurrency } from "@/lib/utils";
 import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
-export function DesktopRoomRow({ room, onEdit }: { room: Room; onEdit: () => void }) {
+export function DesktopRoomRow({
+  room,
+  onEdit,
+  onDelete,
+}: {
+  room: Room;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
   const hasTenant = room.status === "terisi" && room.tenant;
 
   const iconBg = {
@@ -42,6 +50,7 @@ export function DesktopRoomRow({ room, onEdit }: { room: Room; onEdit: () => voi
           <Pencil className="h-4 w-4" />
         </button>
         <button
+          onClick={onDelete}
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
           title="Hapus"
         >

@@ -14,15 +14,21 @@ import {
 } from "@/components/ui/select";
 import { PAGE_SIZE, statusFilterOptions } from "./constants";
 import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
+import { useDeleteRoom } from "@/hooks/api/use-rooms";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { DesktopRoomRow } from "./components/DesktopRoomRow";
 import { Pagination } from "./components/Pagination";
 import { RoomListSkeleton } from "./components/RoomListSkeleton";
 import { RoomListError } from "./components/RoomListError";
 import { RoomFormDialog } from "./components/RoomFormDialog";
+import toast from "react-hot-toast";
+import type { Room } from "./types";
 
 export function DesktopRoomSection() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
+  const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
+  const { mutate: deleteRoom, isPending: isDeleting } = useDeleteRoom();
   const {
     floorOptions,
     isLoading,
@@ -51,6 +57,18 @@ export function DesktopRoomSection() {
   function handleEditRoom(id: string) {
     setEditingRoomId(id);
     setFormOpen(true);
+  }
+
+  function handleDeleteRoom(room: Room) {
+    deleteRoom(room.id, {
+      onSuccess: () => {
+        toast.success(`Kamar ${room.number} telah dihapus.`);
+        setRoomToDelete(null);
+      },
+      onError: () => {
+        toast.error("Gagal menghapus kamar. Silakan coba lagi.");
+      },
+    });
   }
 
   return (
@@ -126,7 +144,12 @@ export function DesktopRoomSection() {
           </div>
         ) : !empty ? (
           paginatedRooms.map((room) => (
-            <DesktopRoomRow key={room.id} room={room} onEdit={() => handleEditRoom(room.id)} />
+            <DesktopRoomRow
+              key={room.id}
+              room={room}
+              onEdit={() => handleEditRoom(room.id)}
+              onDelete={() => setRoomToDelete(room)}
+            />
           ))
         ) : (
           <div className="py-12 text-center text-body-md text-muted-foreground">
@@ -145,6 +168,19 @@ export function DesktopRoomSection() {
       </div>
 
       <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} editingRoomId={editingRoomId} />
+
+      <DeleteAlertDialog
+        open={roomToDelete !== null}
+        onOpenChange={(open) => !open && setRoomToDelete(null)}
+        title="Hapus Kamar"
+        description={
+          roomToDelete
+            ? `Kamar ${roomToDelete.number} pada lantai ${roomToDelete.floor} akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`
+            : undefined
+        }
+        isPending={isDeleting}
+        onConfirm={() => roomToDelete && handleDeleteRoom(roomToDelete)}
+      />
     </div>
   );
 }

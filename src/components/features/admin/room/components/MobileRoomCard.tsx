@@ -20,7 +20,15 @@ import { formatCurrency, cn } from "@/lib/utils";
 import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
-export function MobileRoomCard({ room, onEdit }: { room: Room; onEdit: () => void }) {
+export function MobileRoomCard({
+  room,
+  onEdit,
+  onDelete,
+}: {
+  room: Room;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
   const isMaintenance = room.status === "nonaktif";
   const hasTenant = room.status === "terisi" && room.tenant;
 
@@ -74,10 +82,7 @@ export function MobileRoomCard({ room, onEdit }: { room: Room; onEdit: () => voi
                 <Pencil className="h-4 w-4" />
                 Edit Kamar
               </DropdownMenuItem>
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => console.log("Delete room:", room.id)}
-              >
+              <DropdownMenuItem variant="destructive" onClick={onDelete}>
                 <Trash2 className="h-4 w-4" />
                 Hapus Kamar
               </DropdownMenuItem>

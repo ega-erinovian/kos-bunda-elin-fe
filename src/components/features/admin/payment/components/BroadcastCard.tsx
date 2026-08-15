@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Megaphone, Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Megaphone, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { targetAudienceOptions } from "../constants"
+} from "@/components/ui/select";
+import { targetAudienceOptions } from "../constants";
 
 export function BroadcastCard() {
   return (
@@ -19,10 +19,7 @@ export function BroadcastCard() {
         <h2 className="font-heading text-heading-md text-on-surface">Broadcast</h2>
       </div>
 
-      <form
-        className="flex flex-1 flex-col space-y-4"
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form className="flex flex-1 flex-col space-y-4" onSubmit={(e) => e.preventDefault()}>
         <div className="space-y-2">
           <label className="text-label-md text-on-surface-variant">Target Audience</label>
           <Select defaultValue="semua">
@@ -54,5 +51,5 @@ export function BroadcastCard() {
         </Button>
       </form>
     </div>
-  )
+  );
 }

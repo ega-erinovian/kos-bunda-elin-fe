@@ -1,5 +1,5 @@
-﻿import { MobileTenantSection } from "@/components/features/admin/tenant/MobileTenantSection"
-import { DesktopTenantSection } from "@/components/features/admin/tenant/DesktopTenantSection"
+﻿import { MobileTenantSection } from "@/components/features/admin/tenant/MobileTenantSection";
+import { DesktopTenantSection } from "@/components/features/admin/tenant/DesktopTenantSection";
 
 export default function TenantsPage() {
   return (
@@ -7,5 +7,5 @@ export default function TenantsPage() {
       <MobileTenantSection />
       <DesktopTenantSection />
     </div>
-  )
+  );
 }

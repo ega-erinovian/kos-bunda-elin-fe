@@ -1,6 +1,6 @@
-import type { Tenant, FilterOption } from "./types"
+import type { Tenant, FilterOption } from "./types";
 
-export const PAGE_SIZE = 5
+export const PAGE_SIZE = 5;
 
 export const statusConfig: Record<string, { badge: string; dot: string; label: string }> = {
   lunas: {
@@ -18,12 +18,12 @@ export const statusConfig: Record<string, { badge: string; dot: string; label: s
     dot: "bg-secondary",
     label: "Menunggak",
   },
-}
+};
 
 export function getStatusKey(variant: Tenant["dueVariant"]): "lunas" | "telat" | "menunggak" {
-  if (variant === "default") return "lunas"
-  if (variant === "destructive") return "telat"
-  return "menunggak"
+  if (variant === "default") return "lunas";
+  if (variant === "destructive") return "telat";
+  return "menunggak";
 }
 
 export const filterOptions: { key: FilterOption; label: string }[] = [
@@ -31,7 +31,7 @@ export const filterOptions: { key: FilterOption; label: string }[] = [
   { key: "lunas", label: "Lunas" },
   { key: "telat", label: "Telat" },
   { key: "menunggak", label: "Menunggak" },
-]
+];
 
 export const dummyTenants: Tenant[] = [
   {
@@ -130,4 +130,4 @@ export const dummyTenants: Tenant[] = [
     dueLabel: "15 Apr 2024",
     dueVariant: "secondary",
   },
-]
+];

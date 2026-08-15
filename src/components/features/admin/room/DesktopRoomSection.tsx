@@ -1,18 +1,27 @@
 "use client";
 
+import { useState } from "react";
 import { Search, Plus, Filter, Layers } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PAGE_SIZE, statusFilterOptions } from "./constants";
 import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
 import { DesktopRoomRow } from "./components/DesktopRoomRow";
 import { Pagination } from "./components/Pagination";
 import { RoomListSkeleton } from "./components/RoomListSkeleton";
 import { RoomListError } from "./components/RoomListError";
+import { RoomFormDialog } from "./components/RoomFormDialog";
 
 export function DesktopRoomSection() {
+  const [formOpen, setFormOpen] = useState(false);
   const {
     floorOptions,
     isLoading,
@@ -36,7 +45,7 @@ export function DesktopRoomSection() {
   return (
     <div className="hidden space-y-6 md:block">
       <PageHeader title="Manajemen Kamar" subtitle="Kelola data kamar kos.">
-        <Button size="lg">
+        <Button size="lg" onClick={() => setFormOpen(true)}>
           <Plus className="h-4 w-4" />
           Tambah Kamar
         </Button>
@@ -121,6 +130,8 @@ export function DesktopRoomSection() {
           onPageChange={handlePageChange}
         />
       </div>
+
+      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} />
     </div>
   );
 }

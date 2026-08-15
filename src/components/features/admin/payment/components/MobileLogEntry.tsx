@@ -1,26 +1,26 @@
-import { MessageSquare, Mail, Bell, Users, User } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import type { BroadcastLog } from "../types"
+import { MessageSquare, Mail, Bell, Users, User } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import type { BroadcastLog } from "../types";
 
-const typeIcons = { sms: MessageSquare, email: Mail, push: Bell }
+const typeIcons = { sms: MessageSquare, email: Mail, push: Bell };
 
 function isGroupRecipient(recipient: string) {
-  return recipient.includes("Group") || recipient.includes("Semua")
+  return recipient.includes("Group") || recipient.includes("Semua");
 }
 
 function getIconBgClass(recipient: string) {
   return isGroupRecipient(recipient)
     ? "bg-secondary-fixed text-on-secondary-fixed"
-    : "bg-primary-fixed text-on-primary-fixed-variant"
+    : "bg-primary-fixed text-on-primary-fixed-variant";
 }
 
 type MobileLogEntryProps = {
-  log: BroadcastLog
-}
+  log: BroadcastLog;
+};
 
 export function MobileLogEntry({ log }: MobileLogEntryProps) {
-  const Icon = typeIcons[log.type]
-  const bgClass = getIconBgClass(log.recipient)
+  const Icon = typeIcons[log.type];
+  const bgClass = getIconBgClass(log.recipient);
 
   return (
     <div className="flex items-center gap-4 rounded-xl bg-surface-container-low p-md">
@@ -47,5 +47,5 @@ export function MobileLogEntry({ log }: MobileLogEntryProps) {
         {log.status === "success" ? "Success" : "Failed"}
       </Badge>
     </div>
-  )
+  );
 }

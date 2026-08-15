@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { targetAudienceOptions } from "../constants"
+import { Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { targetAudienceOptions } from "../constants";
 
 export function MobileBroadcastForm() {
   return (
@@ -56,5 +56,5 @@ export function MobileBroadcastForm() {
         </Button>
       </form>
     </div>
-  )
+  );
 }

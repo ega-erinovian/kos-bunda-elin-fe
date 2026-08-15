@@ -25,8 +25,6 @@ export function mapRoom(room: ApiRoom): Room {
     floor: Number(room.lantai) || 1,
     price: room.harga,
     status: STATUS_MAP[room.status],
-    tenant: tenant
-      ? { name: tenant.nama, initials: getInitials(tenant.nama) }
-      : undefined,
+    tenant: tenant ? { name: tenant.nama, initials: getInitials(tenant.nama) } : undefined,
   };
 }

@@ -1,17 +1,26 @@
-"use client"
+"use client";
 
-import { Search, ChevronLeft, ChevronRight, MessageSquare, Mail, Bell, Users, User } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { dummyBroadcastLogs, LOGS_PAGE_SIZE } from "./constants"
-import { useBroadcastLogs } from "@/hooks/features/admin/useBroadcastLogs"
-import type { BroadcastLog } from "./types"
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  MessageSquare,
+  Mail,
+  Bell,
+  Users,
+  User,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { dummyBroadcastLogs, LOGS_PAGE_SIZE } from "./constants";
+import { useBroadcastLogs } from "@/hooks/features/admin/useBroadcastLogs";
+import type { BroadcastLog } from "./types";
 
-const typeIcons = { sms: MessageSquare, email: Mail, push: Bell }
+const typeIcons = { sms: MessageSquare, email: Mail, push: Bell };
 
 function isGroup(recipient: string) {
-  return recipient.includes("Group") || recipient.includes("Semua")
+  return recipient.includes("Group") || recipient.includes("Semua");
 }
 
 export function MobileLogsSection() {
@@ -23,16 +32,14 @@ export function MobileLogsSection() {
     paginatedLogs,
     handleSearch,
     handlePageChange,
-  } = useBroadcastLogs(dummyBroadcastLogs)
+  } = useBroadcastLogs(dummyBroadcastLogs);
 
-  const from = (currentPage - 1) * LOGS_PAGE_SIZE + 1
-  const to = Math.min(currentPage * LOGS_PAGE_SIZE, filteredLogs.length)
+  const from = (currentPage - 1) * LOGS_PAGE_SIZE + 1;
+  const to = Math.min(currentPage * LOGS_PAGE_SIZE, filteredLogs.length);
 
   return (
     <div className="space-y-4 md:hidden">
-      <h1 className="text-heading-lg-mobile font-bold text-on-surface">
-        Log Komunikasi
-      </h1>
+      <h1 className="text-heading-lg-mobile font-bold text-on-surface">Log Komunikasi</h1>
 
       <div className="relative">
         <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
@@ -46,9 +53,7 @@ export function MobileLogsSection() {
 
       <div className="flex flex-col gap-2">
         {paginatedLogs.length > 0 ? (
-          paginatedLogs.map((log) => (
-            <MobileLogRow key={log.id} log={log} />
-          ))
+          paginatedLogs.map((log) => <MobileLogRow key={log.id} log={log} />)
         ) : (
           <div className="py-12 text-center text-body-md text-on-surface-variant">
             Log tidak ditemukan.
@@ -80,12 +85,12 @@ export function MobileLogsSection() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function MobileLogRow({ log }: { log: BroadcastLog }) {
-  const Icon = typeIcons[log.type]
-  const group = isGroup(log.recipient)
+  const Icon = typeIcons[log.type];
+  const group = isGroup(log.recipient);
 
   return (
     <div className="flex items-center gap-4 rounded-xl bg-surface-container-low p-md">
@@ -114,5 +119,5 @@ function MobileLogRow({ log }: { log: BroadcastLog }) {
         {log.status === "success" ? "Success" : "Failed"}
       </Badge>
     </div>
-  )
+  );
 }

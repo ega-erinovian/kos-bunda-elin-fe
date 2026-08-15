@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { Search, Filter, MessageSquare, Mail, Bell, ChevronLeft, ChevronRight } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { PageHeader } from "@/components/ui/page-header"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Search, Filter, MessageSquare, Mail, Bell, ChevronLeft, ChevronRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/ui/page-header";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { dummyBroadcastLogs, LOGS_PAGE_SIZE } from "./constants"
-import { useBroadcastLogs } from "@/hooks/features/admin/useBroadcastLogs"
-import type { BroadcastLog, BroadcastLogStatus } from "./types"
+} from "@/components/ui/select";
+import { dummyBroadcastLogs, LOGS_PAGE_SIZE } from "./constants";
+import { useBroadcastLogs } from "@/hooks/features/admin/useBroadcastLogs";
+import type { BroadcastLog, BroadcastLogStatus } from "./types";
 
-const typeIconMap = { sms: MessageSquare, email: Mail, push: Bell }
+const typeIconMap = { sms: MessageSquare, email: Mail, push: Bell };
 
 const statusFilterOptions: { key: BroadcastLogStatus | "all"; label: string }[] = [
   { key: "all", label: "Semua Status" },
   { key: "success", label: "Success" },
   { key: "failed", label: "Failed" },
-]
+];
 
 const typeFilterOptions: { key: "all" | "sms" | "email" | "push"; label: string }[] = [
   { key: "all", label: "Semua Tipe" },
   { key: "sms", label: "SMS" },
   { key: "email", label: "Email" },
   { key: "push", label: "App Push" },
-]
+];
 
 export function DesktopLogsSection() {
   const {
@@ -44,11 +44,11 @@ export function DesktopLogsSection() {
     handleStatusFilterChange,
     handleTypeFilterChange,
     handlePageChange,
-  } = useBroadcastLogs(dummyBroadcastLogs)
+  } = useBroadcastLogs(dummyBroadcastLogs);
 
-  const empty = paginatedLogs.length === 0
-  const from = (currentPage - 1) * LOGS_PAGE_SIZE + 1
-  const to = Math.min(currentPage * LOGS_PAGE_SIZE, filteredLogs.length)
+  const empty = paginatedLogs.length === 0;
+  const from = (currentPage - 1) * LOGS_PAGE_SIZE + 1;
+  const to = Math.min(currentPage * LOGS_PAGE_SIZE, filteredLogs.length);
 
   return (
     <div className="hidden space-y-6 md:block">
@@ -106,24 +106,14 @@ export function DesktopLogsSection() {
 
       <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-ambient-md">
         <div className="hidden items-center bg-muted/50 md:flex">
-          <div className="flex-[2] px-6 py-4 text-label-md text-muted-foreground">
-            Penerima
-          </div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
-            Tipe
-          </div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
-            Waktu
-          </div>
-          <div className="w-28 px-6 py-4 text-label-md text-muted-foreground">
-            Status
-          </div>
+          <div className="flex-[2] px-6 py-4 text-label-md text-muted-foreground">Penerima</div>
+          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Tipe</div>
+          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Waktu</div>
+          <div className="w-28 px-6 py-4 text-label-md text-muted-foreground">Status</div>
         </div>
 
         {!empty ? (
-          paginatedLogs.map((log) => (
-            <DesktopLogRow key={log.id} log={log} />
-          ))
+          paginatedLogs.map((log) => <DesktopLogRow key={log.id} log={log} />)
         ) : (
           <div className="py-12 text-center text-body-md text-muted-foreground">
             Tidak ada log komunikasi yang ditemukan.
@@ -157,11 +147,11 @@ export function DesktopLogsSection() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function DesktopLogRow({ log }: { log: BroadcastLog }) {
-  const Icon = typeIconMap[log.type]
+  const Icon = typeIconMap[log.type];
   return (
     <div className="flex flex-col gap-4 border-t border-border/30 px-6 py-4 transition-colors hover:bg-muted/30 md:flex-row md:items-center md:gap-0">
       <div className="flex-[2] text-sm font-medium text-on-surface">{log.recipient}</div>
@@ -178,5 +168,5 @@ function DesktopLogRow({ log }: { log: BroadcastLog }) {
         </Badge>
       </div>
     </div>
-  )
+  );
 }

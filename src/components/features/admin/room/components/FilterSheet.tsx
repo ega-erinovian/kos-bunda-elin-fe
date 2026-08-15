@@ -33,9 +33,7 @@ export function FilterSheet({
 
         <div className="flex flex-1 flex-col gap-6 overflow-y-auto py-6">
           <section>
-            <h3 className="mb-3 text-label-md font-semibold text-on-surface">
-              Status Kamar
-            </h3>
+            <h3 className="mb-3 text-label-md font-semibold text-on-surface">Status Kamar</h3>
             <div className="flex flex-wrap gap-2">
               {statusFilterOptions.map((opt) => (
                 <button
@@ -55,9 +53,7 @@ export function FilterSheet({
           </section>
 
           <section>
-            <h3 className="mb-3 text-label-md font-semibold text-on-surface">
-              Lantai
-            </h3>
+            <h3 className="mb-3 text-label-md font-semibold text-on-surface">Lantai</h3>
             <div className="flex flex-wrap gap-2">
               {floorOptions.map((opt) => (
                 <button

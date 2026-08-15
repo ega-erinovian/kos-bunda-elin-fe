@@ -20,8 +20,14 @@ export interface Notification {
   read: boolean;
 }
 
-export const notificationIcons: Record<Notification["type"], { icon: React.ReactNode; bg: string }> = {
-  new_tenant: { icon: <UserPlus className="h-4 w-4 text-primary" />, bg: "bg-primary-container/30" },
+export const notificationIcons: Record<
+  Notification["type"],
+  { icon: React.ReactNode; bg: string }
+> = {
+  new_tenant: {
+    icon: <UserPlus className="h-4 w-4 text-primary" />,
+    bg: "bg-primary-container/30",
+  },
   payment_due: { icon: <Clock className="h-4 w-4 text-destructive" />, bg: "bg-destructive/10" },
   broadcast: { icon: <Megaphone className="h-4 w-4 text-accent" />, bg: "bg-accent/20" },
   check_in: { icon: <DoorOpen className="h-4 w-4 text-tertiary" />, bg: "bg-tertiary/20" },
@@ -41,7 +47,10 @@ export function NotificationSection() {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         render={
-          <button className="relative inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-muted transition-colors cursor-pointer" aria-label="Notifications" />
+          <button
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-muted transition-colors cursor-pointer"
+            aria-label="Notifications"
+          />
         }
       >
         <Bell className="h-5 w-5 text-muted-foreground" />

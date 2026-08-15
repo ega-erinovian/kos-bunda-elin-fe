@@ -3,15 +3,15 @@
 import type { LucideIcon } from "lucide-react";
 
 interface ActivityItemProps {
-  icon: LucideIcon
-  iconWrapper: string
-  name: string
-  desc: string
-  amount: string
-  amountClass: string
-  time: string
-  badge?: string
-  badgeClass?: string
+  icon: LucideIcon;
+  iconWrapper: string;
+  name: string;
+  desc: string;
+  amount: string;
+  amountClass: string;
+  time: string;
+  badge?: string;
+  badgeClass?: string;
 }
 
 export function ActivityItem({
@@ -39,11 +39,7 @@ export function ActivityItem({
         </div>
       </div>
       <div className="flex items-center gap-2 text-right">
-        {badge && (
-          <span className={`rounded px-2 py-1 text-label-sm ${badgeClass}`}>
-            {badge}
-          </span>
-        )}
+        {badge && <span className={`rounded px-2 py-1 text-label-sm ${badgeClass}`}>{badge}</span>}
         <div>
           <p className={`text-label-md font-semibold ${amountClass}`}>{amount}</p>
           <p className="text-label-sm text-on-surface-variant">{time}</p>

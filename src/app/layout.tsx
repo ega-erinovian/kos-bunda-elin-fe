@@ -1,10 +1,10 @@
+import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/providers/auth-provider";
+import { QueryProvider } from "@/providers/query-provider";
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Toaster as HotToaster } from "react-hot-toast";
 import "./globals.css";
-import { QueryProvider } from "@/providers/query-provider";
-import { AuthProvider } from "@/providers/auth-provider";
-import { Toaster } from "@/components/ui/toast";
-import { cn } from "@/lib/utils";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -46,7 +46,7 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>{children}</AuthProvider>
         </QueryProvider>
-        <Toaster />
+        <HotToaster position="top-center" toastOptions={{ duration: 2500 }} />
       </body>
     </html>
   );

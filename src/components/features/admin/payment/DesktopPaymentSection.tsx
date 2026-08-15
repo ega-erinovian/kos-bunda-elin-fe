@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { FilePen, ArrowRight } from "lucide-react"
-import { PageHeader } from "@/components/ui/page-header"
-import { Button } from "@/components/ui/button"
-import { PaymentTrackingCard } from "./components/PaymentTrackingCard"
-import { BroadcastCard } from "./components/BroadcastCard"
-import { CommunicationLogsTable } from "./components/CommunicationLogsTable"
-import { dummyPayments, dummyBroadcastLogs, PAGE_SIZE } from "./constants"
-import { usePayments } from "@/hooks/features/admin/usePayments"
+import Link from "next/link";
+import { FilePen, ArrowRight } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
+import { PaymentTrackingCard } from "./components/PaymentTrackingCard";
+import { BroadcastCard } from "./components/BroadcastCard";
+import { CommunicationLogsTable } from "./components/CommunicationLogsTable";
+import { dummyPayments, dummyBroadcastLogs, PAGE_SIZE } from "./constants";
+import { usePayments } from "@/hooks/features/admin/usePayments";
 
 export function DesktopPaymentSection() {
   const {
@@ -19,11 +19,11 @@ export function DesktopPaymentSection() {
     paginatedPayments,
     handleTabChange,
     handlePageChange,
-  } = usePayments(dummyPayments)
+  } = usePayments(dummyPayments);
 
-  const empty = paginatedPayments.length === 0
-  const from = (currentPage - 1) * PAGE_SIZE + 1
-  const to = Math.min(currentPage * PAGE_SIZE, filteredPayments.length)
+  const empty = paginatedPayments.length === 0;
+  const from = (currentPage - 1) * PAGE_SIZE + 1;
+  const to = Math.min(currentPage * PAGE_SIZE, filteredPayments.length);
 
   return (
     <div className="hidden space-y-2xl md:block">
@@ -63,5 +63,5 @@ export function DesktopPaymentSection() {
         <CommunicationLogsTable logs={dummyBroadcastLogs} />
       </div>
     </div>
-  )
+  );
 }

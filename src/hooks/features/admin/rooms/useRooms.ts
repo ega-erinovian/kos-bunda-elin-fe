@@ -1,10 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  useRooms as useRoomsApi,
-  type RoomListParams,
-} from "@/hooks/api/use-rooms";
+import { useRooms as useRoomsApi, type RoomListParams } from "@/hooks/api/use-rooms";
 import type {
   FilterOption,
   FloorFilter,
@@ -53,10 +50,7 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
     return rooms.filter((room) => {
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        if (
-          !room.number.toLowerCase().includes(q) &&
-          !`lantai ${room.floor}`.includes(q)
-        )
+        if (!room.number.toLowerCase().includes(q) && !`lantai ${room.floor}`.includes(q))
           return false;
       }
       return true;
@@ -64,10 +58,7 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
   }, [rooms, searchQuery]);
 
   const totalPages = Math.ceil(filteredRooms.length / pageSize);
-  const paginatedRooms = filteredRooms.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  );
+  const paginatedRooms = filteredRooms.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   function handleSearch(value: string) {
     setSearchQuery(value);

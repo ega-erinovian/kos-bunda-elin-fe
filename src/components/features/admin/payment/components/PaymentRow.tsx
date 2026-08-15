@@ -1,11 +1,11 @@
-import { Badge } from "@/components/ui/badge"
-import { formatCurrency } from "@/lib/utils"
-import { PaymentRowDropdown } from "./PaymentRowDropdown"
-import type { Payment } from "../types"
+import { Badge } from "@/components/ui/badge";
+import { formatCurrency } from "@/lib/utils";
+import { PaymentRowDropdown } from "./PaymentRowDropdown";
+import type { Payment } from "../types";
 
 type PaymentRowProps = {
-  payment: Payment
-}
+  payment: Payment;
+};
 
 export function PaymentRow({ payment }: PaymentRowProps) {
   return (
@@ -36,5 +36,5 @@ export function PaymentRow({ payment }: PaymentRowProps) {
         <PaymentRowDropdown payment={payment} />
       </div>
     </div>
-  )
+  );
 }

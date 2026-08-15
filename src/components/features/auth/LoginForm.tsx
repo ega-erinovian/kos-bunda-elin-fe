@@ -13,7 +13,10 @@ interface LoginFormProps {
   reason?: string;
 }
 
-const VARIANT_COPY: Record<LoginRole, { title: string; description: string; emailPlaceholder: string }> = {
+const VARIANT_COPY: Record<
+  LoginRole,
+  { title: string; description: string; emailPlaceholder: string }
+> = {
   admin: {
     title: "Masuk ke Panel",
     description: "Silakan masuk dengan akun admin Kos Bunda Elin.",

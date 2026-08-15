@@ -1,4 +1,4 @@
-import type { FilterOption } from "./types";
+import type { FilterOption, RoomStatus } from "./types";
 
 export const PAGE_SIZE = 5;
 
@@ -24,5 +24,16 @@ export const statusFilterOptions: { key: FilterOption; label: string }[] = [
   { key: "semua", label: "Semua" },
   { key: "terisi", label: "Terisi" },
   { key: "kosong", label: "Kosong" },
+  { key: "nonaktif", label: "Non-Aktif" },
+];
+
+export const floorSelectOptions: { key: string; label: string }[] = [
+  { key: "1", label: "Lantai 1" },
+  { key: "2", label: "Lantai 2" },
+];
+
+export const statusSelectOptions: { key: RoomStatus; label: string }[] = [
+  { key: "kosong", label: "Kosong" },
+  { key: "terisi", label: "Terisi" },
   { key: "nonaktif", label: "Non-Aktif" },
 ];

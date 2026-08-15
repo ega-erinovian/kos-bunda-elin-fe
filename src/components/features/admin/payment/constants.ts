@@ -1,6 +1,6 @@
-import type { Payment, BroadcastLog } from "./types"
+import type { Payment, BroadcastLog } from "./types";
 
-export const PAGE_SIZE = 5
+export const PAGE_SIZE = 5;
 
 export const dummyPayments: Payment[] = [
   {
@@ -83,9 +83,9 @@ export const dummyPayments: Payment[] = [
     status: "overdue",
     tab: "overdue",
   },
-]
+];
 
-export const LOGS_PAGE_SIZE = 8
+export const LOGS_PAGE_SIZE = 8;
 
 export const dummyBroadcastLogs: BroadcastLog[] = [
   {
@@ -172,7 +172,7 @@ export const dummyBroadcastLogs: BroadcastLog[] = [
     time: "Oct 03, 12:00 PM",
     status: "success",
   },
-]
+];
 
 export const targetAudienceOptions = [
   { value: "semua", label: "Semua Penghuni" },
@@ -180,10 +180,10 @@ export const targetAudienceOptions = [
   { value: "lantai-2", label: "Lantai 2" },
   { value: "lantai-3", label: "Lantai 3" },
   { value: "menunggak", label: "Menunggak Saja" },
-]
+];
 
 export const typeIconMap: Record<string, string> = {
   sms: "MessageSquare",
   email: "Mail",
   push: "Bell",
-}
+};

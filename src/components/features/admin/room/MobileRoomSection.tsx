@@ -12,6 +12,7 @@ import { EmptyState } from "./components/EmptyState";
 import { Pagination } from "./components/Pagination";
 import { RoomListSkeleton } from "./components/RoomListSkeleton";
 import { RoomListError } from "./components/RoomListError";
+import { RoomFormDialog } from "./components/RoomFormDialog";
 
 export function MobileRoomSection() {
   const {
@@ -35,6 +36,7 @@ export function MobileRoomSection() {
   } = useRooms();
 
   const [filterOpen, setFilterOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
 
   function onResetFilters() {
     handleFilterStatusChange("semua");
@@ -107,9 +109,14 @@ export function MobileRoomSection() {
         onPageChange={handlePageChange}
       />
 
-      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
+      <button
+        onClick={() => setFormOpen(true)}
+        className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden"
+      >
         <Plus className="h-6 w-6" />
       </button>
+
+      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} />
     </div>
   );
 }

@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Search, Plus, ChevronLeft, ChevronRight } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { dummyTenants, PAGE_SIZE } from "./constants"
-import { useTenants } from "../../../../hooks/features/admin/useTenants"
-import { MobileTenantCard } from "./components/MobileTenantCard"
-import { TenantDetailDrawer } from "./components/TenantDetailDrawer"
-import type { Tenant } from "./types"
+import { useState } from "react";
+import { Search, Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { dummyTenants, PAGE_SIZE } from "./constants";
+import { useTenants } from "../../../../hooks/features/admin/useTenants";
+import { MobileTenantCard } from "./components/MobileTenantCard";
+import { TenantDetailDrawer } from "./components/TenantDetailDrawer";
+import type { Tenant } from "./types";
 
 export function MobileTenantSection() {
   const {
@@ -19,24 +19,22 @@ export function MobileTenantSection() {
     paginatedTenants,
     handleSearch,
     handlePageChange,
-  } = useTenants(dummyTenants)
+  } = useTenants(dummyTenants);
 
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null)
-  const [detailOpen, setDetailOpen] = useState(false)
+  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   function openDetail(tenant: Tenant) {
-    setSelectedTenant(tenant)
-    setDetailOpen(true)
+    setSelectedTenant(tenant);
+    setDetailOpen(true);
   }
 
-  const from = (currentPage - 1) * PAGE_SIZE + 1
-  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length)
+  const from = (currentPage - 1) * PAGE_SIZE + 1;
+  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length);
 
   return (
     <div className="space-y-4 md:hidden">
-      <h1 className="text-heading-lg-mobile font-bold text-on-surface">
-        Tenants
-      </h1>
+      <h1 className="text-heading-lg-mobile font-bold text-on-surface">Tenants</h1>
 
       <div className="relative">
         <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
@@ -51,11 +49,7 @@ export function MobileTenantSection() {
       <div className="flex flex-col gap-3 pb-4">
         {paginatedTenants.length > 0 ? (
           paginatedTenants.map((tenant) => (
-            <MobileTenantCard
-              key={tenant.id}
-              tenant={tenant}
-              onClick={openDetail}
-            />
+            <MobileTenantCard key={tenant.id} tenant={tenant} onClick={openDetail} />
           ))
         ) : (
           <div className="py-12 text-center text-body-md text-on-surface-variant">
@@ -92,11 +86,7 @@ export function MobileTenantSection() {
         <Plus className="h-6 w-6" />
       </button>
 
-      <TenantDetailDrawer
-        tenant={selectedTenant}
-        open={detailOpen}
-        onOpenChange={setDetailOpen}
-      />
+      <TenantDetailDrawer tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />
     </div>
-  )
+  );
 }

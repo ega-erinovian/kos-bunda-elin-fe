@@ -37,10 +37,21 @@ export function MobileRoomSection() {
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
+  const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
 
   function onResetFilters() {
     handleFilterStatusChange("semua");
     handleFilterFloorChange("semua");
+  }
+
+  function handleAddRoom() {
+    setEditingRoomId(null);
+    setFormOpen(true);
+  }
+
+  function handleEditRoom(id: string) {
+    setEditingRoomId(id);
+    setFormOpen(true);
   }
 
   return (
@@ -94,7 +105,9 @@ export function MobileRoomSection() {
         ) : isError ? (
           <RoomListError onRetry={refetch} />
         ) : paginatedRooms.length > 0 ? (
-          paginatedRooms.map((room) => <MobileRoomCard key={room.id} room={room} />)
+          paginatedRooms.map((room) => (
+            <MobileRoomCard key={room.id} room={room} onEdit={() => handleEditRoom(room.id)} />
+          ))
         ) : (
           <EmptyState />
         )}
@@ -110,13 +123,13 @@ export function MobileRoomSection() {
       />
 
       <button
-        onClick={() => setFormOpen(true)}
+        onClick={handleAddRoom}
         className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden"
       >
         <Plus className="h-6 w-6" />
       </button>
 
-      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} />
+      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} editingRoomId={editingRoomId} />
     </div>
   );
 }

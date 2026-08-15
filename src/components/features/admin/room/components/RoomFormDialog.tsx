@@ -18,26 +18,45 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCreateRooms } from "@/hooks/features/admin/rooms/useCreateRooms";
+import { useUpdateRoom } from "@/hooks/features/admin/rooms/useUpdateRoom";
 import { floorSelectOptions, statusSelectOptions } from "../constants";
 import type { RoomStatus } from "../types";
 
 type RoomFormDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  editingRoomId?: string | null;
 };
 
 const fieldClassName = "w-full border-outline-variant bg-surface-container-lowest";
 
-export function RoomFormDialog({ open, onOpenChange }: RoomFormDialogProps) {
-  const { nomor, setNomor, lantai, setLantai, harga, setHarga, status, setStatus, errors, isPending, handleSubmit } =
-    useCreateRooms(open, onOpenChange);
+export function RoomFormDialog({ open, onOpenChange, editingRoomId = null }: RoomFormDialogProps) {
+  const createForm = useCreateRooms(open, onOpenChange);
+  const updateForm = useUpdateRoom(open, editingRoomId, onOpenChange);
+  const {
+    nomor,
+    setNomor,
+    lantai,
+    setLantai,
+    harga,
+    setHarga,
+    status,
+    setStatus,
+    errors,
+    isPending,
+    handleSubmit,
+  } = editingRoomId ? updateForm : createForm;
+  const isLoadingRoom = editingRoomId ? updateForm.isLoading : false;
+  const isEditing = editingRoomId !== null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-112">
         <DialogHeader>
-          <DialogTitle>Tambah Kamar</DialogTitle>
-          <DialogDescription>Lengkapi detail kamar baru.</DialogDescription>
+          <DialogTitle>{isEditing ? "Edit Kamar" : "Tambah Kamar"}</DialogTitle>
+          <DialogDescription>
+            {isEditing ? "Ubah detail kamar yang sudah ada." : "Lengkapi detail kamar baru."}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -117,8 +136,8 @@ export function RoomFormDialog({ open, onOpenChange }: RoomFormDialogProps) {
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Batal
             </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Menyimpan..." : "Simpan"}
+            <Button type="submit" disabled={isPending || isLoadingRoom}>
+              {isPending ? "Menyimpan..." : isLoadingRoom ? "Memuat..." : "Simpan"}
             </Button>
           </div>
         </form>

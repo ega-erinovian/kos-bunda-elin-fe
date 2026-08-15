@@ -7,5 +7,6 @@ export type { default as AuthResponse } from "./AuthResponse";
 export type { default as MeResponse } from "./MeResponse";
 export type { default as LogoutResponse } from "./LogoutResponse";
 export type { default as PaginatedResponse } from "./PaginatedResponse";
+export type { default as ApiResponse } from "./ApiResponse";
 export type { default as ApiError } from "./ApiError";
 export type { default as PushSubscriptionBody } from "./PushSubscriptionBody";

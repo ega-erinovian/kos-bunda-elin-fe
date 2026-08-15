@@ -1,4 +1,6 @@
-import { MoreVertical, Layers } from "lucide-react";
+"use client";
+
+import { MoreVertical, Layers, Pencil, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Card,
@@ -8,11 +10,17 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { formatCurrency, cn } from "@/lib/utils";
 import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
-export function MobileRoomCard({ room }: { room: Room }) {
+export function MobileRoomCard({ room, onEdit }: { room: Room; onEdit: () => void }) {
   const isMaintenance = room.status === "nonaktif";
   const hasTenant = room.status === "terisi" && room.tenant;
 
@@ -57,9 +65,24 @@ export function MobileRoomCard({ room }: { room: Room }) {
               {formatCurrency(room.price)}
             </p>
           </div>
-          <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary">
-            <MoreVertical className="h-5 w-5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary">
+              <MoreVertical className="h-5 w-5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onClick={onEdit}>
+                <Pencil className="h-4 w-4" />
+                Edit Kamar
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => console.log("Delete room:", room.id)}
+              >
+                <Trash2 className="h-4 w-4" />
+                Hapus Kamar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </CardFooter>
     </Card>

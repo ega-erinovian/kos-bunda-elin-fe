@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { MessageSquare, Mail, Bell, ArrowRight } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import type { BroadcastLog } from "../types"
+import Link from "next/link";
+import { MessageSquare, Mail, Bell, ArrowRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import type { BroadcastLog } from "../types";
 
-const typeIconMap = { sms: MessageSquare, email: Mail, push: Bell }
+const typeIconMap = { sms: MessageSquare, email: Mail, push: Bell };
 
 type CommunicationLogsTableProps = {
-  logs: BroadcastLog[]
-}
+  logs: BroadcastLog[];
+};
 
 export function CommunicationLogsTable({ logs }: CommunicationLogsTableProps) {
   return (
@@ -37,7 +37,7 @@ export function CommunicationLogsTable({ logs }: CommunicationLogsTableProps) {
           </thead>
           <tbody className="divide-y divide-outline-variant/20 text-body-md text-on-surface">
             {logs.map((log) => {
-              const Icon = typeIconMap[log.type]
+              const Icon = typeIconMap[log.type];
               return (
                 <tr key={log.id} className="transition-colors hover:bg-primary/5">
                   <td className="px-6 py-4">{log.recipient}</td>
@@ -54,11 +54,11 @@ export function CommunicationLogsTable({ logs }: CommunicationLogsTableProps) {
                     </Badge>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
       </div>
     </div>
-  )
+  );
 }

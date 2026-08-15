@@ -34,9 +34,7 @@ export function NotificationDropdownItem({ notification: n }: Props) {
           >
             {n.title}
           </p>
-          {!n.read && (
-            <span className="shrink-0 h-2 w-2 rounded-full bg-primary" />
-          )}
+          {!n.read && <span className="shrink-0 h-2 w-2 rounded-full bg-primary" />}
         </div>
         <p className="mt-0.5 truncate text-xs text-muted-foreground">{n.message}</p>
         <p className="mt-0.5 text-[11px] text-muted-foreground/60">{n.time}</p>

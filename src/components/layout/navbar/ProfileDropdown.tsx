@@ -24,7 +24,10 @@ export function ProfileDropdown() {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         render={
-          <button className="flex cursor-pointer items-center gap-2 rounded-full pr-3 pl-1 py-1 hover:bg-muted transition-colors" aria-label="Profile" />
+          <button
+            className="flex cursor-pointer items-center gap-2 rounded-full pr-3 pl-1 py-1 hover:bg-muted transition-colors"
+            aria-label="Profile"
+          />
         }
       >
         {user ? (
@@ -32,9 +35,7 @@ export function ProfileDropdown() {
             <Avatar className="size-8">
               <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
             </Avatar>
-            <span className="hidden text-sm font-medium text-foreground lg:block">
-              {user.name}
-            </span>
+            <span className="hidden text-sm font-medium text-foreground lg:block">{user.name}</span>
           </>
         ) : (
           <Avatar className="size-8">
@@ -58,11 +59,23 @@ export function ProfileDropdown() {
           <DropdownMenuSeparator className="mx-4 my-0" />
 
           <div className="p-1">
-            <DropdownMenuItem className="cursor-pointer rounded-lg py-2" onClick={() => { setOpen(false); router.push(`/${user.role}/profile`); }}>
+            <DropdownMenuItem
+              className="cursor-pointer rounded-lg py-2"
+              onClick={() => {
+                setOpen(false);
+                router.push(`/${user.role}/profile`);
+              }}
+            >
               <User className="h-4 w-4" />
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer rounded-lg py-2" onClick={() => { setOpen(false); router.push(`/${user.role}/settings`); }}>
+            <DropdownMenuItem
+              className="cursor-pointer rounded-lg py-2"
+              onClick={() => {
+                setOpen(false);
+                router.push(`/${user.role}/settings`);
+              }}
+            >
               <Settings className="h-4 w-4" />
               Settings
             </DropdownMenuItem>
@@ -74,7 +87,10 @@ export function ProfileDropdown() {
             <DropdownMenuItem
               variant="destructive"
               className="cursor-pointer rounded-lg py-2"
-              onClick={() => { setOpen(false); logout.mutate(); }}
+              onClick={() => {
+                setOpen(false);
+                logout.mutate();
+              }}
             >
               <LogOut className="h-4 w-4" />
               Logout

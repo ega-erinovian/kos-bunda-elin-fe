@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Search, Plus, Filter } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { PageHeader } from "@/components/ui/page-header"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Search, Plus, Filter } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/ui/page-header";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { formatCurrency } from "@/lib/utils"
-import { dummyTenants, PAGE_SIZE, filterOptions } from "./constants"
-import { useTenants } from "../../../../hooks/features/admin/useTenants"
-import { TenantDetailDialog } from "./components/TenantDetailDialog"
-import type { Tenant } from "./types"
-import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react"
+} from "@/components/ui/select";
+import { formatCurrency } from "@/lib/utils";
+import { dummyTenants, PAGE_SIZE, filterOptions } from "./constants";
+import { useTenants } from "../../../../hooks/features/admin/useTenants";
+import { TenantDetailDialog } from "./components/TenantDetailDialog";
+import type { Tenant } from "./types";
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react";
 
 export function DesktopTenantSection() {
   const {
@@ -31,19 +31,19 @@ export function DesktopTenantSection() {
     handleSearch,
     handlePageChange,
     handleFilterStatusChange,
-  } = useTenants(dummyTenants)
+  } = useTenants(dummyTenants);
 
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null)
-  const [detailOpen, setDetailOpen] = useState(false)
+  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   function openDetail(tenant: Tenant) {
-    setSelectedTenant(tenant)
-    setDetailOpen(true)
+    setSelectedTenant(tenant);
+    setDetailOpen(true);
   }
 
-  const empty = paginatedTenants.length === 0
-  const from = (currentPage - 1) * PAGE_SIZE + 1
-  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length)
+  const empty = paginatedTenants.length === 0;
+  const from = (currentPage - 1) * PAGE_SIZE + 1;
+  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length);
 
   return (
     <div className="hidden space-y-6 md:block">
@@ -89,27 +89,15 @@ export function DesktopTenantSection() {
 
       <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-ambient-md">
         <div className="hidden items-center bg-muted/50 md:flex">
-          <div className="flex-2 px-6 py-4 text-label-md text-muted-foreground">
-            Nama Penghuni
-          </div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
-            No. Telepon
-          </div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
-            Kamar
-          </div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
-            Tanggal Masuk
-          </div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">
-            Biaya Sewa
-          </div>
+          <div className="flex-2 px-6 py-4 text-label-md text-muted-foreground">Nama Penghuni</div>
+          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">No. Telepon</div>
+          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Kamar</div>
+          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Tanggal Masuk</div>
+          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Biaya Sewa</div>
           <div className="flex-[1.5] px-6 py-4 text-label-md text-muted-foreground">
             Jatuh Tempo Berikutnya
           </div>
-          <div className="w-24 px-6 py-4 text-right text-label-md text-muted-foreground">
-            Aksi
-          </div>
+          <div className="w-24 px-6 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
         </div>
 
         {!empty ? (
@@ -153,28 +141,24 @@ export function DesktopTenantSection() {
         )}
       </div>
 
-      <TenantDetailDialog
-        tenant={selectedTenant}
-        open={detailOpen}
-        onOpenChange={setDetailOpen}
-      />
+      <TenantDetailDialog tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />
     </div>
-  )
+  );
 }
 
 function DesktopTenantRow({
   tenant,
   onDetailClick,
 }: {
-  tenant: Tenant
-  onDetailClick: () => void
+  tenant: Tenant;
+  onDetailClick: () => void;
 }) {
   const dueBadgeVariant = {
     default: "default" as const,
     secondary: "secondary" as const,
     destructive: "destructive" as const,
     outline: "outline" as const,
-  }[tenant.dueVariant]
+  }[tenant.dueVariant];
 
   return (
     <div className="flex flex-col gap-4 border-t border-border/30 px-6 py-4 transition-colors hover:bg-muted/30 md:flex-row md:items-center md:gap-0">
@@ -202,9 +186,7 @@ function DesktopTenantRow({
 
       <div className="flex-1 text-sm text-muted-foreground">{tenant.checkInDate}</div>
 
-      <div className="flex-1 text-sm text-on-surface">
-        {formatCurrency(tenant.rentCost)}
-      </div>
+      <div className="flex-1 text-sm text-on-surface">{formatCurrency(tenant.rentCost)}</div>
 
       <div className="flex-[1.5]">
         <Badge variant={dueBadgeVariant}>{tenant.dueLabel}</Badge>
@@ -212,14 +194,12 @@ function DesktopTenantRow({
 
       <div className="flex w-full justify-end gap-2 md:w-24">
         <button
-
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
           title="Edit"
         >
           <Pencil className="h-4 w-4" />
         </button>
         <button
-
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
           title="Hapus"
         >
@@ -227,5 +207,5 @@ function DesktopTenantRow({
         </button>
       </div>
     </div>
-  )
+  );
 }

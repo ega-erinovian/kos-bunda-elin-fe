@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { LoginForm } from "@/components/features/auth/LoginForm";
 import { BrandLogo } from "./components/BrandLogo";

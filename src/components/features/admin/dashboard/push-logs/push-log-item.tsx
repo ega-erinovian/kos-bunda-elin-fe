@@ -3,13 +3,13 @@
 import type { LucideIcon } from "lucide-react";
 
 interface PushLogItemProps {
-  statusIcon: LucideIcon
-  statusClass: string
-  label: string
-  status: string
-  detail: string
-  time: string
-  isError?: boolean
+  statusIcon: LucideIcon;
+  statusClass: string;
+  label: string;
+  status: string;
+  detail: string;
+  time: string;
+  isError?: boolean;
 }
 
 export function PushLogItem({

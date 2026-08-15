@@ -1,9 +1,9 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from "react";
 
 type SectionHeaderProps = {
-  title: string
-  children?: ReactNode
-}
+  title: string;
+  children?: ReactNode;
+};
 
 export function SectionHeader({ title, children }: SectionHeaderProps) {
   return (
@@ -11,5 +11,5 @@ export function SectionHeader({ title, children }: SectionHeaderProps) {
       <h2 className="font-heading text-heading-md text-on-surface">{title}</h2>
       {children}
     </div>
-  )
+  );
 }

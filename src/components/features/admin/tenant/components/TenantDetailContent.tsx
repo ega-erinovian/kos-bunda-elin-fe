@@ -1,35 +1,35 @@
-import { DoorOpen, Pencil } from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { formatCurrency } from "@/lib/utils"
-import type { Tenant } from "../types"
-import { getStatusKey } from "../constants"
+import { DoorOpen, Pencil } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
+import type { Tenant } from "../types";
+import { getStatusKey } from "../constants";
 
 type TenantDetailContentProps = {
-  tenant: Tenant
-}
+  tenant: Tenant;
+};
 
-const statusLabelMap: Record<string, { label: string; classes: string, statusClasses: string }> = {
+const statusLabelMap: Record<string, { label: string; classes: string; statusClasses: string }> = {
   lunas: {
     label: "Lunas",
     classes: "bg-primary/10 text-primary",
-    statusClasses: "bg-primary/90"
+    statusClasses: "bg-primary/90",
   },
   telat: {
     label: "Telat",
     classes: "bg-error-container/50 text-on-error-container",
-    statusClasses: "bg-red-600/90"
+    statusClasses: "bg-red-600/90",
   },
   menunggak: {
     label: "Menunggak",
     classes: "bg-tertiary/10 text-tertiary",
-    statusClasses: "bg-tertiary/90"
+    statusClasses: "bg-tertiary/90",
   },
-}
+};
 
 export function TenantDetailContent({ tenant }: TenantDetailContentProps) {
-  const statusKey = getStatusKey(tenant.dueVariant)
-  const style = statusLabelMap[statusKey]
+  const statusKey = getStatusKey(tenant.dueVariant);
+  const style = statusLabelMap[statusKey];
 
   return (
     <div className="flex flex-col gap-4">
@@ -39,9 +39,7 @@ export function TenantDetailContent({ tenant }: TenantDetailContentProps) {
             <AvatarFallback className="text-lg">{tenant.initials}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col justify-center">
-            <h2 className="text-heading-md font-semibold text-on-surface">
-              {tenant.name}
-            </h2>
+            <h2 className="text-heading-md font-semibold text-on-surface">{tenant.name}</h2>
             <span className="mt-1 flex items-center gap-1 text-label-md text-on-surface-variant">
               <DoorOpen className="h-4 w-4" />
               Kamar {tenant.room}
@@ -70,9 +68,7 @@ export function TenantDetailContent({ tenant }: TenantDetailContentProps) {
         <hr className="border-outline-variant/30" />
         <div className="flex items-center justify-between">
           <span className="text-label-md text-on-surface-variant">Sewa Per Bulan</span>
-          <span className="text-body-md text-on-surface">
-            {formatCurrency(tenant.rentCost)}
-          </span>
+          <span className="text-body-md text-on-surface">{formatCurrency(tenant.rentCost)}</span>
         </div>
       </div>
 
@@ -90,5 +86,5 @@ export function TenantDetailContent({ tenant }: TenantDetailContentProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

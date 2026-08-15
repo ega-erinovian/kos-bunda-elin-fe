@@ -1,5 +1,5 @@
-import { MobilePaymentSection } from "@/components/features/admin/payment/MobilePaymentSection"
-import { DesktopPaymentSection } from "@/components/features/admin/payment/DesktopPaymentSection"
+import { MobilePaymentSection } from "@/components/features/admin/payment/MobilePaymentSection";
+import { DesktopPaymentSection } from "@/components/features/admin/payment/DesktopPaymentSection";
 
 export default function PaymentsPage() {
   return (
@@ -7,5 +7,5 @@ export default function PaymentsPage() {
       <MobilePaymentSection />
       <DesktopPaymentSection />
     </div>
-  )
+  );
 }

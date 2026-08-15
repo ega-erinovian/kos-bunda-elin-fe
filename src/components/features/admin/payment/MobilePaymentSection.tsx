@@ -1,20 +1,18 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Search, Filter, ArrowRight } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { SectionHeader } from "@/components/ui/section-header"
-import { MobilePaymentCard } from "./components/MobilePaymentCard"
-import { MobileBroadcastForm } from "./components/MobileBroadcastForm"
-import { MobileLogEntry } from "./components/MobileLogEntry"
-import { dummyPayments, dummyBroadcastLogs } from "./constants"
+import Link from "next/link";
+import { Search, Filter, ArrowRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { SectionHeader } from "@/components/ui/section-header";
+import { MobilePaymentCard } from "./components/MobilePaymentCard";
+import { MobileBroadcastForm } from "./components/MobileBroadcastForm";
+import { MobileLogEntry } from "./components/MobileLogEntry";
+import { dummyPayments, dummyBroadcastLogs } from "./constants";
 
 export function MobilePaymentSection() {
   return (
     <div className="space-y-6 md:hidden">
-      <h1 className="text-heading-lg-mobile font-bold text-on-surface">
-        Manajemen Pembayaran
-      </h1>
+      <h1 className="text-heading-lg-mobile font-bold text-on-surface">Manajemen Pembayaran</h1>
 
       {/* Search */}
       <div className="relative">
@@ -65,5 +63,5 @@ export function MobilePaymentSection() {
         </div>
       </section>
     </div>
-  )
+  );
 }

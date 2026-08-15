@@ -1,47 +1,43 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import type { Payment, PaymentTab } from "@/components/features/admin/payment/types"
-import { PAGE_SIZE } from "@/components/features/admin/payment/constants"
+import { useState, useMemo } from "react";
+import type { Payment, PaymentTab } from "@/components/features/admin/payment/types";
+import { PAGE_SIZE } from "@/components/features/admin/payment/constants";
 
 export function usePaymentsSearch(payments: Payment[], pageSize = PAGE_SIZE) {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeTab, setActiveTab] = useState<PaymentTab>("approaching")
-  const [currentPage, setCurrentPage] = useState(1)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<PaymentTab>("approaching");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredPayments = useMemo(() => {
     return payments.filter((p) => {
-      if (p.tab !== activeTab) return false
+      if (p.tab !== activeTab) return false;
       if (searchQuery) {
-        const q = searchQuery.toLowerCase()
-        if (
-          !p.name.toLowerCase().includes(q) &&
-          !p.room.toLowerCase().includes(q)
-        )
-          return false
+        const q = searchQuery.toLowerCase();
+        if (!p.name.toLowerCase().includes(q) && !p.room.toLowerCase().includes(q)) return false;
       }
-      return true
-    })
-  }, [payments, activeTab, searchQuery])
+      return true;
+    });
+  }, [payments, activeTab, searchQuery]);
 
-  const totalPages = Math.ceil(filteredPayments.length / pageSize)
+  const totalPages = Math.ceil(filteredPayments.length / pageSize);
   const paginatedPayments = filteredPayments.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize,
-  )
+  );
 
   function handleSearch(value: string) {
-    setSearchQuery(value)
-    setCurrentPage(1)
+    setSearchQuery(value);
+    setCurrentPage(1);
   }
 
   function handleTabChange(tab: PaymentTab) {
-    setActiveTab(tab)
-    setCurrentPage(1)
+    setActiveTab(tab);
+    setCurrentPage(1);
   }
 
   function handlePageChange(page: number) {
-    setCurrentPage(page)
+    setCurrentPage(page);
   }
 
   return {
@@ -54,5 +50,5 @@ export function usePaymentsSearch(payments: Payment[], pageSize = PAGE_SIZE) {
     handleSearch,
     handleTabChange,
     handlePageChange,
-  }
+  };
 }

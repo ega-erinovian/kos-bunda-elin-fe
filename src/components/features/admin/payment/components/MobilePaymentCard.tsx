@@ -1,9 +1,9 @@
-import { formatCurrency } from "@/lib/utils"
-import type { Payment } from "../types"
+import { formatCurrency } from "@/lib/utils";
+import type { Payment } from "../types";
 
 type MobilePaymentCardProps = {
-  payment: Payment
-}
+  payment: Payment;
+};
 
 export function MobilePaymentCard({ payment }: MobilePaymentCardProps) {
   return (
@@ -11,9 +11,7 @@ export function MobilePaymentCard({ payment }: MobilePaymentCardProps) {
       <div className="mb-sm flex items-start justify-between">
         <div>
           <p className="text-[18px] font-semibold text-on-surface">{payment.name}</p>
-          <p className="text-label-md text-on-surface-variant">
-            Kamar {payment.room}
-          </p>
+          <p className="text-label-md text-on-surface-variant">Kamar {payment.room}</p>
         </div>
         <span className="rounded-full bg-tertiary-fixed px-3 py-1 text-label-sm text-on-tertiary-fixed-variant">
           {payment.status === "pending" ? "Pending" : "Overdue"}
@@ -26,11 +24,9 @@ export function MobilePaymentCard({ payment }: MobilePaymentCardProps) {
         </div>
         <div className="text-right">
           <p className="mb-1 text-label-sm text-on-surface-variant">Jumlah</p>
-          <p className="text-[20px] font-bold text-primary">
-            {formatCurrency(payment.amount)}
-          </p>
+          <p className="text-[20px] font-bold text-primary">{formatCurrency(payment.amount)}</p>
         </div>
       </div>
     </article>
-  )
+  );
 }

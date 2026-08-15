@@ -1,6 +1,13 @@
 import { MoreVertical, Layers } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { formatCurrency, cn } from "@/lib/utils";
 import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
@@ -35,13 +42,9 @@ export function MobileRoomCard({ room }: { room: Room }) {
         <CardContent>
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
-              <AvatarFallback className="text-xs">
-                {room.tenant!.initials}
-              </AvatarFallback>
+              <AvatarFallback className="text-xs">{room.tenant!.initials}</AvatarFallback>
             </Avatar>
-            <span className="text-label-md text-on-surface">
-              {room.tenant!.name}
-            </span>
+            <span className="text-label-md text-on-surface">{room.tenant!.name}</span>
           </div>
         </CardContent>
       )}

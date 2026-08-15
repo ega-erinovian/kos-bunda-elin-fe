@@ -3,27 +3,32 @@
 import type { LucideIcon } from "lucide-react";
 
 interface MobileMetricCardProps {
-  label: string
-  value: string
-  icon: LucideIcon
-  iconWrapper: string
-  className: string
-  accent?: boolean
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  iconWrapper: string;
+  className: string;
+  accent?: boolean;
 }
 
 interface DesktopMetricCardProps {
-  label: string
-  value: string
-  sub?: string
-  icon: LucideIcon
-  iconWrapper: string
-  decorColor?: string
-  progress?: number
-  danger?: boolean
+  label: string;
+  value: string;
+  sub?: string;
+  icon: LucideIcon;
+  iconWrapper: string;
+  decorColor?: string;
+  progress?: number;
+  danger?: boolean;
 }
 
 export function MobileMetricCard({
-  label, value, icon: Icon, iconWrapper, className, accent,
+  label,
+  value,
+  icon: Icon,
+  iconWrapper,
+  className,
+  accent,
 }: MobileMetricCardProps) {
   return (
     <div
@@ -40,16 +45,21 @@ export function MobileMetricCard({
       </div>
       <div className="relative z-10 mt-2">
         <p className="font-heading text-heading-xl mb-1">{value}</p>
-        <p className={`text-sm ${accent ? "opacity-90" : "text-muted-foreground"}`}>
-          {label}
-        </p>
+        <p className={`text-sm ${accent ? "opacity-90" : "text-muted-foreground"}`}>{label}</p>
       </div>
     </div>
   );
 }
 
 export function DesktopMetricCard({
-  label, value, sub, icon: Icon, iconWrapper, decorColor, progress, danger,
+  label,
+  value,
+  sub,
+  icon: Icon,
+  iconWrapper,
+  decorColor,
+  progress,
+  danger,
 }: DesktopMetricCardProps) {
   return (
     <div className="group relative overflow-hidden rounded-3xl border border-transparent bg-surface p-6 shadow-ambient-md transition-colors hover:border-secondary">
@@ -75,10 +85,7 @@ export function DesktopMetricCard({
         </div>
         {progress !== undefined && (
           <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-surface-variant">
-            <div
-              className="h-full rounded-full bg-primary"
-              style={{ width: `${progress}%` }}
-            />
+            <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
           </div>
         )}
       </div>

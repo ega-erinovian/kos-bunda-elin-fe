@@ -1,5 +1,5 @@
-import { MobileLogsSection } from "@/components/features/admin/payment/MobileLogsSection"
-import { DesktopLogsSection } from "@/components/features/admin/payment/DesktopLogsSection"
+import { MobileLogsSection } from "@/components/features/admin/payment/MobileLogsSection";
+import { DesktopLogsSection } from "@/components/features/admin/payment/DesktopLogsSection";
 
 export default function LogsPage() {
   return (
@@ -7,5 +7,5 @@ export default function LogsPage() {
       <MobileLogsSection />
       <DesktopLogsSection />
     </div>
-  )
+  );
 }

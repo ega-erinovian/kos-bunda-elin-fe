@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { PAGE_SIZE } from "./constants";
 import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
+import { useDeleteRoom } from "@/hooks/api/use-rooms";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { FilterSheet } from "./components/FilterSheet";
 import { MobileRoomCard } from "./components/MobileRoomCard";
 import { EmptyState } from "./components/EmptyState";
@@ -13,6 +15,8 @@ import { Pagination } from "./components/Pagination";
 import { RoomListSkeleton } from "./components/RoomListSkeleton";
 import { RoomListError } from "./components/RoomListError";
 import { RoomFormDialog } from "./components/RoomFormDialog";
+import toast from "react-hot-toast";
+import type { Room } from "./types";
 
 export function MobileRoomSection() {
   const {
@@ -38,6 +42,8 @@ export function MobileRoomSection() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
+  const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
+  const { mutate: deleteRoom, isPending: isDeleting } = useDeleteRoom();
 
   function onResetFilters() {
     handleFilterStatusChange("semua");
@@ -52,6 +58,18 @@ export function MobileRoomSection() {
   function handleEditRoom(id: string) {
     setEditingRoomId(id);
     setFormOpen(true);
+  }
+
+  function handleDeleteRoom(room: Room) {
+    deleteRoom(room.id, {
+      onSuccess: () => {
+        toast.success(`Kamar ${room.number} telah dihapus.`);
+        setRoomToDelete(null);
+      },
+      onError: () => {
+        toast.error("Gagal menghapus kamar. Silakan coba lagi.");
+      },
+    });
   }
 
   return (
@@ -106,7 +124,12 @@ export function MobileRoomSection() {
           <RoomListError onRetry={refetch} />
         ) : paginatedRooms.length > 0 ? (
           paginatedRooms.map((room) => (
-            <MobileRoomCard key={room.id} room={room} onEdit={() => handleEditRoom(room.id)} />
+            <MobileRoomCard
+              key={room.id}
+              room={room}
+              onEdit={() => handleEditRoom(room.id)}
+              onDelete={() => setRoomToDelete(room)}
+            />
           ))
         ) : (
           <EmptyState />
@@ -130,6 +153,19 @@ export function MobileRoomSection() {
       </button>
 
       <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} editingRoomId={editingRoomId} />
+
+      <DeleteAlertDialog
+        open={roomToDelete !== null}
+        onOpenChange={(open) => !open && setRoomToDelete(null)}
+        title="Hapus Kamar"
+        description={
+          roomToDelete
+            ? `Kamar ${roomToDelete.number} pada lantai ${roomToDelete.floor} akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`
+            : undefined
+        }
+        isPending={isDeleting}
+        onConfirm={() => roomToDelete && handleDeleteRoom(roomToDelete)}
+      />
     </div>
   );
 }

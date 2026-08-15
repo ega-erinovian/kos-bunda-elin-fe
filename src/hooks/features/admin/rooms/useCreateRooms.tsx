@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { z } from "zod";
 import { useCreateRoom } from "@/hooks/api/use-rooms";
+import toast from "react-hot-toast";
 import type { Room as ApiRoom } from "@/types";
 import type { RoomStatus } from "@/components/features/admin/room/types";
 
@@ -24,7 +25,7 @@ type FieldErrors = {
 };
 
 export function useCreateRooms(open: boolean, onOpenChange: (open: boolean) => void) {
-  const { mutate, isPending, isError } = useCreateRoom();
+  const { mutate, isPending } = useCreateRoom();
   const [nomor, setNomorRaw] = useState("");
   const [lantai, setLantaiRaw] = useState("1");
   const [harga, setHargaRaw] = useState("");
@@ -83,7 +84,15 @@ export function useCreateRooms(open: boolean, onOpenChange: (open: boolean) => v
         harga: Number(harga),
         status: status.toUpperCase() as ApiRoom["status"],
       },
-      { onSuccess: () => onOpenChange(false) },
+      {
+        onSuccess: () => {
+          toast.success(`Kamar ${nomor.trim()} pada lantai ${lantai} telah ditambahkan.`);
+          onOpenChange(false);
+        },
+        onError: () => {
+          toast.error("Gagal membuat kamar. Silakan coba lagi.");
+        },
+      },
     );
   }
 
@@ -98,7 +107,6 @@ export function useCreateRooms(open: boolean, onOpenChange: (open: boolean) => v
     setStatus,
     errors,
     isPending,
-    isError,
     handleSubmit,
   };
 }

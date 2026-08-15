@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Bell, BellOff } from "lucide-react";
 import {
@@ -12,12 +12,8 @@ import {
 import { api } from "@/lib/api";
 
 export function PushNotificationManager() {
-  const [supported, setSupported] = useState(false);
+  const [supported] = useState(isPushSupported);
   const [subscribed, setSubscribed] = useState(false);
-
-  useEffect(() => {
-    setSupported(isPushSupported());
-  }, []);
 
   const handleSubscribe = async () => {
     const permission = await requestNotificationPermission();

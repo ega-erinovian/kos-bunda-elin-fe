@@ -4,7 +4,6 @@ import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
 export function DesktopRoomRow({ room }: { room: Room }) {
-  const isMaintenance = room.status === "nonaktif";
   const hasTenant = room.status === "terisi" && room.tenant;
 
   const iconBg = {

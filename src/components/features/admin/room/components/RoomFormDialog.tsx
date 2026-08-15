@@ -29,7 +29,7 @@ type RoomFormDialogProps = {
 const fieldClassName = "w-full border-outline-variant bg-surface-container-lowest";
 
 export function RoomFormDialog({ open, onOpenChange }: RoomFormDialogProps) {
-  const { nomor, setNomor, lantai, setLantai, harga, setHarga, status, setStatus, errors, isPending, isError, handleSubmit } =
+  const { nomor, setNomor, lantai, setLantai, harga, setHarga, status, setStatus, errors, isPending, handleSubmit } =
     useCreateRooms(open, onOpenChange);
 
   return (
@@ -112,12 +112,6 @@ export function RoomFormDialog({ open, onOpenChange }: RoomFormDialogProps) {
               </SelectContent>
             </Select>
           </div>
-
-          {isError && (
-            <p role="alert" className="text-label-md text-destructive">
-              Gagal menyimpan kamar. Silakan coba lagi.
-            </p>
-          )}
 
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

@@ -22,6 +22,7 @@ import { RoomFormDialog } from "./components/RoomFormDialog";
 
 export function DesktopRoomSection() {
   const [formOpen, setFormOpen] = useState(false);
+  const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
   const {
     floorOptions,
     isLoading,
@@ -42,10 +43,20 @@ export function DesktopRoomSection() {
 
   const empty = paginatedRooms.length === 0;
 
+  function handleAddRoom() {
+    setEditingRoomId(null);
+    setFormOpen(true);
+  }
+
+  function handleEditRoom(id: string) {
+    setEditingRoomId(id);
+    setFormOpen(true);
+  }
+
   return (
     <div className="hidden space-y-6 md:block">
       <PageHeader title="Manajemen Kamar" subtitle="Kelola data kamar kos.">
-        <Button size="lg" onClick={() => setFormOpen(true)}>
+        <Button size="lg" onClick={handleAddRoom}>
           <Plus className="h-4 w-4" />
           Tambah Kamar
         </Button>
@@ -114,7 +125,9 @@ export function DesktopRoomSection() {
             <RoomListError onRetry={refetch} />
           </div>
         ) : !empty ? (
-          paginatedRooms.map((room) => <DesktopRoomRow key={room.id} room={room} />)
+          paginatedRooms.map((room) => (
+            <DesktopRoomRow key={room.id} room={room} onEdit={() => handleEditRoom(room.id)} />
+          ))
         ) : (
           <div className="py-12 text-center text-body-md text-muted-foreground">
             Tidak ada kamar yang ditemukan.
@@ -131,7 +144,7 @@ export function DesktopRoomSection() {
         />
       </div>
 
-      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} />
+      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} editingRoomId={editingRoomId} />
     </div>
   );
 }

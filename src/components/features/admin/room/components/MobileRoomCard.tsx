@@ -12,7 +12,7 @@ import { formatCurrency, cn } from "@/lib/utils";
 import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
-export function MobileRoomCard({ room }: { room: Room }) {
+export function MobileRoomCard({ room, onEdit }: { room: Room; onEdit: () => void }) {
   const isMaintenance = room.status === "nonaktif";
   const hasTenant = room.status === "terisi" && room.tenant;
 
@@ -57,7 +57,11 @@ export function MobileRoomCard({ room }: { room: Room }) {
               {formatCurrency(room.price)}
             </p>
           </div>
-          <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary">
+          <button
+            onClick={onEdit}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-primary/5 hover:text-primary"
+            title="Edit"
+          >
             <MoreVertical className="h-5 w-5" />
           </button>
         </div>

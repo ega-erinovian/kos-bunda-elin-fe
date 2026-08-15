@@ -3,7 +3,7 @@ import { formatCurrency } from "@/lib/utils";
 import type { Room } from "../types";
 import { StatusBadge } from "./StatusBadge";
 
-export function DesktopRoomRow({ room }: { room: Room }) {
+export function DesktopRoomRow({ room, onEdit }: { room: Room; onEdit: () => void }) {
   const hasTenant = room.status === "terisi" && room.tenant;
 
   const iconBg = {
@@ -35,6 +35,7 @@ export function DesktopRoomRow({ room }: { room: Room }) {
 
       <div className="flex w-full justify-end gap-2 md:w-24">
         <button
+          onClick={onEdit}
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
           title="Edit"
         >

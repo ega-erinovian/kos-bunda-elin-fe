@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import type { PaginatedResponse, Room } from "@/types";
+import type { ApiResponse, PaginatedResponse, Room } from "@/types";
 
 const ROOMS_KEY = ["rooms"];
 
@@ -33,7 +33,7 @@ export function useRooms(params?: RoomListParams) {
 export function useRoom(id: string) {
   return useQuery({
     queryKey: [...ROOMS_KEY, id],
-    queryFn: () => api.get<Room>(`/kamar/${id}`),
+    queryFn: () => api.get<ApiResponse<Room>>(`/kamar/${id}`),
     enabled: !!id,
   });
 }

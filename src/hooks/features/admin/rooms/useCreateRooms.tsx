@@ -62,7 +62,13 @@ export function useCreateRooms(open: boolean, onOpenChange: (open: boolean) => v
     if (next.lantai !== undefined) setLantaiRaw(next.lantai);
     if (next.harga !== undefined) setHargaRaw(next.harga);
     if (submitted) {
-      setErrors(validate({ nomor: next.nomor ?? nomor, lantai: next.lantai ?? lantai, harga: next.harga ?? harga }));
+      setErrors(
+        validate({
+          nomor: next.nomor ?? nomor,
+          lantai: next.lantai ?? lantai,
+          harga: next.harga ?? harga,
+        }),
+      );
     }
   }
 

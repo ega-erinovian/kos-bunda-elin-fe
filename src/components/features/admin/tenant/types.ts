@@ -11,6 +11,7 @@ export type Tenant = {
   dueDate: string;
   dueLabel: string;
   dueVariant: DueVariant;
+  aktif: boolean;
 };
 
-export type FilterOption = "all" | "lunas" | "telat" | "menunggak";
+export type FilterOption = "semua" | "aktif" | "nonaktif";

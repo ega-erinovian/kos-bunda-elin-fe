@@ -8,6 +8,7 @@ type PaginationProps = {
   pageSize: number;
   onPageChange: (page: number) => void;
   variant?: "mobile" | "desktop";
+  itemLabel?: string;
 };
 
 export function Pagination({
@@ -17,6 +18,7 @@ export function Pagination({
   pageSize,
   onPageChange,
   variant = "desktop",
+  itemLabel = "kamar",
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -52,7 +54,7 @@ export function Pagination({
   return (
     <div className="flex items-center justify-between border-t border-border/30 px-6 py-4">
       <span className="text-sm text-muted-foreground">
-        Menampilkan {from}-{to} dari {totalItems} kamar
+        Menampilkan {from}-{to} dari {totalItems} {itemLabel}
       </span>
       <div className="flex gap-1">
         <Button

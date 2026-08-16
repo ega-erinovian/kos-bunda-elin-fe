@@ -1,17 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { dummyTenants, PAGE_SIZE } from "./constants";
-import { useTenants } from "../../../../hooks/features/admin/useTenants";
+import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
 import { MobileTenantCard } from "./components/MobileTenantCard";
 import { TenantDetailDrawer } from "./components/TenantDetailDrawer";
+import { TenantFormDialog } from "./components/TenantFormDialog";
+import { Pagination } from "../room/components/Pagination";
+import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
+import { RoomListError } from "../room/components/RoomListError";
+import { PAGE_SIZE } from "./constants";
 import type { Tenant } from "./types";
 
 export function MobileTenantSection() {
   const {
+    isLoading,
+    isError,
+    refetch,
     searchQuery,
     currentPage,
     filteredTenants,
@@ -19,18 +25,32 @@ export function MobileTenantSection() {
     paginatedTenants,
     handleSearch,
     handlePageChange,
-  } = useTenants(dummyTenants);
+  } = useTenants();
 
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingTenantId, setEditingTenantId] = useState<string | null>(null);
+  const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  function openDetail(tenant: Tenant) {
-    setSelectedTenant(tenant);
-    setDetailOpen(true);
+  function handleAddTenant() {
+    setEditingTenantId(null);
+    setFormOpen(true);
   }
 
-  const from = (currentPage - 1) * PAGE_SIZE + 1;
-  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length);
+  function handleEditTenant(id: string) {
+    setEditingTenantId(id);
+    setFormOpen(true);
+  }
+
+  function handleEditFromDetail(id: string) {
+    setDetailOpen(false);
+    handleEditTenant(id);
+  }
+
+  function openDetail(tenant: Tenant) {
+    setSelectedTenantId(tenant.id);
+    setDetailOpen(true);
+  }
 
   return (
     <div className="space-y-4 md:hidden">
@@ -42,12 +62,16 @@ export function MobileTenantSection() {
           placeholder="Cari nama atau kamar..."
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
-          className="h-[46px] w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
+          className="h-11.5 w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
         />
       </div>
 
       <div className="flex flex-col gap-3 pb-4">
-        {paginatedTenants.length > 0 ? (
+        {isLoading ? (
+          <RoomListSkeleton variant="mobile" />
+        ) : isError ? (
+          <RoomListError onRetry={refetch} title="Gagal memuat data penghuni" />
+        ) : paginatedTenants.length > 0 ? (
           paginatedTenants.map((tenant) => (
             <MobileTenantCard key={tenant.id} tenant={tenant} onClick={openDetail} />
           ))
@@ -58,35 +82,35 @@ export function MobileTenantSection() {
         )}
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-4 py-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-            disabled={currentPage <= 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-label-sm text-on-surface-variant">
-            {from}-{to} dari {filteredTenants.length}
-          </span>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-            disabled={currentPage >= totalPages}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
+      <Pagination
+        variant="mobile"
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={filteredTenants.length}
+        pageSize={PAGE_SIZE}
+        onPageChange={handlePageChange}
+        itemLabel="penghuni"
+      />
 
-      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
+      <button
+        onClick={handleAddTenant}
+        className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden"
+      >
         <Plus className="h-6 w-6" />
       </button>
 
-      <TenantDetailDrawer tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />
+      <TenantFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        editingTenantId={editingTenantId}
+      />
+
+      <TenantDetailDrawer
+        tenantId={selectedTenantId}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={handleEditFromDetail}
+      />
     </div>
   );
 }

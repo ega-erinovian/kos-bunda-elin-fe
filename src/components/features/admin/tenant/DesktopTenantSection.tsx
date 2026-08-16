@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Search, Plus, Filter } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,15 +12,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { formatCurrency } from "@/lib/utils";
-import { dummyTenants, PAGE_SIZE, filterOptions } from "./constants";
-import { useTenants } from "../../../../hooks/features/admin/useTenants";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
+import { filterOptions, PAGE_SIZE } from "./constants";
+import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
+import { useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { TenantDetailDialog } from "./components/TenantDetailDialog";
+import { TenantFormDialog } from "./components/TenantFormDialog";
+import { DesktopTenantRow } from "./components/DesktopTenantRow";
+import { Pagination } from "../room/components/Pagination";
+import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
+import { RoomListError } from "../room/components/RoomListError";
+import toast from "react-hot-toast";
 import type { Tenant } from "./types";
-import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react";
 
 export function DesktopTenantSection() {
   const {
+    isLoading,
+    isError,
+    refetch,
     searchQuery,
     filterStatus,
     currentPage,
@@ -31,19 +39,51 @@ export function DesktopTenantSection() {
     handleSearch,
     handlePageChange,
     handleFilterStatusChange,
-  } = useTenants(dummyTenants);
+  } = useTenants();
 
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingTenantId, setEditingTenantId] = useState<string | null>(null);
+  const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [tenantToSetKeluar, setTenantToSetKeluar] = useState<Tenant | null>(null);
+  const { mutate: markKeluar, isPending: isMarkingKeluar } = useMarkTenantKeluar();
+
+  function handleAddTenant() {
+    setEditingTenantId(null);
+    setFormOpen(true);
+  }
+
+  function handleEditTenant(id: string) {
+    setEditingTenantId(id);
+    setFormOpen(true);
+  }
+
+  function handleEditFromDetail(id: string) {
+    setDetailOpen(false);
+    handleEditTenant(id);
+  }
 
   function openDetail(tenant: Tenant) {
-    setSelectedTenant(tenant);
+    setSelectedTenantId(tenant.id);
     setDetailOpen(true);
   }
 
+  function handleMarkKeluar(tenant: Tenant) {
+    markKeluar(
+      { id: tenant.id },
+      {
+        onSuccess: () => {
+          toast.success(`${tenant.name} telah diset keluar.`);
+          setTenantToSetKeluar(null);
+        },
+        onError: () => {
+          toast.error("Gagal set keluar. Silakan coba lagi.");
+        },
+      },
+    );
+  }
+
   const empty = paginatedTenants.length === 0;
-  const from = (currentPage - 1) * PAGE_SIZE + 1;
-  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length);
 
   return (
     <div className="hidden space-y-6 md:block">
@@ -51,7 +91,7 @@ export function DesktopTenantSection() {
         title="Manajemen Penghuni"
         subtitle="Kelola data penghuni kos, status pembayaran, dan informasi kamar."
       >
-        <Button size="lg">
+        <Button size="lg" onClick={handleAddTenant}>
           <Plus className="h-4 w-4" />
           Tambah Penghuni
         </Button>
@@ -88,24 +128,32 @@ export function DesktopTenantSection() {
       </div>
 
       <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-ambient-md">
-        <div className="hidden items-center bg-muted/50 md:flex">
-          <div className="flex-2 px-6 py-4 text-label-md text-muted-foreground">Nama Penghuni</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">No. Telepon</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Kamar</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Tanggal Masuk</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Biaya Sewa</div>
-          <div className="flex-[1.5] px-6 py-4 text-label-md text-muted-foreground">
+        <div className="hidden items-center bg-muted/50 px-6 md:flex">
+          <div className="w-64 py-4 text-label-md text-muted-foreground">Nama Penghuni</div>
+          <div className="w-40 py-4 text-label-md text-muted-foreground">No. Telepon</div>
+          <div className="w-24 py-4 text-label-md text-muted-foreground">Kamar</div>
+          <div className="w-32 py-4 text-label-md text-muted-foreground">Tanggal Masuk</div>
+          <div className="w-32 py-4 text-label-md text-muted-foreground">Biaya Sewa</div>
+          <div className="w-44 py-4 text-label-md text-muted-foreground">
             Jatuh Tempo Berikutnya
           </div>
-          <div className="w-24 px-6 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
+          <div className="w-24 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
         </div>
 
-        {!empty ? (
+        {isLoading ? (
+          <RoomListSkeleton variant="desktop" />
+        ) : isError ? (
+          <div className="border-t border-border/30 px-6 py-6">
+            <RoomListError onRetry={refetch} title="Gagal memuat data penghuni" />
+          </div>
+        ) : !empty ? (
           paginatedTenants.map((tenant) => (
             <DesktopTenantRow
               key={tenant.id}
               tenant={tenant}
               onDetailClick={() => openDetail(tenant)}
+              onEdit={() => handleEditTenant(tenant.id)}
+              onSetKeluar={() => setTenantToSetKeluar(tenant)}
             />
           ))
         ) : (
@@ -114,98 +162,43 @@ export function DesktopTenantSection() {
           </div>
         )}
 
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-border/30 px-6 py-4">
-            <span className="text-sm text-muted-foreground">
-              Menampilkan {from}-{to} dari {filteredTenants.length} penghuni
-            </span>
-            <div className="flex gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                disabled={currentPage <= 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage >= totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
+        <Pagination
+          variant="desktop"
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filteredTenants.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={handlePageChange}
+          itemLabel="penghuni"
+        />
       </div>
 
-      <TenantDetailDialog tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />
-    </div>
-  );
-}
+      <TenantFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        editingTenantId={editingTenantId}
+      />
 
-function DesktopTenantRow({
-  tenant,
-  onDetailClick,
-}: {
-  tenant: Tenant;
-  onDetailClick: () => void;
-}) {
-  const dueBadgeVariant = {
-    default: "default" as const,
-    secondary: "secondary" as const,
-    destructive: "destructive" as const,
-    outline: "outline" as const,
-  }[tenant.dueVariant];
+      <TenantDetailDialog
+        tenantId={selectedTenantId}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onEdit={handleEditFromDetail}
+      />
 
-  return (
-    <div className="flex flex-col gap-4 border-t border-border/30 px-6 py-4 transition-colors hover:bg-muted/30 md:flex-row md:items-center md:gap-0">
-      <div className="flex flex-2 items-center gap-3">
-        <button
-          onClick={onDetailClick}
-          className="flex cursor-pointer items-center gap-3 text-left"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
-            {tenant.initials}
-          </div>
-          <span className="text-sm font-semibold text-on-surface transition-colors hover:text-primary">
-            {tenant.name}
-          </span>
-        </button>
-      </div>
-
-      <div className="flex-1 text-sm text-muted-foreground">{tenant.phone}</div>
-
-      <div className="flex-1">
-        <Badge variant="outline" className="font-medium">
-          {tenant.room}
-        </Badge>
-      </div>
-
-      <div className="flex-1 text-sm text-muted-foreground">{tenant.checkInDate}</div>
-
-      <div className="flex-1 text-sm text-on-surface">{formatCurrency(tenant.rentCost)}</div>
-
-      <div className="flex-[1.5]">
-        <Badge variant={dueBadgeVariant}>{tenant.dueLabel}</Badge>
-      </div>
-
-      <div className="flex w-full justify-end gap-2 md:w-24">
-        <button
-          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
-          title="Edit"
-        >
-          <Pencil className="h-4 w-4" />
-        </button>
-        <button
-          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
-          title="Hapus"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
-      </div>
+      <DeleteAlertDialog
+        open={tenantToSetKeluar !== null}
+        onOpenChange={(open) => !open && setTenantToSetKeluar(null)}
+        title="Set Penghuni Keluar"
+        description={
+          tenantToSetKeluar
+            ? `${tenantToSetKeluar.name} akan diset keluar dari kamar ${tenantToSetKeluar.room}. Status penghuni akan berubah menjadi tidak aktif. Lanjutkan?`
+            : undefined
+        }
+        confirmLabel="Set Keluar"
+        isPending={isMarkingKeluar}
+        onConfirm={() => tenantToSetKeluar && handleMarkKeluar(tenantToSetKeluar)}
+      />
     </div>
   );
 }

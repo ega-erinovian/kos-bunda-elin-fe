@@ -13,14 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { formatCurrency } from "@/lib/utils";
 import { filterOptions, PAGE_SIZE } from "./constants";
 import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
+import { useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { TenantDetailDialog } from "./components/TenantDetailDialog";
 import { TenantFormDialog } from "./components/TenantFormDialog";
 import { Pagination } from "../room/components/Pagination";
 import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
 import { RoomListError } from "../room/components/RoomListError";
+import toast from "react-hot-toast";
 import type { Tenant } from "./types";
 
 export function DesktopTenantSection() {
@@ -43,6 +46,8 @@ export function DesktopTenantSection() {
   const [editingTenantId, setEditingTenantId] = useState<string | null>(null);
   const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [tenantToSetKeluar, setTenantToSetKeluar] = useState<Tenant | null>(null);
+  const { mutate: markKeluar, isPending: isMarkingKeluar } = useMarkTenantKeluar();
 
   function handleAddTenant() {
     setEditingTenantId(null);
@@ -62,6 +67,21 @@ export function DesktopTenantSection() {
   function openDetail(tenant: Tenant) {
     setSelectedTenantId(tenant.id);
     setDetailOpen(true);
+  }
+
+  function handleMarkKeluar(tenant: Tenant) {
+    markKeluar(
+      { id: tenant.id },
+      {
+        onSuccess: () => {
+          toast.success(`${tenant.name} telah diset keluar.`);
+          setTenantToSetKeluar(null);
+        },
+        onError: () => {
+          toast.error("Gagal set keluar. Silakan coba lagi.");
+        },
+      },
+    );
   }
 
   const empty = paginatedTenants.length === 0;
@@ -134,6 +154,7 @@ export function DesktopTenantSection() {
               tenant={tenant}
               onDetailClick={() => openDetail(tenant)}
               onEdit={() => handleEditTenant(tenant.id)}
+              onSetKeluar={() => setTenantToSetKeluar(tenant)}
             />
           ))
         ) : (
@@ -165,6 +186,20 @@ export function DesktopTenantSection() {
         onOpenChange={setDetailOpen}
         onEdit={handleEditFromDetail}
       />
+
+      <DeleteAlertDialog
+        open={tenantToSetKeluar !== null}
+        onOpenChange={(open) => !open && setTenantToSetKeluar(null)}
+        title="Set Penghuni Keluar"
+        description={
+          tenantToSetKeluar
+            ? `${tenantToSetKeluar.name} akan diset keluar dari kamar ${tenantToSetKeluar.room}. Status penghuni akan berubah menjadi tidak aktif. Lanjutkan?`
+            : undefined
+        }
+        confirmLabel="Set Keluar"
+        isPending={isMarkingKeluar}
+        onConfirm={() => tenantToSetKeluar && handleMarkKeluar(tenantToSetKeluar)}
+      />
     </div>
   );
 }
@@ -173,10 +208,12 @@ function DesktopTenantRow({
   tenant,
   onDetailClick,
   onEdit,
+  onSetKeluar,
 }: {
   tenant: Tenant;
   onDetailClick: () => void;
   onEdit: () => void;
+  onSetKeluar: () => void;
 }) {
   const dueBadgeVariant = {
     default: "default" as const,
@@ -226,8 +263,9 @@ function DesktopTenantRow({
           <Pencil className="h-4 w-4" />
         </button>
         <button
+          onClick={onSetKeluar}
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
-          title="Hapus"
+          title="Set Keluar"
         >
           <Trash2 className="h-4 w-4" />
         </button>

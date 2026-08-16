@@ -5,3 +5,5 @@ TENANTS:
 - Buat selecttwo buat selectfieldnya
 - Karena per bulan tanggal jatuh tempo otomatis terhitung (pake hooks, ato lib)
 - Nama gak rapi di text wrap setelah di set width kolomnya entar
+- Tenant Detail content buat reusable component buat item berulang
+- DesktopTenantRow dibikin dedicated componentnya

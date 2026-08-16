@@ -62,7 +62,7 @@ export function MobileTenantSection() {
           placeholder="Cari nama atau kamar..."
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
-          className="h-[46px] w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
+          className="h-11.5 w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
         />
       </div>
 

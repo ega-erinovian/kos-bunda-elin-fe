@@ -1,9 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import { DoorOpen, Pencil } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { useTenant } from "@/hooks/api/use-tenants";
+import { useTenant, useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { Skeleton } from "@/components/ui/skeleton";
+import toast from "react-hot-toast";
 
 type TenantDetailContentProps = {
   tenantId: string;
@@ -21,6 +26,8 @@ function getInitials(name: string): string {
 
 export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentProps) {
   const { data, isLoading, isError } = useTenant(tenantId);
+  const { mutate: markKeluar, isPending: isMarkingKeluar } = useMarkTenantKeluar();
+  const [keluarDialogOpen, setKeluarDialogOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -55,6 +62,21 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
   const tenant = data.data;
   const initials = getInitials(tenant.nama);
   const isActive = tenant.aktif;
+
+  function handleMarkKeluar() {
+    markKeluar(
+      { id: tenant.id },
+      {
+        onSuccess: () => {
+          toast.success(`${tenant.nama} telah diset keluar.`);
+          setKeluarDialogOpen(false);
+        },
+        onError: () => {
+          toast.error("Gagal set keluar. Silakan coba lagi.");
+        },
+      },
+    );
+  }
 
   const style = isActive
     ? {
@@ -140,6 +162,7 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
         {isActive && (
           <Button
             variant="destructive"
+            onClick={() => setKeluarDialogOpen(true)}
             className="flex h-12 w-full items-center justify-center gap-2 rounded-xl"
           >
             <DoorOpen className="h-4 w-4" />
@@ -147,6 +170,16 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
           </Button>
         )}
       </div>
+
+      <DeleteAlertDialog
+        open={keluarDialogOpen}
+        onOpenChange={setKeluarDialogOpen}
+        title="Set Penghuni Keluar"
+        description={`${tenant.nama} akan diset keluar dari kamar ${tenant.kamar?.nomor ?? "-"}. Status penghuni akan berubah menjadi tidak aktif. Lanjutkan?`}
+        confirmLabel="Set Keluar"
+        isPending={isMarkingKeluar}
+        onConfirm={handleMarkKeluar}
+      />
     </div>
   );
 }

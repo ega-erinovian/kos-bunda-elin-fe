@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Filter } from "lucide-react";
+import { Search, Plus, Filter, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
@@ -14,14 +14,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatCurrency } from "@/lib/utils";
-import { dummyTenants, PAGE_SIZE, filterOptions } from "./constants";
-import { useTenants } from "../../../../hooks/features/admin/useTenants";
+import { filterOptions, PAGE_SIZE } from "./constants";
+import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
 import { TenantDetailDialog } from "./components/TenantDetailDialog";
+import { Pagination } from "../room/components/Pagination";
+import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
+import { RoomListError } from "../room/components/RoomListError";
 import type { Tenant } from "./types";
-import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react";
 
 export function DesktopTenantSection() {
   const {
+    isLoading,
+    isError,
+    refetch,
     searchQuery,
     filterStatus,
     currentPage,
@@ -31,7 +36,7 @@ export function DesktopTenantSection() {
     handleSearch,
     handlePageChange,
     handleFilterStatusChange,
-  } = useTenants(dummyTenants);
+  } = useTenants();
 
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -42,8 +47,6 @@ export function DesktopTenantSection() {
   }
 
   const empty = paginatedTenants.length === 0;
-  const from = (currentPage - 1) * PAGE_SIZE + 1;
-  const to = Math.min(currentPage * PAGE_SIZE, filteredTenants.length);
 
   return (
     <div className="hidden space-y-6 md:block">
@@ -100,7 +103,13 @@ export function DesktopTenantSection() {
           <div className="w-24 px-6 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
         </div>
 
-        {!empty ? (
+        {isLoading ? (
+          <RoomListSkeleton variant="desktop" />
+        ) : isError ? (
+          <div className="border-t border-border/30 px-6 py-6">
+            <RoomListError onRetry={refetch} title="Gagal memuat data penghuni" />
+          </div>
+        ) : !empty ? (
           paginatedTenants.map((tenant) => (
             <DesktopTenantRow
               key={tenant.id}
@@ -114,31 +123,15 @@ export function DesktopTenantSection() {
           </div>
         )}
 
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-border/30 px-6 py-4">
-            <span className="text-sm text-muted-foreground">
-              Menampilkan {from}-{to} dari {filteredTenants.length} penghuni
-            </span>
-            <div className="flex gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                disabled={currentPage <= 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage >= totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
+        <Pagination
+          variant="desktop"
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filteredTenants.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={handlePageChange}
+          itemLabel="penghuni"
+        />
       </div>
 
       <TenantDetailDialog tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />

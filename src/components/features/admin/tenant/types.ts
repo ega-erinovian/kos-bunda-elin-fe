@@ -13,4 +13,4 @@ export type Tenant = {
   dueVariant: DueVariant;
 };
 
-export type FilterOption = "all" | "lunas" | "telat" | "menunggak";
+export type FilterOption = "semua" | "aktif" | "nonaktif";

@@ -3,33 +3,25 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import type { Tenant } from "../types";
-import { getStatusKey } from "../constants";
 
 type TenantDetailContentProps = {
   tenant: Tenant;
 };
 
-const statusLabelMap: Record<string, { label: string; classes: string; statusClasses: string }> = {
-  lunas: {
-    label: "Lunas",
-    classes: "bg-primary/10 text-primary",
-    statusClasses: "bg-primary/90",
-  },
-  telat: {
-    label: "Telat",
-    classes: "bg-error-container/50 text-on-error-container",
-    statusClasses: "bg-red-600/90",
-  },
-  menunggak: {
-    label: "Menunggak",
-    classes: "bg-tertiary/10 text-tertiary",
-    statusClasses: "bg-tertiary/90",
-  },
+const activeStyle = {
+  label: "Aktif",
+  classes: "bg-primary/10 text-primary",
+  statusClasses: "bg-primary/90",
+};
+
+const inactiveStyle = {
+  label: "Tidak Aktif",
+  classes: "bg-surface-variant text-on-surface-variant",
+  statusClasses: "bg-outline",
 };
 
 export function TenantDetailContent({ tenant }: TenantDetailContentProps) {
-  const statusKey = getStatusKey(tenant.dueVariant);
-  const style = statusLabelMap[statusKey];
+  const style = tenant.dueVariant === "outline" ? inactiveStyle : activeStyle;
 
   return (
     <div className="flex flex-col gap-4">

@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type TenantDetailContentProps = {
   tenantId: string;
+  onEdit: (id: string) => void;
 };
 
 function getInitials(name: string): string {
@@ -18,7 +19,7 @@ function getInitials(name: string): string {
     .join("");
 }
 
-export function TenantDetailContent({ tenantId }: TenantDetailContentProps) {
+export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentProps) {
   const { data, isLoading, isError } = useTenant(tenantId);
 
   if (isLoading) {
@@ -129,7 +130,10 @@ export function TenantDetailContent({ tenantId }: TenantDetailContentProps) {
       </div>
 
       <div className="mt-2 flex flex-col gap-3">
-        <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-xl">
+        <Button
+          onClick={() => onEdit(tenant.id)}
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl"
+        >
           <Pencil className="h-4 w-4" />
           Edit Data Penghuni
         </Button>

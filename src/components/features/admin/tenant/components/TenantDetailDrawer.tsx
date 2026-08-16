@@ -5,9 +5,15 @@ type TenantDetailDrawerProps = {
   tenantId: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onEdit: (id: string) => void;
 };
 
-export function TenantDetailDrawer({ tenantId, open, onOpenChange }: TenantDetailDrawerProps) {
+export function TenantDetailDrawer({
+  tenantId,
+  open,
+  onOpenChange,
+  onEdit,
+}: TenantDetailDrawerProps) {
   if (!tenantId) return null;
 
   return (
@@ -16,7 +22,7 @@ export function TenantDetailDrawer({ tenantId, open, onOpenChange }: TenantDetai
         <DrawerHeader className="px-0">
           <div className="mx-auto mb-2 h-1.5 w-12 rounded-full bg-surface-variant" />
         </DrawerHeader>
-        <TenantDetailContent tenantId={tenantId} />
+        <TenantDetailContent tenantId={tenantId} onEdit={onEdit} />
       </DrawerContent>
     </Drawer>
   );

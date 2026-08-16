@@ -17,6 +17,7 @@ import { formatCurrency } from "@/lib/utils";
 import { filterOptions, PAGE_SIZE } from "./constants";
 import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
 import { TenantDetailDialog } from "./components/TenantDetailDialog";
+import { TenantFormDialog } from "./components/TenantFormDialog";
 import { Pagination } from "../room/components/Pagination";
 import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
 import { RoomListError } from "../room/components/RoomListError";
@@ -38,8 +39,25 @@ export function DesktopTenantSection() {
     handleFilterStatusChange,
   } = useTenants();
 
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingTenantId, setEditingTenantId] = useState<string | null>(null);
   const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  function handleAddTenant() {
+    setEditingTenantId(null);
+    setFormOpen(true);
+  }
+
+  function handleEditTenant(id: string) {
+    setEditingTenantId(id);
+    setFormOpen(true);
+  }
+
+  function handleEditFromDetail(id: string) {
+    setDetailOpen(false);
+    handleEditTenant(id);
+  }
 
   function openDetail(tenant: Tenant) {
     setSelectedTenantId(tenant.id);
@@ -54,7 +72,7 @@ export function DesktopTenantSection() {
         title="Manajemen Penghuni"
         subtitle="Kelola data penghuni kos, status pembayaran, dan informasi kamar."
       >
-        <Button size="lg">
+        <Button size="lg" onClick={handleAddTenant}>
           <Plus className="h-4 w-4" />
           Tambah Penghuni
         </Button>
@@ -115,6 +133,7 @@ export function DesktopTenantSection() {
               key={tenant.id}
               tenant={tenant}
               onDetailClick={() => openDetail(tenant)}
+              onEdit={() => handleEditTenant(tenant.id)}
             />
           ))
         ) : (
@@ -134,10 +153,17 @@ export function DesktopTenantSection() {
         />
       </div>
 
+      <TenantFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        editingTenantId={editingTenantId}
+      />
+
       <TenantDetailDialog
         tenantId={selectedTenantId}
         open={detailOpen}
         onOpenChange={setDetailOpen}
+        onEdit={handleEditFromDetail}
       />
     </div>
   );
@@ -146,9 +172,11 @@ export function DesktopTenantSection() {
 function DesktopTenantRow({
   tenant,
   onDetailClick,
+  onEdit,
 }: {
   tenant: Tenant;
   onDetailClick: () => void;
+  onEdit: () => void;
 }) {
   const dueBadgeVariant = {
     default: "default" as const,
@@ -191,6 +219,7 @@ function DesktopTenantRow({
 
       <div className="flex w-full justify-end gap-2 md:w-24">
         <button
+          onClick={onEdit}
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
           title="Edit"
         >

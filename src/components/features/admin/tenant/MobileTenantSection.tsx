@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
 import { MobileTenantCard } from "./components/MobileTenantCard";
 import { TenantDetailDrawer } from "./components/TenantDetailDrawer";
+import { TenantFormDialog } from "./components/TenantFormDialog";
 import { Pagination } from "../room/components/Pagination";
 import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
 import { RoomListError } from "../room/components/RoomListError";
@@ -26,8 +27,25 @@ export function MobileTenantSection() {
     handlePageChange,
   } = useTenants();
 
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingTenantId, setEditingTenantId] = useState<string | null>(null);
   const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  function handleAddTenant() {
+    setEditingTenantId(null);
+    setFormOpen(true);
+  }
+
+  function handleEditTenant(id: string) {
+    setEditingTenantId(id);
+    setFormOpen(true);
+  }
+
+  function handleEditFromDetail(id: string) {
+    setDetailOpen(false);
+    handleEditTenant(id);
+  }
 
   function openDetail(tenant: Tenant) {
     setSelectedTenantId(tenant.id);
@@ -74,14 +92,24 @@ export function MobileTenantSection() {
         itemLabel="penghuni"
       />
 
-      <button className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden">
+      <button
+        onClick={handleAddTenant}
+        className="fixed bottom-24 right-4 z-30 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl bg-primary text-on-primary shadow-lg transition-colors hover:bg-primary/90 md:hidden"
+      >
         <Plus className="h-6 w-6" />
       </button>
+
+      <TenantFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        editingTenantId={editingTenantId}
+      />
 
       <TenantDetailDrawer
         tenantId={selectedTenantId}
         open={detailOpen}
         onOpenChange={setDetailOpen}
+        onEdit={handleEditFromDetail}
       />
     </div>
   );

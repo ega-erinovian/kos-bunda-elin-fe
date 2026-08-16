@@ -59,6 +59,26 @@ export function TenantFormDialog({
   const isLoadingTenant = editingTenantId ? updateForm.isLoading : false;
   const isEditing = editingTenantId !== null;
 
+  function handleRoomChange(roomId: string | null) {
+    if (!roomId) return;
+    setKamarId(roomId);
+    const selectedRoom = availableRooms.find((r) => r.id === roomId);
+    if (selectedRoom && !nominalSewa) {
+      setNominalSewa(String(selectedRoom.harga));
+    }
+  }
+
+  function handleDateChange(dateString: string) {
+    setTanggalMulaiSewa(dateString);
+    if (dateString && !tanggalJatuhTempo) {
+      const date = new Date(dateString);
+      const dayOfMonth = date.getDate();
+      setTanggalJatuhTempo(String(Math.min(dayOfMonth, 28)));
+    }
+  }
+
+  const selectedRoom = availableRooms.find((r) => r.id === kamarId);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-112">
@@ -110,9 +130,13 @@ export function TenantFormDialog({
 
           <div className="space-y-2">
             <Label className="text-label-md text-on-surface-variant">Kamar</Label>
-            <Select value={kamarId} onValueChange={(v) => v !== null && setKamarId(v)}>
+            <Select value={kamarId} onValueChange={handleRoomChange}>
               <SelectTrigger className={fieldClassName}>
-                <SelectValue placeholder="Pilih kamar" />
+                <SelectValue placeholder="Pilih kamar">
+                  {selectedRoom
+                    ? `Kamar ${selectedRoom.nomor} - Lantai ${selectedRoom.lantai}`
+                    : "Pilih kamar"}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {availableRooms.map((room) => (
@@ -137,7 +161,7 @@ export function TenantFormDialog({
               id="tanggalMulaiSewa"
               type="date"
               value={tanggalMulaiSewa}
-              onChange={(e) => setTanggalMulaiSewa(e.target.value)}
+              onChange={(e) => handleDateChange(e.target.value)}
               className={fieldClassName}
               aria-invalid={!!errors.tanggalMulaiSewa}
             />

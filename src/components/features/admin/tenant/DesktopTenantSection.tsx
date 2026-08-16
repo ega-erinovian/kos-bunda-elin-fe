@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Filter, Pencil, Trash2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Search, Plus, Filter } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,12 +13,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
-import { formatCurrency } from "@/lib/utils";
 import { filterOptions, PAGE_SIZE } from "./constants";
 import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
 import { useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { TenantDetailDialog } from "./components/TenantDetailDialog";
 import { TenantFormDialog } from "./components/TenantFormDialog";
+import { DesktopTenantRow } from "./components/DesktopTenantRow";
 import { Pagination } from "../room/components/Pagination";
 import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
 import { RoomListError } from "../room/components/RoomListError";
@@ -129,16 +128,16 @@ export function DesktopTenantSection() {
       </div>
 
       <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-ambient-md">
-        <div className="hidden items-center bg-muted/50 md:flex">
-          <div className="flex-2 px-6 py-4 text-label-md text-muted-foreground">Nama Penghuni</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">No. Telepon</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Kamar</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Tanggal Masuk</div>
-          <div className="flex-1 px-6 py-4 text-label-md text-muted-foreground">Biaya Sewa</div>
-          <div className="flex-[1.5] px-6 py-4 text-label-md text-muted-foreground">
+        <div className="hidden items-center bg-muted/50 px-6 md:flex">
+          <div className="w-64 py-4 text-label-md text-muted-foreground">Nama Penghuni</div>
+          <div className="w-40 py-4 text-label-md text-muted-foreground">No. Telepon</div>
+          <div className="w-24 py-4 text-label-md text-muted-foreground">Kamar</div>
+          <div className="w-32 py-4 text-label-md text-muted-foreground">Tanggal Masuk</div>
+          <div className="w-32 py-4 text-label-md text-muted-foreground">Biaya Sewa</div>
+          <div className="w-44 py-4 text-label-md text-muted-foreground">
             Jatuh Tempo Berikutnya
           </div>
-          <div className="w-24 px-6 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
+          <div className="w-24 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
         </div>
 
         {isLoading ? (
@@ -200,76 +199,6 @@ export function DesktopTenantSection() {
         isPending={isMarkingKeluar}
         onConfirm={() => tenantToSetKeluar && handleMarkKeluar(tenantToSetKeluar)}
       />
-    </div>
-  );
-}
-
-function DesktopTenantRow({
-  tenant,
-  onDetailClick,
-  onEdit,
-  onSetKeluar,
-}: {
-  tenant: Tenant;
-  onDetailClick: () => void;
-  onEdit: () => void;
-  onSetKeluar: () => void;
-}) {
-  const dueBadgeVariant = {
-    default: "default" as const,
-    secondary: "secondary" as const,
-    destructive: "destructive" as const,
-    outline: "outline" as const,
-  }[tenant.dueVariant];
-
-  return (
-    <div className="flex flex-col gap-4 border-t border-border/30 px-6 py-4 transition-colors hover:bg-muted/30 md:flex-row md:items-center md:gap-0">
-      <div className="flex flex-2 items-center gap-3">
-        <button
-          onClick={onDetailClick}
-          className="flex cursor-pointer items-center gap-3 text-left"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
-            {tenant.initials}
-          </div>
-          <span className="text-sm font-semibold text-on-surface transition-colors hover:text-primary">
-            {tenant.name}
-          </span>
-        </button>
-      </div>
-
-      <div className="flex-1 text-sm text-muted-foreground">{tenant.phone}</div>
-
-      <div className="flex-1">
-        <Badge variant="outline" className="font-medium">
-          {tenant.room}
-        </Badge>
-      </div>
-
-      <div className="flex-1 text-sm text-muted-foreground">{tenant.checkInDate}</div>
-
-      <div className="flex-1 text-sm text-on-surface">{formatCurrency(tenant.rentCost)}</div>
-
-      <div className="flex-[1.5]">
-        <Badge variant={dueBadgeVariant}>{tenant.dueLabel}</Badge>
-      </div>
-
-      <div className="flex w-full justify-end gap-2 md:w-24">
-        <button
-          onClick={onEdit}
-          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
-          title="Edit"
-        >
-          <Pencil className="h-4 w-4" />
-        </button>
-        <button
-          onClick={onSetKeluar}
-          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-destructive"
-          title="Set Keluar"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
-      </div>
     </div>
   );
 }

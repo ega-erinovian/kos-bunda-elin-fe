@@ -8,6 +8,8 @@ import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useTenant, useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TenantDetailContentItem } from "./TenantDetailContentItem";
+import { MobileTenantCardActiveBadge } from "./MobileTenantCardActiveBadge";
 import toast from "react-hot-toast";
 
 type TenantDetailContentProps = {
@@ -78,18 +80,6 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
     );
   }
 
-  const style = isActive
-    ? {
-        label: "Aktif",
-        classes: "bg-primary/10 text-primary",
-        statusClasses: "bg-primary/90",
-      }
-    : {
-        label: "Tidak Aktif",
-        classes: "bg-surface-variant text-on-surface-variant",
-        statusClasses: "bg-outline",
-      };
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-start justify-between">
@@ -107,47 +97,30 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
         </div>
       </div>
 
-      <div
-        className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-label-sm ${style.classes}`}
-      >
-        <span className={`h-2 w-2 rounded-full ${style.statusClasses}`} />
-        {style.label}
-      </div>
+      <MobileTenantCardActiveBadge aktif={isActive} />
 
       <div className="flex flex-col gap-3 rounded-2xl border border-surface-variant/50 bg-surface-container-low p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-label-md text-on-surface-variant">Tanggal Masuk</span>
-          <span className="text-body-md text-on-surface">
-            {formatDate(tenant.tanggalMulaiSewa)}
-          </span>
-        </div>
-        <hr className="border-outline-variant/30" />
-        <div className="flex items-center justify-between">
-          <span className="text-label-md text-on-surface-variant">No. Telepon</span>
-          <span className="text-body-md text-on-surface">{tenant.noHp}</span>
-        </div>
-        <hr className="border-outline-variant/30" />
-        <div className="flex items-center justify-between">
-          <span className="text-label-md text-on-surface-variant">Sewa Per Bulan</span>
-          <span className="text-body-md text-on-surface">
-            {formatCurrency(Number(tenant.nominalSewa))}
-          </span>
-        </div>
-        <hr className="border-outline-variant/30" />
-        <div className="flex items-center justify-between">
-          <span className="text-label-md text-on-surface-variant">Jatuh Tempo</span>
-          <span className="text-body-md text-on-surface">Tanggal {tenant.tanggalJatuhTempo}</span>
-        </div>
+        <TenantDetailContentItem
+          label="Tanggal Masuk"
+          value={formatDate(tenant.tanggalMulaiSewa)}
+        />
+        <TenantDetailContentItem label="No. Telepon" value={tenant.noHp} showDivider />
+        <TenantDetailContentItem
+          label="Sewa Per Bulan"
+          value={formatCurrency(Number(tenant.nominalSewa))}
+          showDivider
+        />
+        <TenantDetailContentItem
+          label="Jatuh Tempo"
+          value={`Tanggal ${tenant.tanggalJatuhTempo}`}
+          showDivider
+        />
         {tenant.tanggalKeluar && (
-          <>
-            <hr className="border-outline-variant/30" />
-            <div className="flex items-center justify-between">
-              <span className="text-label-md text-on-surface-variant">Tanggal Keluar</span>
-              <span className="text-body-md text-on-surface">
-                {formatDate(tenant.tanggalKeluar)}
-              </span>
-            </div>
-          </>
+          <TenantDetailContentItem
+            label="Tanggal Keluar"
+            value={formatDate(tenant.tanggalKeluar)}
+            showDivider
+          />
         )}
       </div>
 

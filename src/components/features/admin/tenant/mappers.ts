@@ -32,5 +32,6 @@ export function mapTenant(tenant: ApiTenant): Tenant {
     dueDate,
     dueLabel: tenant.aktif ? dueDate : "Tidak Aktif",
     dueVariant: tenant.aktif ? "secondary" : "outline",
+    aktif: tenant.aktif,
   };
 }

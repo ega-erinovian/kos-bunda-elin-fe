@@ -38,11 +38,11 @@ export function DesktopTenantSection() {
     handleFilterStatusChange,
   } = useTenants();
 
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
   function openDetail(tenant: Tenant) {
-    setSelectedTenant(tenant);
+    setSelectedTenantId(tenant.id);
     setDetailOpen(true);
   }
 
@@ -134,7 +134,11 @@ export function DesktopTenantSection() {
         />
       </div>
 
-      <TenantDetailDialog tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />
+      <TenantDetailDialog
+        tenantId={selectedTenantId}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+      />
     </div>
   );
 }

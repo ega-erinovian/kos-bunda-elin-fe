@@ -1,15 +1,14 @@
 import { Drawer, DrawerContent, DrawerHeader } from "@/components/ui/drawer";
-import type { Tenant } from "../types";
 import { TenantDetailContent } from "./TenantDetailContent";
 
 type TenantDetailDrawerProps = {
-  tenant: Tenant | null;
+  tenantId: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
-export function TenantDetailDrawer({ tenant, open, onOpenChange }: TenantDetailDrawerProps) {
-  if (!tenant) return null;
+export function TenantDetailDrawer({ tenantId, open, onOpenChange }: TenantDetailDrawerProps) {
+  if (!tenantId) return null;
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} showSwipeHandle swipeDirection="down">
@@ -17,7 +16,7 @@ export function TenantDetailDrawer({ tenant, open, onOpenChange }: TenantDetailD
         <DrawerHeader className="px-0">
           <div className="mx-auto mb-2 h-1.5 w-12 rounded-full bg-surface-variant" />
         </DrawerHeader>
-        <TenantDetailContent tenant={tenant} />
+        <TenantDetailContent tenantId={tenantId} />
       </DrawerContent>
     </Drawer>
   );

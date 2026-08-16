@@ -26,11 +26,11 @@ export function MobileTenantSection() {
     handlePageChange,
   } = useTenants();
 
-  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+  const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
   function openDetail(tenant: Tenant) {
-    setSelectedTenant(tenant);
+    setSelectedTenantId(tenant.id);
     setDetailOpen(true);
   }
 
@@ -78,7 +78,11 @@ export function MobileTenantSection() {
         <Plus className="h-6 w-6" />
       </button>
 
-      <TenantDetailDrawer tenant={selectedTenant} open={detailOpen} onOpenChange={setDetailOpen} />
+      <TenantDetailDrawer
+        tenantId={selectedTenantId}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+      />
     </div>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Search, Filter, ArrowRight } from "lucide-react";
+import { Search, Filter, ArrowRight, FilePen } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
 import { MobilePaymentCard } from "./components/MobilePaymentCard";
+import { PaymentFormDialog } from "./components/PaymentFormDialog";
 import { MobileBroadcastForm } from "./components/MobileBroadcastForm";
 import { MobileLogEntry } from "./components/MobileLogEntry";
 import { dummyBroadcastLogs } from "./constants";
@@ -12,6 +15,7 @@ import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
 import { transformApiPaymentToAdminPayment } from "@/lib/utils";
 
 export function MobilePaymentSection() {
+  const [formOpen, setFormOpen] = useState(false);
 const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
@@ -30,6 +34,11 @@ const currentDate = new Date();
   return (
     <div className="space-y-6 md:hidden">
       <h1 className="text-heading-lg-mobile font-bold text-on-surface">Manajemen Pembayaran</h1>
+
+      <Button size="lg" className="w-full" onClick={() => setFormOpen(true)}>
+        <FilePen className="h-4 w-4" />
+        Input Manual
+      </Button>
 
       {/* Search */}
       <div className="relative">
@@ -82,6 +91,8 @@ const currentDate = new Date();
           ))}
         </div>
       </section>
+
+      <PaymentFormDialog open={formOpen} onOpenChange={setFormOpen} />
     </div>
   );
 }

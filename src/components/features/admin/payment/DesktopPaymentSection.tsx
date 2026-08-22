@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { FilePen, ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { PaymentTrackingCard } from "./components/PaymentTrackingCard";
+import { PaymentFormDialog } from "./components/PaymentFormDialog";
 import { BroadcastCard } from "./components/BroadcastCard";
 import { CommunicationLogsTable } from "./components/CommunicationLogsTable";
 import { dummyBroadcastLogs, PAGE_SIZE } from "./constants";
@@ -13,6 +15,7 @@ import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
 import { transformApiPaymentToAdminPayment } from "@/lib/utils";
 
 export function DesktopPaymentSection() {
+  const [formOpen, setFormOpen] = useState(false);
 const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
@@ -49,7 +52,7 @@ const currentDate = new Date();
         title="Payment Tracking"
         subtitle="Monitor pending collections and manage financial communications."
       >
-        <Button size="lg" variant="secondary">
+        <Button size="lg" variant="secondary" onClick={() => setFormOpen(true)}>
           <FilePen className="h-4 w-4" />
           Manual Input
         </Button>
@@ -88,6 +91,8 @@ const currentDate = new Date();
           </>
         )}
       </div>
+
+      <PaymentFormDialog open={formOpen} onOpenChange={setFormOpen} />
     </div>
   );
 }

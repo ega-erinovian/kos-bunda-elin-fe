@@ -1,6 +1,12 @@
 import type { Payment, BroadcastLog } from "./types";
+import { getMonthName } from "@/lib/utils";
 
 export const PAGE_SIZE = 5;
+
+export const monthSelectOptions: { key: string; label: string }[] = Array.from(
+  { length: 12 },
+  (_, i) => ({ key: String(i + 1), label: getMonthName(i + 1) }),
+);
 
 export const dummyPayments: Payment[] = [
   {

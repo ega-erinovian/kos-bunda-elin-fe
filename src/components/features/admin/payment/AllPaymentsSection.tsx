@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Search, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, ArrowLeft, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MobilePaymentCard } from "./components/MobilePaymentCard";
 import { PaymentRow } from "./components/PaymentRow";
+import { PaymentFormDialog } from "./components/PaymentFormDialog";
 import { PAGE_SIZE } from "./constants";
 import { usePaymentsSearch } from "@/hooks/features/admin/usePaymentsSearch";
 import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
@@ -19,6 +21,7 @@ const tabOptions: { key: PaymentTab; label: string }[] = [
 ];
 
 export function AllPaymentsSection() {
+  const [formOpen, setFormOpen] = useState(false);
 const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
@@ -67,6 +70,14 @@ const currentDate = new Date();
             Daftar lengkap tagihan penghuni yang perlu ditindaklanjuti.
           </p>
         </div>
+
+        <Button
+          onClick={() => setFormOpen(true)}
+          className="ml-auto h-9 shrink-0 rounded-full px-3 text-label-sm font-semibold md:h-10 md:px-5 md:text-label-md"
+        >
+          <Plus className="h-4 w-4 md:h-5 md:w-5" />
+          Input Manual
+        </Button>
       </div>
 
       <div className="relative">
@@ -152,6 +163,8 @@ const currentDate = new Date();
           )}
         </>
       )}
+
+      <PaymentFormDialog open={formOpen} onOpenChange={setFormOpen} />
     </div>
   );
 }

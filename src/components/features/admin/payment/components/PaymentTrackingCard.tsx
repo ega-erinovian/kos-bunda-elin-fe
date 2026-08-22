@@ -57,6 +57,16 @@ export function PaymentTrackingCard({
           >
             Menunggak (H+)
           </button>
+          <button
+            onClick={() => onTabChange("paid")}
+            className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
+              activeTab === "paid"
+                ? "border-b-2 border-primary text-primary"
+                : "text-on-surface-variant hover:text-primary"
+            }`}
+          >
+            Lunas
+          </button>
         </div>
         {headerAction}
       </div>
@@ -68,7 +78,9 @@ export function PaymentTrackingCard({
           <div className="py-12 text-center text-body-md text-on-surface-variant">
             {activeTab === "approaching"
               ? "Tidak ada pembayaran yang mendekati jatuh tempo."
-              : "Tidak ada pembayaran yang menunggak."}
+              : activeTab === "overdue"
+                ? "Tidak ada pembayaran yang menunggak."
+                : "Tidak ada pembayaran yang sudah lunas."}
           </div>
         )}
       </div>

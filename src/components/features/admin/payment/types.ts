@@ -1,5 +1,5 @@
-export type PaymentTab = "approaching" | "overdue";
-export type PaymentStatus = "pending" | "overdue" | "paid";
+export type PaymentTab = "approaching" | "overdue" | "paid";
+export type PaymentStatus = "pending" | "overdue" | "paid" | "partial";
 
 export type Payment = {
   id: string;
@@ -10,6 +10,7 @@ export type Payment = {
   amount: number;
   status: PaymentStatus;
   tab: PaymentTab;
+  totalDibayar?: number;
 };
 
 export type BroadcastLogStatus = "success" | "failed";

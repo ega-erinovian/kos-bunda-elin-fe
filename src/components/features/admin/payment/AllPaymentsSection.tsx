@@ -6,16 +6,35 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MobilePaymentCard } from "./components/MobilePaymentCard";
 import { PaymentRow } from "./components/PaymentRow";
-import { dummyPayments, PAGE_SIZE } from "./constants";
+import { PAGE_SIZE } from "./constants";
 import { usePaymentsSearch } from "@/hooks/features/admin/usePaymentsSearch";
+import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
+import { transformApiPaymentToAdminPayment } from "@/lib/utils";
 import type { PaymentTab } from "./types";
 
 const tabOptions: { key: PaymentTab; label: string }[] = [
   { key: "approaching", label: "Menunggu" },
   { key: "overdue", label: "Overdue" },
+  { key: "paid", label: "Lunas" },
 ];
 
 export function AllPaymentsSection() {
+const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  const paymentsQuery = useApiPayments({
+    periodeBulan: currentMonth,
+    periodeTahun: currentYear,
+  });
+
+  const adminPayments = (paymentsQuery?.data?.data || [])
+    .filter(
+      (p) =>
+        p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT" || p.status === "LUNAS",
+    )
+    .map(transformApiPaymentToAdminPayment);
+
   const {
     searchQuery,
     activeTab,
@@ -26,7 +45,7 @@ export function AllPaymentsSection() {
     handleSearch,
     handleTabChange,
     handlePageChange,
-  } = usePaymentsSearch(dummyPayments);
+  } = usePaymentsSearch(adminPayments);
 
   const from = (currentPage - 1) * PAGE_SIZE + 1;
   const to = Math.min(currentPage * PAGE_SIZE, filteredPayments.length);
@@ -76,52 +95,62 @@ export function AllPaymentsSection() {
         ))}
       </div>
 
-      <div className="flex flex-col gap-3 md:gap-4 lg:hidden">
-        {paginatedPayments.length > 0 ? (
-          paginatedPayments.map((payment) => (
-            <MobilePaymentCard key={payment.id} payment={payment} />
-          ))
-        ) : (
-          <div className="py-12 text-center text-body-md text-on-surface-variant md:py-16">
-            Tidak ada tagihan ditemukan.
+      {paymentsQuery?.isLoading ? (
+        <div className="py-12 text-center text-body-md text-on-surface-variant">
+          Memuat data pembayaran...
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col gap-3 md:gap-4 lg:hidden">
+            {paginatedPayments.length > 0 ? (
+              paginatedPayments.map((payment) => (
+                <MobilePaymentCard key={payment.id} payment={payment} />
+              ))
+            ) : (
+              <div className="py-12 text-center text-body-md text-on-surface-variant md:py-16">
+                Tidak ada tagihan ditemukan.
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className="hidden rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md lg:block">
-        <div className="space-y-3">
-          {paginatedPayments.length > 0 ? (
-            paginatedPayments.map((payment) => <PaymentRow key={payment.id} payment={payment} />)
-          ) : (
-            <div className="py-12 text-center text-body-md text-on-surface-variant">
-              Tidak ada tagihan ditemukan.
+          <div className="hidden rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md lg:block">
+            <div className="space-y-3">
+              {paginatedPayments.length > 0 ? (
+                paginatedPayments.map((payment) => (
+                  <PaymentRow key={payment.id} payment={payment} />
+                ))
+              ) : (
+                <div className="py-12 text-center text-body-md text-on-surface-variant">
+                  Tidak ada tagihan ditemukan.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 py-2 md:gap-6 md:py-4">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                disabled={currentPage <= 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-label-sm text-on-surface-variant md:text-body-md">
+                {from}-{to} dari {filteredPayments.length}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage >= totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           )}
-        </div>
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-4 py-2 md:gap-6 md:py-4">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-            disabled={currentPage <= 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-label-sm text-on-surface-variant md:text-body-md">
-            {from}-{to} dari {filteredPayments.length}
-          </span>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-            disabled={currentPage >= totalPages}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        </>
       )}
     </div>
   );

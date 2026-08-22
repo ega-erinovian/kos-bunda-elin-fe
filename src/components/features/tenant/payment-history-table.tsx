@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDate, getMonthName } from "@/lib/utils";
-import type { Payment } from "@/types";
+import type { Payment, PaymentStatus } from "@/types";
 
 interface PaymentHistoryTableProps {
   payments: Payment[];
@@ -18,13 +18,13 @@ interface PaymentHistoryTableProps {
 
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
   const statusMap: Record<
-    string,
+    PaymentStatus,
     { label: string; variant: "default" | "secondary" | "destructive" | "outline" }
   > = {
-    paid: { label: "Lunas", variant: "default" },
-    pending: { label: "Menunggu", variant: "secondary" },
-    late: { label: "Terlambat", variant: "destructive" },
-    partial: { label: "Sebagian", variant: "outline" },
+    LUNAS: { label: "Lunas", variant: "default" },
+    BELUM_BAYAR: { label: "Belum Bayar", variant: "secondary" },
+    TERLAMBAT: { label: "Terlambat", variant: "destructive" },
+    SEBAGIAN: { label: "Sebagian", variant: "outline" },
   };
 
   if (payments.length === 0) {
@@ -45,18 +45,18 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
       </TableHeader>
       <TableBody>
         {payments.map((payment) => {
-          const s = statusMap[payment.status] || statusMap.pending;
+          const s = statusMap[payment.status];
           return (
             <TableRow key={payment.id}>
               <TableCell>
-                {getMonthName(payment.month)} {payment.year}
+                {getMonthName(payment.periodeBulan)} {payment.periodeTahun}
               </TableCell>
-              <TableCell>{formatCurrency(payment.amount)}</TableCell>
+              <TableCell>{formatCurrency(payment.nominal)}</TableCell>
               <TableCell>
                 <Badge variant={s.variant}>{s.label}</Badge>
               </TableCell>
               <TableCell className="text-slate-500">
-                {payment.paidAt ? formatDate(payment.paidAt) : "—"}
+                {payment.tanggalBayar ? formatDate(payment.tanggalBayar) : "—"}
               </TableCell>
             </TableRow>
           );

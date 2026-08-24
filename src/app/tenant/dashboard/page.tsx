@@ -11,7 +11,7 @@ import { Bell } from "lucide-react";
 
 export default function TenantDashboardPage() {
   const { user } = useAuth();
-const currentDate = new Date();
+  const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 

@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { generateIdempotencyKey } from "@/lib/idempotency";
-import type { AddPaymentResponse, ApiResponse, CreatePaymentRecordInput, PaymentRecord } from "@/types";
+import type {
+  AddPaymentResponse,
+  ApiResponse,
+  CreatePaymentRecordInput,
+  PaymentRecord,
+} from "@/types";
 
 interface UseAddPaymentOptions {
   onSuccess?: (data: AddPaymentResponse) => void;

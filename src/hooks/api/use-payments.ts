@@ -55,14 +55,3 @@ export function useUpdatePayment() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: PAYMENTS_KEY }),
   });
 }
-
-export function useMarkPaymentLunas() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: string) => {
-      const response = await api.patch<ApiResponse<Payment>>(`/pembayaran/${id}/mark-lunas`);
-      return response.data;
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: PAYMENTS_KEY }),
-  });
-}

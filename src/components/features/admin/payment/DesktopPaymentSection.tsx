@@ -13,10 +13,12 @@ import { dummyBroadcastLogs, PAGE_SIZE } from "./constants";
 import { usePayments as usePaymentsHook } from "@/hooks/features/admin/usePayments";
 import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
 import { transformApiPaymentToAdminPayment } from "@/lib/utils";
+import type { Payment as ApiPayment } from "@/types";
 
 export function DesktopPaymentSection() {
   const [formOpen, setFormOpen] = useState(false);
-const currentDate = new Date();
+  const [editingPayment, setEditingPayment] = useState<ApiPayment | null>(null);
+  const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
@@ -26,10 +28,7 @@ const currentDate = new Date();
   });
 
   const adminPayments = (paymentsQuery?.data?.data || [])
-    .filter(
-      (p) =>
-        p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT" || p.status === "LUNAS",
-    )
+    .filter((p) => p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT" || p.status === "LUNAS")
     .map(transformApiPaymentToAdminPayment);
 
   const {
@@ -43,6 +42,18 @@ const currentDate = new Date();
   } = usePaymentsHook(adminPayments);
 
   const empty = paginatedPayments.length === 0;
+
+  const apiPayments = paymentsQuery?.data?.data ?? [];
+
+  const handleEdit = (payment: (typeof adminPayments)[number]) => {
+    setEditingPayment(apiPayments.find((p) => p.id === payment.id) ?? null);
+    setFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setFormOpen(false);
+    setEditingPayment(null);
+  };
   const from = (currentPage - 1) * PAGE_SIZE + 1;
   const to = Math.min(currentPage * PAGE_SIZE, filteredPayments.length);
 
@@ -74,6 +85,7 @@ const currentDate = new Date();
               totalPages={totalPages}
               onPageChange={handlePageChange}
               empty={empty}
+              onEdit={handleEdit}
               from={from}
               to={to}
               headerAction={
@@ -92,7 +104,11 @@ const currentDate = new Date();
         )}
       </div>
 
-      <PaymentFormDialog open={formOpen} onOpenChange={setFormOpen} />
+      <PaymentFormDialog
+        open={formOpen}
+        onOpenChange={handleFormClose}
+        editingPayment={editingPayment}
+      />
     </div>
   );
 }

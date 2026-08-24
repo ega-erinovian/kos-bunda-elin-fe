@@ -18,6 +18,7 @@ type PaymentTrackingCardProps = {
   from: number;
   to: number;
   headerAction?: ReactNode;
+  onEdit?: (payment: Payment) => void;
 };
 
 export function PaymentTrackingCard({
@@ -32,6 +33,7 @@ export function PaymentTrackingCard({
   from,
   to,
   headerAction,
+  onEdit,
 }: PaymentTrackingCardProps) {
   return (
     <div className="col-span-12 flex flex-col rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md transition-shadow hover:shadow-ambient-lg lg:col-span-8">
@@ -73,7 +75,9 @@ export function PaymentTrackingCard({
 
       <div className="flex-1 space-y-3 overflow-y-auto pr-2">
         {!empty ? (
-          paginatedPayments.map((payment) => <PaymentRow key={payment.id} payment={payment} />)
+          paginatedPayments.map((payment) => (
+            <PaymentRow key={payment.id} payment={payment} onEdit={onEdit} />
+          ))
         ) : (
           <div className="py-12 text-center text-body-md text-on-surface-variant">
             {activeTab === "approaching"

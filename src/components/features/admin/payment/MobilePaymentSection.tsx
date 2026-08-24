@@ -13,10 +13,12 @@ import { MobileLogEntry } from "./components/MobileLogEntry";
 import { dummyBroadcastLogs } from "./constants";
 import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
 import { transformApiPaymentToAdminPayment } from "@/lib/utils";
+import type { Payment as ApiPayment } from "@/types";
 
 export function MobilePaymentSection() {
   const [formOpen, setFormOpen] = useState(false);
-const currentDate = new Date();
+  const [editingPayment, setEditingPayment] = useState<ApiPayment | null>(null);
+  const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
@@ -25,11 +27,23 @@ const currentDate = new Date();
     periodeTahun: currentYear,
   });
 
-  const adminPayments = (paymentsQuery?.data?.data || [])
+  const apiPayments = paymentsQuery?.data?.data ?? [];
+
+  const adminPayments = apiPayments
     .filter((p) => p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT")
     .map(transformApiPaymentToAdminPayment);
 
   const approachingPayments = adminPayments.filter((p) => p.tab === "approaching").slice(0, 3);
+
+  const handleEdit = (payment: (typeof adminPayments)[number]) => {
+    setEditingPayment(apiPayments.find((p) => p.id === payment.id) ?? null);
+    setFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setFormOpen(false);
+    setEditingPayment(null);
+  };
 
   return (
     <div className="space-y-6 md:hidden">
@@ -67,7 +81,7 @@ const currentDate = new Date();
         ) : (
           <div className="space-y-3">
             {approachingPayments.map((payment) => (
-              <MobilePaymentCard key={payment.id} payment={payment} />
+              <MobilePaymentCard key={payment.id} payment={payment} onEdit={handleEdit} />
             ))}
           </div>
         )}
@@ -92,7 +106,11 @@ const currentDate = new Date();
         </div>
       </section>
 
-      <PaymentFormDialog open={formOpen} onOpenChange={setFormOpen} />
+      <PaymentFormDialog
+        open={formOpen}
+        onOpenChange={handleFormClose}
+        editingPayment={editingPayment}
+      />
     </div>
   );
 }

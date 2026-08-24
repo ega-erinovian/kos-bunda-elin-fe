@@ -3,12 +3,7 @@ import type { PaymentRecord } from "./payment-record";
 export type PaymentStatus = "BELUM_BAYAR" | "SEBAGIAN" | "LUNAS" | "TERLAMBAT";
 
 export type PaymentStatusFilter =
-  | "akan_jatuh_tempo"
-  | "menunggak"
-  | "belum_bayar"
-  | "sebagian"
-  | "lunas"
-  | "terlambat";
+  "akan_jatuh_tempo" | "menunggak" | "belum_bayar" | "sebagian" | "lunas" | "terlambat";
 
 export default interface Payment {
   id: string;

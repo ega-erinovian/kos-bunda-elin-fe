@@ -6,9 +6,10 @@ import type { Payment } from "../types";
 type PaymentRowProps = {
   payment: Payment;
   totalDibayar?: number;
+  onEdit?: (payment: Payment) => void;
 };
 
-export function PaymentRow({ payment, totalDibayar = 0 }: PaymentRowProps) {
+export function PaymentRow({ payment, totalDibayar = 0, onEdit }: PaymentRowProps) {
   const isPartial =
     payment.status === "partial" && totalDibayar > 0 && totalDibayar < payment.amount;
 
@@ -51,7 +52,7 @@ export function PaymentRow({ payment, totalDibayar = 0 }: PaymentRowProps) {
                   : "BELUM_BAYAR"
           }
         />
-        <PaymentRowDropdown payment={payment} />
+        <PaymentRowDropdown payment={payment} onEdit={onEdit} />
       </div>
     </div>
   );

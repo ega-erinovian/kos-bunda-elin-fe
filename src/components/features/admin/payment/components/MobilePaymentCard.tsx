@@ -1,34 +1,45 @@
+"use client";
+
 import { formatCurrency } from "@/lib/utils";
 import { StatusBadge } from "../StatusBadge";
+import { PaymentRowDropdown } from "./PaymentRowDropdown";
 import type { Payment } from "../types";
 
 type MobilePaymentCardProps = {
   payment: Payment;
   totalDibayar?: number;
+  onEdit?: (payment: Payment) => void;
 };
 
-export function MobilePaymentCard({ payment, totalDibayar = 0 }: MobilePaymentCardProps) {
+export function MobilePaymentCard({
+  payment,
+  totalDibayar = 0,
+  onEdit,
+}: MobilePaymentCardProps) {
   const isPartial =
     payment.status === "partial" && totalDibayar > 0 && totalDibayar < payment.amount;
 
   return (
     <article className="rounded-xl border border-transparent bg-surface-container-lowest p-lg shadow-ambient-md transition-all hover:border-secondary">
-      <div className="mb-sm flex items-start justify-between">
+      <div className="mb-sm flex items-start justify-between gap-2">
         <div>
           <p className="text-[18px] font-semibold text-on-surface">{payment.name}</p>
           <p className="text-label-md text-on-surface-variant">Kamar {payment.room}</p>
         </div>
-        <StatusBadge
-          status={
-            payment.status === "overdue"
-              ? "TERLAMBAT"
-              : payment.status === "paid"
-                ? "LUNAS"
-                : payment.status === "partial"
-                  ? "SEBAGIAN"
-                  : "BELUM_BAYAR"
-          }
-        />
+        <div className="flex items-center gap-1">
+          <StatusBadge
+            status={
+              payment.status === "overdue"
+                ? "TERLAMBAT"
+                : payment.status === "paid"
+                  ? "LUNAS"
+                  : payment.status === "partial"
+                    ? "SEBAGIAN"
+                    : "BELUM_BAYAR"
+            }
+          />
+          <PaymentRowDropdown payment={payment} onEdit={onEdit} />
+        </div>
       </div>
       <div className="mt-4 flex items-end justify-between">
         <div>

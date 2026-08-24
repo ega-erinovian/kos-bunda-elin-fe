@@ -12,9 +12,10 @@ import type { Payment } from "../types";
 
 type PaymentRowDropdownProps = {
   payment: Payment;
+  onEdit?: (payment: Payment) => void;
 };
 
-export function PaymentRowDropdown({ payment }: PaymentRowDropdownProps) {
+export function PaymentRowDropdown({ payment, onEdit }: PaymentRowDropdownProps) {
   const isPaid = payment.status === "paid";
 
   return (
@@ -43,11 +44,14 @@ export function PaymentRowDropdown({ payment }: PaymentRowDropdownProps) {
               Detail Pembayaran
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log("Edit:", payment.id)}>
+            <DropdownMenuItem onClick={() => onEdit?.(payment)}>
               <Pencil className="h-4 w-4" />
               Edit Tagihan
             </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" onClick={() => console.log("Delete:", payment.id)}>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => console.log("Delete:", payment.id)}
+            >
               <Trash2 className="h-4 w-4" />
               Hapus
             </DropdownMenuItem>

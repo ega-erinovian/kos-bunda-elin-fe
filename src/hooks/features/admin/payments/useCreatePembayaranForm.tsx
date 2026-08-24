@@ -36,6 +36,7 @@ type FieldErrors = {
   periodeTahun?: string;
   tanggalJatuhTempo?: string;
   nominal?: string;
+  catatan?: string;
 };
 
 type FormValues = {
@@ -138,9 +139,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
       },
       {
         onSuccess: () => {
-          toast.success(
-            `Tagihan periode ${getMonthName(Number(bulan))} ${tahun} berhasil dibuat.`,
-          );
+          toast.success(`Tagihan periode ${getMonthName(Number(bulan))} ${tahun} berhasil dibuat.`);
           onOpenChange(false);
         },
         onError: (error) => {

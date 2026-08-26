@@ -7,10 +7,7 @@ import { ApiError } from "@/lib/api";
 import { getMonthName } from "@/lib/utils";
 import toast from "react-hot-toast";
 
-// Mirrors BE createPembayaranSchema (pembayaran.schema.ts)
 const createPembayaranSchema = z.object({
-  // ponytail: presence-check only — some penyewa ids are customized and not RFC-4122
-  // uuids; format validation stays server-side
   penyewaId: z.string().min(1, "Penghuni wajib dipilih"),
   periodeBulan: z
     .number()

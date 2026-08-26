@@ -2,9 +2,12 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { generateIdempotencyKey } from "@/lib/idempotency";
 import type {
+  AddPaymentResponse,
   ApiResponse,
   CreatePaymentInput,
+  CreatePaymentRecordInput,
   PaginatedResponse,
   Payment,
   PaymentListParams,
@@ -53,5 +56,29 @@ export function useUpdatePayment() {
       return response.data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: PAYMENTS_KEY }),
+  });
+}
+
+export function useCreatePaymentRecord() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: CreatePaymentRecordInput) => {
+      const { pembayaranId, ...body } = input;
+      const idempotencyKey = generateIdempotencyKey();
+      const response = await api.post<ApiResponse<AddPaymentResponse>>(
+        `/pembayaran/${pembayaranId}/payments`,
+        body,
+        {
+          headers: {
+            "Idempotency-Key": idempotencyKey,
+          },
+        },
+      );
+      return response.data;
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: PAYMENTS_KEY });
+      queryClient.invalidateQueries({ queryKey: ["pembayaranRecords", variables.pembayaranId] });
+    },
   });
 }

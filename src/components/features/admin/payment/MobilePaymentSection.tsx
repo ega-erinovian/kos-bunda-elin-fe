@@ -1,18 +1,58 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Search, Filter, ArrowRight } from "lucide-react";
+import { Search, Filter, ArrowRight, FilePen } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
 import { MobilePaymentCard } from "./components/MobilePaymentCard";
+import { PaymentFormDialog } from "./components/PaymentFormDialog";
 import { MobileBroadcastForm } from "./components/MobileBroadcastForm";
 import { MobileLogEntry } from "./components/MobileLogEntry";
-import { dummyPayments, dummyBroadcastLogs } from "./constants";
+import { dummyBroadcastLogs } from "./constants";
+import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
+import { transformApiPaymentToAdminPayment } from "@/lib/utils";
+import type { Payment as ApiPayment } from "@/types";
 
 export function MobilePaymentSection() {
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingPayment, setEditingPayment] = useState<ApiPayment | null>(null);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  const paymentsQuery = useApiPayments({
+    periodeBulan: currentMonth,
+    periodeTahun: currentYear,
+  });
+
+  const apiPayments = paymentsQuery?.data?.data ?? [];
+
+  const adminPayments = apiPayments
+    .filter((p) => p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT")
+    .map(transformApiPaymentToAdminPayment);
+
+  const approachingPayments = adminPayments.filter((p) => p.tab === "approaching").slice(0, 3);
+
+  const handleEdit = (payment: (typeof adminPayments)[number]) => {
+    setEditingPayment(apiPayments.find((p) => p.id === payment.id) ?? null);
+    setFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setFormOpen(false);
+    setEditingPayment(null);
+  };
+
   return (
     <div className="space-y-6 md:hidden">
       <h1 className="text-heading-lg-mobile font-bold text-on-surface">Manajemen Pembayaran</h1>
+
+      <Button size="lg" className="w-full" onClick={() => setFormOpen(true)}>
+        <FilePen className="h-4 w-4" />
+        Input Manual
+      </Button>
 
       {/* Search */}
       <div className="relative">
@@ -34,14 +74,17 @@ export function MobilePaymentSection() {
             <ArrowRight className="h-4 w-4" />
           </Link>
         </SectionHeader>
-        <div className="space-y-3">
-          {dummyPayments
-            .filter((p) => p.tab === "approaching")
-            .slice(0, 3)
-            .map((payment) => (
-              <MobilePaymentCard key={payment.id} payment={payment} />
+        {paymentsQuery?.isLoading ? (
+          <p className="text-sm text-slate-500 text-center py-4">Memuat data pembayaran...</p>
+        ) : approachingPayments.length === 0 ? (
+          <p className="text-sm text-slate-500 text-center py-4">Tidak ada tagihan menunggu.</p>
+        ) : (
+          <div className="space-y-3">
+            {approachingPayments.map((payment) => (
+              <MobilePaymentCard key={payment.id} payment={payment} onEdit={handleEdit} />
             ))}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* Broadcast Cepat */}
@@ -62,6 +105,12 @@ export function MobilePaymentSection() {
           ))}
         </div>
       </section>
+
+      <PaymentFormDialog
+        open={formOpen}
+        onOpenChange={handleFormClose}
+        editingPayment={editingPayment}
+      />
     </div>
   );
 }

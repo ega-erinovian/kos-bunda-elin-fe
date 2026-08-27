@@ -1,13 +1,18 @@
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "../StatusBadge";
 import { formatCurrency } from "@/lib/utils";
 import { PaymentRowDropdown } from "./PaymentRowDropdown";
 import type { Payment } from "../types";
 
 type PaymentRowProps = {
   payment: Payment;
+  totalDibayar?: number;
+  onEdit?: (payment: Payment) => void;
 };
 
-export function PaymentRow({ payment }: PaymentRowProps) {
+export function PaymentRow({ payment, totalDibayar = 0, onEdit }: PaymentRowProps) {
+  const isPartial =
+    payment.status === "partial" && totalDibayar > 0 && totalDibayar < payment.amount;
+
   return (
     <div className="flex cursor-pointer items-center justify-between rounded-lg border border-outline-variant/30 p-4 transition-colors hover:bg-primary/5 group">
       <div className="flex items-center gap-4">
@@ -24,16 +29,30 @@ export function PaymentRow({ payment }: PaymentRowProps) {
         </div>
       </div>
       <div className="flex items-center gap-6">
-        <span className="text-body-md font-medium text-on-surface">
-          {formatCurrency(payment.amount)}
-        </span>
-        <Badge
-          variant={payment.status === "overdue" ? "destructive" : "secondary"}
-          className="capitalize"
-        >
-          {payment.status === "pending" ? "Pending" : "Overdue"}
-        </Badge>
-        <PaymentRowDropdown payment={payment} />
+        <div className="text-right">
+          <span className="text-body-md font-medium text-on-surface">
+            {isPartial
+              ? formatCurrency(payment.amount - totalDibayar)
+              : formatCurrency(payment.amount)}
+          </span>
+          {isPartial && (
+            <p className="text-label-xs text-on-surface-variant">
+              {formatCurrency(totalDibayar)} / {formatCurrency(payment.amount)}
+            </p>
+          )}
+        </div>
+        <StatusBadge
+          status={
+            payment.status === "overdue"
+              ? "TERLAMBAT"
+              : payment.status === "paid"
+                ? "LUNAS"
+                : payment.status === "partial"
+                  ? "SEBAGIAN"
+                  : "BELUM_BAYAR"
+          }
+        />
+        <PaymentRowDropdown payment={payment} onEdit={onEdit} />
       </div>
     </div>
   );

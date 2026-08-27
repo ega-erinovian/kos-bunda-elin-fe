@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/providers/auth-provider";
 import { QueryProvider } from "@/providers/query-provider";
+import { MSWProvider } from "@/providers/msw-provider";
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster as HotToaster } from "react-hot-toast";
@@ -43,9 +44,11 @@ export default function RootLayout({
   return (
     <html lang="id" className={cn("h-full antialiased", inter.variable, plusJakartaSans.variable)}>
       <body className="min-h-full flex flex-col w-full">
-        <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </QueryProvider>
+        <MSWProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
+        </MSWProvider>
         <HotToaster position="top-center" toastOptions={{ duration: 2500 }} />
       </body>
     </html>

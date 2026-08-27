@@ -11,11 +11,23 @@ const UNAUTHORIZED_EVENT = "auth:unauthorized";
 
 export class ApiError extends Error {
   readonly status: number;
+  readonly errors?: Record<string, string[]>;
+  readonly formErrors?: string[];
+  readonly issues?: { path: string; message: string; code: string }[];
 
-  constructor(message: string, status: number) {
+  constructor(
+    message: string,
+    status: number,
+    errors?: Record<string, string[]>,
+    formErrors?: string[],
+    issues?: { path: string; message: string; code: string }[],
+  ) {
     super(message);
     this.name = "ApiError";
     this.status = status;
+    this.errors = errors;
+    this.formErrors = formErrors;
+    this.issues = issues;
   }
 }
 
@@ -64,13 +76,16 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     if (qs) url += `?${qs}`;
   }
 
+  const { headers: customHeaders, ...restFetchOptions } = fetchOptions as RequestOptions & {
+    headers?: Record<string, string>;
+  };
   const buildInit = () => ({
     headers: {
       "Content-Type": "application/json",
-      ...(fetchOptions.headers ?? {}),
+      ...((customHeaders as Record<string, string>) ?? {}),
     },
     credentials: "include" as const,
-    ...fetchOptions,
+    ...restFetchOptions,
   });
 
   const res = await fetch(url, buildInit());
@@ -87,7 +102,41 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     const error = await res.json().catch(() => ({
       message: "An unexpected error occurred",
     }));
-    throw new ApiError(error.message || `Request failed with status ${res.status}`, res.status);
+
+    const fieldErrors: Record<string, string[]> | undefined =
+      error.errors && typeof error.errors === "object" && !Array.isArray(error.errors)
+        ? (error.errors as Record<string, string[]>)
+        : undefined;
+    const formErrors: string[] | undefined =
+      Array.isArray(error.formErrors) && error.formErrors.length > 0 ? error.formErrors : undefined;
+    const issues: { path: string; message: string; code: string }[] | undefined =
+      Array.isArray(error.issues) && error.issues.length > 0 ? error.issues : undefined;
+
+    const fieldDetail = fieldErrors
+      ? Object.entries(fieldErrors)
+          .filter(([, msgs]) => Array.isArray(msgs) && msgs.length > 0)
+          .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(", ")}`)
+          .join(" | ")
+      : undefined;
+    const issueDetail = issues
+      ? issues.map((i) => (i.path ? `${i.path}: ${i.message}` : i.message)).join(" | ")
+      : undefined;
+    const formDetail = formErrors?.join(" | ");
+
+    const fallbackDetail = fieldDetail || issueDetail || formDetail;
+
+    const legacyError = typeof error.error === "string" ? error.error : undefined;
+
+    const message =
+      error.message && error.message !== "Validation error"
+        ? error.message
+        : fallbackDetail || legacyError || `Request failed with status ${res.status}`;
+
+    // If BE returned generic Validation error with empty details, surface the detail
+    const finalMessage =
+      error.message === "Validation error" && fallbackDetail ? fallbackDetail : message;
+
+    throw new ApiError(finalMessage, res.status, fieldErrors, formErrors, issues);
   }
 
   return res.json();

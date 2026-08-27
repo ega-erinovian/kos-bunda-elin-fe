@@ -1,21 +1,51 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Search, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, ArrowLeft, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MobilePaymentCard } from "./components/MobilePaymentCard";
 import { PaymentRow } from "./components/PaymentRow";
-import { dummyPayments, PAGE_SIZE } from "./constants";
+import { PaymentFormDialog } from "./components/PaymentFormDialog";
+import { PAGE_SIZE } from "./constants";
 import { usePaymentsSearch } from "@/hooks/features/admin/usePaymentsSearch";
-import type { PaymentTab } from "./types";
+import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
+import { transformApiPaymentToAdminPayment } from "@/lib/utils";
+import type { Payment, PaymentTab } from "./types";
+import type { Payment as ApiPayment } from "@/types";
+
+type AdminPayment = Payment;
 
 const tabOptions: { key: PaymentTab; label: string }[] = [
   { key: "approaching", label: "Menunggu" },
   { key: "overdue", label: "Overdue" },
+  { key: "partial", label: "Sebagian" },
+  { key: "paid", label: "Lunas" },
 ];
 
 export function AllPaymentsSection() {
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingPayment, setEditingPayment] = useState<ApiPayment | null>(null);
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  const paymentsQuery = useApiPayments({
+    periodeBulan: currentMonth,
+    periodeTahun: currentYear,
+  });
+
+  const apiPayments = (paymentsQuery?.data?.data || []).filter(
+    (p) =>
+      p.status === "BELUM_BAYAR" ||
+      p.status === "TERLAMBAT" ||
+      p.status === "SEBAGIAN" ||
+      p.status === "LUNAS",
+  );
+
+  const adminPayments = apiPayments.map(transformApiPaymentToAdminPayment);
+
   const {
     searchQuery,
     activeTab,
@@ -26,10 +56,25 @@ export function AllPaymentsSection() {
     handleSearch,
     handleTabChange,
     handlePageChange,
-  } = usePaymentsSearch(dummyPayments);
+  } = usePaymentsSearch(adminPayments);
 
   const from = (currentPage - 1) * PAGE_SIZE + 1;
   const to = Math.min(currentPage * PAGE_SIZE, filteredPayments.length);
+
+  const handleEdit = (payment: AdminPayment) => {
+    setEditingPayment(apiPayments.find((p) => p.id === payment.id) ?? null);
+    setFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setFormOpen(false);
+    setEditingPayment(null);
+  };
+
+  const handleFormSuccess = () => {
+    setEditingPayment(null);
+    setFormOpen(true);
+  };
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-4 md:px-6 md:py-6 lg:px-8">
@@ -48,6 +93,16 @@ export function AllPaymentsSection() {
             Daftar lengkap tagihan penghuni yang perlu ditindaklanjuti.
           </p>
         </div>
+
+        {!editingPayment && (
+          <Button
+            onClick={() => setFormOpen(true)}
+            className="ml-auto h-9 shrink-0 rounded-full px-3 text-label-sm font-semibold md:h-10 md:px-5 md:text-label-md"
+          >
+            <Plus className="h-4 w-4 md:h-5 md:w-5" />
+            Input Manual
+          </Button>
+        )}
       </div>
 
       <div className="relative">
@@ -56,19 +111,26 @@ export function AllPaymentsSection() {
           placeholder="Cari penghuni atau kamar..."
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
-          className="h-[46px] w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)] md:h-12 md:pl-14"
+          className="h-11.5 w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)] md:h-12 md:pl-14"
         />
       </div>
 
-      <div className="flex gap-2">
+      <div
+        role="tablist"
+        aria-label="Filter tagihan"
+        className="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1"
+      >
         {tabOptions.map((tab) => (
           <button
             key={tab.key}
+            role="tab"
+            aria-selected={activeTab === tab.key}
+            type="button"
             onClick={() => handleTabChange(tab.key)}
-            className={`rounded-full px-4 py-1.5 text-label-sm font-semibold transition-colors md:px-5 md:py-2 md:text-label-md ${
+            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 text-label-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:px-5 md:py-2 md:text-label-md ${
               activeTab === tab.key
                 ? "bg-primary text-primary-foreground"
-                : "bg-surface-container-high text-on-surface-variant"
+                : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
             }`}
           >
             {tab.label}
@@ -76,53 +138,70 @@ export function AllPaymentsSection() {
         ))}
       </div>
 
-      <div className="flex flex-col gap-3 md:gap-4 lg:hidden">
-        {paginatedPayments.length > 0 ? (
-          paginatedPayments.map((payment) => (
-            <MobilePaymentCard key={payment.id} payment={payment} />
-          ))
-        ) : (
-          <div className="py-12 text-center text-body-md text-on-surface-variant md:py-16">
-            Tidak ada tagihan ditemukan.
+      {paymentsQuery?.isLoading ? (
+        <div className="py-12 text-center text-body-md text-on-surface-variant">
+          Memuat data pembayaran...
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col gap-3 md:gap-4 lg:hidden">
+            {paginatedPayments.length > 0 ? (
+              paginatedPayments.map((payment) => (
+                <MobilePaymentCard key={payment.id} payment={payment} onEdit={handleEdit} />
+              ))
+            ) : (
+              <div className="py-12 text-center text-body-md text-on-surface-variant md:py-16">
+                Tidak ada tagihan ditemukan.
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className="hidden rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md lg:block">
-        <div className="space-y-3">
-          {paginatedPayments.length > 0 ? (
-            paginatedPayments.map((payment) => <PaymentRow key={payment.id} payment={payment} />)
-          ) : (
-            <div className="py-12 text-center text-body-md text-on-surface-variant">
-              Tidak ada tagihan ditemukan.
+          <div className="hidden lg:block mt-4">
+            <div className="space-y-3">
+              {paginatedPayments.length > 0 ? (
+                paginatedPayments.map((payment) => (
+                  <PaymentRow key={payment.id} payment={payment} onEdit={handleEdit} />
+                ))
+              ) : (
+                <div className="py-12 text-center text-body-md text-on-surface-variant">
+                  Tidak ada tagihan ditemukan.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 py-2 md:gap-6 md:py-4">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                disabled={currentPage <= 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-label-sm text-on-surface-variant md:text-body-md">
+                {from}-{to} dari {filteredPayments.length}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage >= totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           )}
-        </div>
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-4 py-2 md:gap-6 md:py-4">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-            disabled={currentPage <= 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-label-sm text-on-surface-variant md:text-body-md">
-            {from}-{to} dari {filteredPayments.length}
-          </span>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-            disabled={currentPage >= totalPages}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        </>
       )}
+
+      <PaymentFormDialog
+        open={formOpen}
+        onOpenChange={handleFormClose}
+        editingPayment={editingPayment}
+        onSuccess={handleFormSuccess}
+      />
     </div>
   );
 }

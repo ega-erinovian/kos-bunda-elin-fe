@@ -1,4 +1,4 @@
-export type PaymentTab = "approaching" | "overdue" | "paid";
+export type PaymentTab = "approaching" | "overdue" | "partial" | "paid";
 export type PaymentStatus = "pending" | "overdue" | "paid" | "partial";
 
 export type Payment = {

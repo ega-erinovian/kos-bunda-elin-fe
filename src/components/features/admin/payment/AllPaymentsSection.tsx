@@ -20,6 +20,7 @@ type AdminPayment = Payment;
 const tabOptions: { key: PaymentTab; label: string }[] = [
   { key: "approaching", label: "Menunggu" },
   { key: "overdue", label: "Overdue" },
+  { key: "partial", label: "Sebagian" },
   { key: "paid", label: "Lunas" },
 ];
 
@@ -36,7 +37,11 @@ export function AllPaymentsSection() {
   });
 
   const apiPayments = (paymentsQuery?.data?.data || []).filter(
-    (p) => p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT" || p.status === "LUNAS",
+    (p) =>
+      p.status === "BELUM_BAYAR" ||
+      p.status === "TERLAMBAT" ||
+      p.status === "SEBAGIAN" ||
+      p.status === "LUNAS",
   );
 
   const adminPayments = apiPayments.map(transformApiPaymentToAdminPayment);
@@ -106,19 +111,26 @@ export function AllPaymentsSection() {
           placeholder="Cari penghuni atau kamar..."
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
-          className="h-[46px] w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)] md:h-12 md:pl-14"
+          className="h-11.5 w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)] md:h-12 md:pl-14"
         />
       </div>
 
-      <div className="flex gap-2">
+      <div
+        role="tablist"
+        aria-label="Filter tagihan"
+        className="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1"
+      >
         {tabOptions.map((tab) => (
           <button
             key={tab.key}
+            role="tab"
+            aria-selected={activeTab === tab.key}
+            type="button"
             onClick={() => handleTabChange(tab.key)}
-            className={`rounded-full px-4 py-1.5 text-label-sm font-semibold transition-colors md:px-5 md:py-2 md:text-label-md ${
+            className={`shrink-0 whitespace-nowrap rounded-full px-4 py-1.5 text-label-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:px-5 md:py-2 md:text-label-md ${
               activeTab === tab.key
                 ? "bg-primary text-primary-foreground"
-                : "bg-surface-container-high text-on-surface-variant"
+                : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
             }`}
           >
             {tab.label}
@@ -144,7 +156,7 @@ export function AllPaymentsSection() {
             )}
           </div>
 
-          <div className="hidden rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md lg:block">
+          <div className="hidden lg:block mt-4">
             <div className="space-y-3">
               {paginatedPayments.length > 0 ? (
                 paginatedPayments.map((payment) => (

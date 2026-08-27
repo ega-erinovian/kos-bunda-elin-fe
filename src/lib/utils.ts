@@ -82,7 +82,13 @@ export function transformApiPaymentToAdminPayment(payment: ApiPayment): AdminPay
 
   const isOverdue = diffDays < 0;
   const tab: PaymentTab =
-    payment.status === "LUNAS" ? "paid" : isOverdue ? "overdue" : "approaching";
+    payment.status === "LUNAS"
+      ? "paid"
+      : payment.status === "SEBAGIAN"
+        ? "partial"
+        : isOverdue
+          ? "overdue"
+          : "approaching";
 
   // Map API status to admin status
   const status: AdminPayment["status"] =

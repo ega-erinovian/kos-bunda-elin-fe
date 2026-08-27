@@ -28,7 +28,13 @@ export function DesktopPaymentSection() {
   });
 
   const adminPayments = (paymentsQuery?.data?.data || [])
-    .filter((p) => p.status === "BELUM_BAYAR" || p.status === "TERLAMBAT" || p.status === "LUNAS")
+    .filter(
+      (p) =>
+        p.status === "BELUM_BAYAR" ||
+        p.status === "TERLAMBAT" ||
+        p.status === "SEBAGIAN" ||
+        p.status === "LUNAS",
+    )
     .map(transformApiPaymentToAdminPayment);
 
   const {

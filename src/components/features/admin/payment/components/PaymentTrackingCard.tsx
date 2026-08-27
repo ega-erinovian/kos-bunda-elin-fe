@@ -38,10 +38,17 @@ export function PaymentTrackingCard({
   return (
     <div className="col-span-12 flex flex-col rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md transition-shadow hover:shadow-ambient-lg lg:col-span-8">
       <div className="mb-6 flex items-center justify-between gap-4 border-b border-outline-variant/30">
-        <div className="flex gap-4">
+        <div
+          role="tablist"
+          aria-label="Filter pembayaran"
+          className="flex gap-1 overflow-x-auto no-scrollbar md:gap-4"
+        >
           <button
+            role="tab"
+            aria-selected={activeTab === "approaching"}
+            type="button"
             onClick={() => onTabChange("approaching")}
-            className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
+            className={`shrink-0 cursor-pointer whitespace-nowrap px-3 pb-3 pt-2 text-label-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:px-4 ${
               activeTab === "approaching"
                 ? "border-b-2 border-primary text-primary"
                 : "text-on-surface-variant hover:text-primary"
@@ -50,8 +57,11 @@ export function PaymentTrackingCard({
             Mendekati Jatuh Tempo (H-3)
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === "overdue"}
+            type="button"
             onClick={() => onTabChange("overdue")}
-            className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
+            className={`shrink-0 cursor-pointer whitespace-nowrap px-3 pb-3 pt-2 text-label-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:px-4 ${
               activeTab === "overdue"
                 ? "border-b-2 border-primary text-primary"
                 : "text-on-surface-variant hover:text-primary"
@@ -60,8 +70,24 @@ export function PaymentTrackingCard({
             Menunggak (H+)
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === "partial"}
+            type="button"
+            onClick={() => onTabChange("partial")}
+            className={`shrink-0 cursor-pointer whitespace-nowrap px-3 pb-3 pt-2 text-label-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:px-4 ${
+              activeTab === "partial"
+                ? "border-b-2 border-primary text-primary"
+                : "text-on-surface-variant hover:text-primary"
+            }`}
+          >
+            Sebagian
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === "paid"}
+            type="button"
             onClick={() => onTabChange("paid")}
-            className={`cursor-pointer px-4 pb-3 pt-2 text-label-md font-semibold transition-colors ${
+            className={`shrink-0 cursor-pointer whitespace-nowrap px-3 pb-3 pt-2 text-label-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:px-4 ${
               activeTab === "paid"
                 ? "border-b-2 border-primary text-primary"
                 : "text-on-surface-variant hover:text-primary"
@@ -70,7 +96,7 @@ export function PaymentTrackingCard({
             Lunas
           </button>
         </div>
-        {headerAction}
+        <div className="shrink-0">{headerAction}</div>
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto pr-2">
@@ -84,7 +110,9 @@ export function PaymentTrackingCard({
               ? "Tidak ada pembayaran yang mendekati jatuh tempo."
               : activeTab === "overdue"
                 ? "Tidak ada pembayaran yang menunggak."
-                : "Tidak ada pembayaran yang sudah lunas."}
+                : activeTab === "partial"
+                  ? "Tidak ada pembayaran sebagian."
+                  : "Tidak ada pembayaran yang sudah lunas."}
           </div>
         )}
       </div>

@@ -102,7 +102,8 @@ export function WhatsAppComposer({
               {title ?? "Kirim via WhatsApp"}
             </DialogTitle>
             <DialogDescription className="text-label-md text-on-surface-variant">
-              Pesan dibuka di WhatsApp (wa.me). Anda yang menekan Kirim di WhatsApp — bukan blast otomatis.
+              Pesan dibuka di WhatsApp (wa.me). Anda yang menekan Kirim di WhatsApp — bukan blast
+              otomatis.
             </DialogDescription>
           </DialogHeader>
 
@@ -119,17 +120,24 @@ export function WhatsAppComposer({
                 )}
               </p>
               {!validPhone && phone && (
-                <p className="mt-1 text-label-sm text-destructive">Nomor tidak valid (harus 62xxxxxxxxxx / 08xxx).</p>
+                <p className="mt-1 text-label-sm text-destructive">
+                  Nomor tidak valid (harus 62xxxxxxxxxx / 08xxx).
+                </p>
               )}
               {!phone && (
-                <p className="mt-1 text-label-sm text-destructive">Nomor HP belum tersedia untuk penghuni ini.</p>
+                <p className="mt-1 text-label-sm text-destructive">
+                  Nomor HP belum tersedia untuk penghuni ini.
+                </p>
               )}
             </div>
 
             {/* Template picker */}
             <div className="space-y-2">
               <label className="text-label-md font-medium text-on-surface">Template Pesan</label>
-              <Select value={templateId} onValueChange={(v) => setTemplateId(v as WhatsAppTemplateId)}>
+              <Select
+                value={templateId}
+                onValueChange={(v) => setTemplateId(v as WhatsAppTemplateId)}
+              >
                 <SelectTrigger className="w-full border-outline-variant bg-surface-container-lowest">
                   <SelectValue />
                 </SelectTrigger>
@@ -138,7 +146,9 @@ export function WhatsAppComposer({
                     <SelectItem key={t.id} value={t.id}>
                       <span className="flex flex-col items-start">
                         <span className="font-medium">{t.label}</span>
-                        <span className="text-label-sm text-on-surface-variant">{t.description}</span>
+                        <span className="text-label-sm text-on-surface-variant">
+                          {t.description}
+                        </span>
                       </span>
                     </SelectItem>
                   ))}
@@ -151,7 +161,9 @@ export function WhatsAppComposer({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-label-md font-medium text-on-surface">Isi Pesan</label>
-                <span className="text-label-sm text-on-surface-variant">{message.length} karakter</span>
+                <span className="text-label-sm text-on-surface-variant">
+                  {message.length} karakter
+                </span>
               </div>
               <textarea
                 value={message}
@@ -161,7 +173,8 @@ export function WhatsAppComposer({
                 placeholder="Tulis pesan WhatsApp..."
               />
               <p className="text-label-sm text-on-surface-variant">
-                Variabel: nama, kamar, periode, nominal, sisa, jatuh tempo sudah terisi dari data tagihan.
+                Variabel: nama, kamar, periode, nominal, sisa, jatuh tempo sudah terisi dari data
+                tagihan.
               </p>
             </div>
 
@@ -188,8 +201,11 @@ export function WhatsAppComposer({
 
             <p className="text-center text-label-sm leading-relaxed text-on-surface-variant">
               Dibuka via{" "}
-              <span className="font-mono text-on-surface">wa.me/{normalized || "62xxxxxxxxxx"}</span> —{" "}
-              <span className="font-medium">bukan</span> WhatsApp API / blast. Pastikan WhatsApp Web / aplikasi terpasang.
+              <span className="font-mono text-on-surface">
+                wa.me/{normalized || "62xxxxxxxxxx"}
+              </span>{" "}
+              — <span className="font-medium">bukan</span> WhatsApp API / blast. Pastikan WhatsApp
+              Web / aplikasi terpasang.
             </p>
           </div>
         </div>

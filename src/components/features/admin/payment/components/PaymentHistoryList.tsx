@@ -32,7 +32,9 @@ export function PaymentHistoryList({ records }: PaymentHistoryListProps) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h3 className="font-heading text-label-md font-semibold text-on-surface">Riwayat Pembayaran</h3>
+        <h3 className="font-heading text-label-md font-semibold text-on-surface">
+          Riwayat Pembayaran
+        </h3>
         <Badge variant="secondary" className="rounded-full font-medium">
           {records.length} transaksi
         </Badge>
@@ -44,7 +46,9 @@ export function PaymentHistoryList({ records }: PaymentHistoryListProps) {
             <Wallet className="h-5 w-5" />
           </div>
           <p className="mt-3 text-body-md font-medium text-on-surface">Belum ada pembayaran</p>
-          <p className="mt-1 text-label-md text-on-surface-variant">Pembayaran yang dicatat akan muncul di sini.</p>
+          <p className="mt-1 text-label-md text-on-surface-variant">
+            Pembayaran yang dicatat akan muncul di sini.
+          </p>
         </div>
       ) : (
         <div className="space-y-2.5">
@@ -58,7 +62,9 @@ export function PaymentHistoryList({ records }: PaymentHistoryListProps) {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-label-md font-semibold text-on-surface">{getMethodLabel(r.paymentMethod)}</span>
+                  <span className="text-label-md font-semibold text-on-surface">
+                    {getMethodLabel(r.paymentMethod)}
+                  </span>
                   <span className="rounded-full bg-surface-container-high px-2 py-0.5 text-label-sm font-medium text-on-surface-variant">
                     {formatCurrency(r.amountPaid)}
                   </span>

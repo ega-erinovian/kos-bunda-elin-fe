@@ -59,8 +59,12 @@ export function PaymentDetailContent({ paymentId }: PaymentDetailContentProps) {
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
           <FileText className="h-6 w-6" />
         </div>
-        <p className="mt-3 text-body-md font-medium text-on-surface">Gagal memuat detail pembayaran</p>
-        <p className="mt-1 text-label-md text-on-surface-variant">Silakan coba lagi atau periksa koneksi Anda.</p>
+        <p className="mt-3 text-body-md font-medium text-on-surface">
+          Gagal memuat detail pembayaran
+        </p>
+        <p className="mt-1 text-label-md text-on-surface-variant">
+          Silakan coba lagi atau periksa koneksi Anda.
+        </p>
       </div>
     );
   }

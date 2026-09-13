@@ -35,9 +35,7 @@ function idr(n: number): string {
 
 function formatTanggal(iso: string): string {
   try {
-    return new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(
-      new Date(iso),
-    );
+    return new Intl.DateTimeFormat("id-ID", { dateStyle: "long" }).format(new Date(iso));
   } catch {
     return iso;
   }
@@ -92,10 +90,7 @@ export function getWhatsAppTemplate(id: WhatsAppTemplateId): WhatsAppTemplate | 
   return WHATSAPP_TEMPLATES.find((t) => t.id === id);
 }
 
-export function renderWhatsAppTemplate(
-  id: WhatsAppTemplateId,
-  vars: WhatsAppVars,
-): string {
+export function renderWhatsAppTemplate(id: WhatsAppTemplateId, vars: WhatsAppVars): string {
   const t = getWhatsAppTemplate(id);
   return t ? t.render(vars) : "";
 }
@@ -205,7 +200,11 @@ export function paymentToDefaultTemplate(payment: Payment): WhatsAppTemplateId {
 
 export function tenantToWhatsAppVars(tenant: Tenant): WhatsAppVars {
   const now = new Date();
-  const isoDue = new Date(now.getFullYear(), now.getMonth(), tenant.tanggalJatuhTempo).toISOString();
+  const isoDue = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    tenant.tanggalJatuhTempo,
+  ).toISOString();
   return buildWhatsAppVars({
     nama: tenant.nama,
     kamar: tenant.kamar?.nomor ?? "-",

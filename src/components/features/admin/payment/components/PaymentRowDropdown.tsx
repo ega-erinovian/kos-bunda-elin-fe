@@ -14,11 +14,7 @@ import { PaymentDetailDialog } from "./PaymentDetailDialog";
 import { PaymentDetailDrawer } from "./PaymentDetailDrawer";
 import { WhatsAppComposer } from "@/components/features/whatsapp/WhatsAppComposer";
 import { usePayment } from "@/hooks/api/use-payments";
-import {
-  paymentToDefaultTemplate,
-  paymentToWhatsAppVars,
-  type WhatsAppVars,
-} from "@/lib/whatsapp";
+import { paymentToDefaultTemplate, paymentToWhatsAppVars, type WhatsAppVars } from "@/lib/whatsapp";
 import type { Payment } from "../types";
 
 function useIsMobile(breakpoint = 768) {

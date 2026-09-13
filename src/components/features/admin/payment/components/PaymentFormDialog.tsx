@@ -39,12 +39,7 @@ export function PaymentFormDialog({
   onSuccess,
 }: PaymentFormDialogProps) {
   const createForm = useCreatePembayaranForm(open, onOpenChange);
-  const updateForm = useUpdatePembayaranForm(
-    open,
-    onOpenChange,
-    editingPayment,
-    onSuccess,
-  );
+  const updateForm = useUpdatePembayaranForm(open, onOpenChange, editingPayment, onSuccess);
   const form = editingPayment ? updateForm : createForm;
   const isPending = editingPayment ? updateForm.isPending : createForm.isPending;
   const isLoading = editingPayment ? updateForm.isLoading : false;

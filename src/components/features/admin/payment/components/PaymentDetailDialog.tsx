@@ -20,7 +20,9 @@ export function PaymentDetailDialog({ paymentId, open, onOpenChange }: PaymentDe
             <DialogTitle className="font-heading text-heading-md text-on-surface">
               Detail Pembayaran
             </DialogTitle>
-            <p className="text-label-md text-on-surface-variant">Ringkasan tagihan dan riwayat transaksi.</p>
+            <p className="text-label-md text-on-surface-variant">
+              Ringkasan tagihan dan riwayat transaksi.
+            </p>
           </DialogHeader>
           <div className="p-6">
             <PaymentDetailContent paymentId={paymentId} />

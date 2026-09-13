@@ -73,6 +73,38 @@ export function getDueDateLabel(dueDate: string): string {
 }
 
 export function transformApiPaymentToAdminPayment(payment: ApiPayment): AdminPayment {
+  // Root cause fix is in src/mocks/handlers/pembayaran.ts:208 which now maps flat fixture to nested penyewa shape.
+  // This guard is defensive for live drift / partial cache entries — never throw in render.
+  if (!payment || typeof payment !== "object") {
+    return {
+      id: (payment as unknown as { id?: string })?.id ?? "unknown",
+      name: "Penghuni",
+      initials: "--",
+      room: "-",
+      dueDate: "-",
+      amount: 0,
+      status: "pending",
+      tab: "approaching",
+      totalDibayar: 0,
+    };
+  }
+  // Defensive: BE/mock shape drift → `penyewa` may be missing; fall back to flat penyewaNama/penyewaId
+  const penyewaAny = (
+    payment as unknown as {
+      penyewa?: ApiPayment["penyewa"];
+      penyewaNama?: string;
+      kamarId?: string;
+      nomorKamar?: string;
+    }
+  ).penyewa;
+  const fallbackNama =
+    (payment as unknown as { penyewaNama?: string }).penyewaNama ?? penyewaAny?.nama ?? "Penghuni";
+  const fallbackRoom =
+    penyewaAny?.kamar?.nomor ??
+    (payment as unknown as { nomorKamar?: string }).nomorKamar ??
+    (payment as unknown as { penyewa?: { kamar?: { nomor?: string } } }).penyewa?.kamar?.nomor ??
+    "-";
+  const nama = penyewaAny?.nama ?? fallbackNama;
   const dueDate = new Date(payment.tanggalJatuhTempo);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -101,9 +133,9 @@ export function transformApiPaymentToAdminPayment(payment: ApiPayment): AdminPay
           : "pending";
   return {
     id: payment.id,
-    name: payment.penyewa.nama,
-    initials: getInitials(payment.penyewa.nama),
-    room: payment.penyewa.kamar.nomor,
+    name: nama,
+    initials: getInitials(nama),
+    room: fallbackRoom,
     dueDate: getDueDateLabel(payment.tanggalJatuhTempo),
     amount: payment.nominal,
     status,

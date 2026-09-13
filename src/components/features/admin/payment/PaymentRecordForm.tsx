@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
+import { useFinanceAccounts } from "@/hooks/api/use-finance-accounts";
 import type { PaymentMethod, CreatePaymentRecordInput } from "@/types";
 
 interface PaymentRecordFormProps {
@@ -35,6 +36,8 @@ export function PaymentRecordForm({
       onSuccess?.();
     },
   });
+
+  const { data: accounts = [] } = useFinanceAccounts();
 
   const remainingBalance = nominal - totalDibayar;
 
@@ -143,6 +146,27 @@ export function PaymentRecordForm({
               className="h-10"
               maxLength={500}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="financialAccountId" className="text-label-sm font-medium">
+              Akun Keuangan (Opsional)
+            </Label>
+            <Select name="financialAccountId">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih akun (default: Cash)" />
+              </SelectTrigger>
+              <SelectContent>
+                {accounts.map((acc) => (
+                  <SelectItem key={acc.id} value={acc.id}>
+                    {acc.name} — {acc.type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-label-sm text-on-surface-variant">
+              Jika kosong, otomatis pakai Cash.
+            </p>
           </div>
 
           <Button type="submit" className="w-full" disabled={mutation.isPending}>

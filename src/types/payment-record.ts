@@ -9,6 +9,7 @@ export interface PaymentRecord {
   referenceNumber?: string;
   notes?: string;
   financialAccountId?: string;
+  financialTransactionId?: string;
   createdByAdmin?: {
     id: string;
     nama: string;

@@ -26,14 +26,14 @@ export function usePayments(params?: PaymentListParams) {
   });
 }
 
-export function usePayment(id: string) {
+export function usePayment(id: string, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: [...PAYMENTS_KEY, id],
     queryFn: async () => {
       const response = await api.get<ApiResponse<Payment>>(`/pembayaran/${id}`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && (options?.enabled ?? true),
   });
 }
 

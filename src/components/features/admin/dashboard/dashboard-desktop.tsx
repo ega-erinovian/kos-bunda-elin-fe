@@ -12,7 +12,6 @@ import { CalendarDays, ChevronDown, Megaphone, Plus, StickyNotePlus, UserPlus } 
 import { ActivityFeedDesktop } from "./activity-feed";
 import { metrics } from "./consts";
 import { DesktopMetricCard } from "./metric-card";
-import { PushLogsDesktop } from "./push-logs";
 
 export function DashboardDesktop() {
   return (
@@ -68,10 +67,7 @@ export function DashboardDesktop() {
         ))}
       </section>
 
-      <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <ActivityFeedDesktop />
-        <PushLogsDesktop />
-      </section>
+      <ActivityFeedDesktop />
     </div>
   );
 }

@@ -72,6 +72,8 @@ Never start writing before you understand the change. Trace the full flow: every
 - **Naming:** intention-revealing names. Verb-prefix handlers (`handleSearch`, `handlePageChange`), noun types. Match existing naming style per directory.
 - **Types over `any`.** Use the colocated/`src/types` types. Derive where possible. Keep `strict` on — no silent escapes.
 - **Keep files small and focused.** If a component or hook is doing two jobs, extract. If it's big enough to need a section comment, it's probably two files.
+- **Heavy logic → hooks (>100 lines).** Any heavy logic block exceeding ~100 lines (derived state, data transforms, effects, handlers, validation) must be extracted into a hook (`src/hooks/features/<feature>/use-*.ts` or colocated `use-*.ts`), not left inline in a component. Components orchestrate hooks + render; hooks own logic. Exception: trivial glue (<100 lines) stays inline.
+- **Components ≤300 lines.** No component file may exceed 300 lines. When approaching the limit, split by responsibility into smaller sub-components co-located in the same feature folder (e.g. `RoomCard.tsx`, `RoomFilters.tsx`, `RoomTable.tsx`). Sub-component files must use **PascalCase** (matching the exported component name). Composition over monolith — keep each piece focused, maintainable, and sustainable.
 - **No dead code.** Delete unused exports, constants, and branches as you work.
 - **Formatting/static checks:** Prettier + ESLint flat config are wired. Run `npm run format:fix` and `npm run lint` before finishing.
 - **Comments** are for `ponytail:` ceilings and non-obvious rationale — never restate the code.

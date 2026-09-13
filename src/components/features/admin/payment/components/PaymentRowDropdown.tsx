@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MoreHorizontal, Check, Bell, Info, Pencil, Trash2, MoreVertical } from "lucide-react";
+import { Check, Info, Pencil, Trash2, MoreVertical, MessageCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,6 +12,13 @@ import {
 import { SettlementRecordForm } from "./SettlementRecordForm";
 import { PaymentDetailDialog } from "./PaymentDetailDialog";
 import { PaymentDetailDrawer } from "./PaymentDetailDrawer";
+import { WhatsAppComposer } from "@/components/features/whatsapp/WhatsAppComposer";
+import { usePayment } from "@/hooks/api/use-payments";
+import {
+  paymentToDefaultTemplate,
+  paymentToWhatsAppVars,
+  type WhatsAppVars,
+} from "@/lib/whatsapp";
 import type { Payment } from "../types";
 
 function useIsMobile(breakpoint = 768) {
@@ -36,7 +43,13 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
   const isPaid = payment.status === "paid";
   const [settlementOpen, setSettlementOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [waOpen, setWaOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  const { data: waData } = usePayment(payment.id, { enabled: waOpen });
+  const apiPayment = waData ?? null;
+  const waVars: WhatsAppVars | null = apiPayment ? paymentToWhatsAppVars(apiPayment) : null;
+  const waDefaultTemplate = apiPayment ? paymentToDefaultTemplate(apiPayment) : undefined;
 
   const handleBayar = () => {
     if (onBayar) {
@@ -58,19 +71,25 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           {isPaid ? (
-            <DropdownMenuItem onClick={() => setDetailOpen(true)}>
-              <Info className="h-4 w-4" />
-              Detail Pembayaran
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem onClick={() => setDetailOpen(true)}>
+                <Info className="h-4 w-4" />
+                Detail Pembayaran
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setWaOpen(true)}>
+                <MessageCircle className="h-4 w-4" />
+                Kirim via WhatsApp
+              </DropdownMenuItem>
+            </>
           ) : (
             <>
               <DropdownMenuItem onClick={handleBayar}>
                 <Check className="h-4 w-4" />
                 Bayar
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => console.log("Send reminder:", payment.id)}>
-                <Bell className="h-4 w-4" />
-                Kirim Pengingat
+              <DropdownMenuItem onClick={() => setWaOpen(true)}>
+                <MessageCircle className="h-4 w-4" />
+                Kirim via WhatsApp
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setDetailOpen(true)}>
                 <Info className="h-4 w-4" />
@@ -114,6 +133,34 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
             paymentId={payment.id}
             open={detailOpen}
             onOpenChange={handleDetailOpenChange}
+          />
+        ))}
+
+      {waOpen &&
+        (waVars && apiPayment ? (
+          <WhatsAppComposer
+            open={waOpen}
+            onOpenChange={setWaOpen}
+            phone={apiPayment.penyewa.noHp}
+            vars={waVars}
+            defaultTemplateId={waDefaultTemplate}
+            title={`WhatsApp — ${apiPayment.penyewa.nama}`}
+          />
+        ) : (
+          <WhatsAppComposer
+            open={waOpen}
+            onOpenChange={setWaOpen}
+            phone=""
+            vars={{
+              nama: payment.name,
+              kamar: payment.room,
+              periode: "-",
+              nominal: String(payment.amount),
+              sisaTagihan: String(payment.amount - (payment.totalDibayar ?? 0)),
+              totalDibayar: String(payment.totalDibayar ?? 0),
+              tanggalJatuhTempo: "-",
+            }}
+            defaultTemplateId="reminder_jatuh_tempo"
           />
         ))}
     </>

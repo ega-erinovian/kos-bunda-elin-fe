@@ -117,17 +117,22 @@ export function PaymentHistoryList({ pembayaranId, nominal }: PaymentHistoryList
                   )}
                 </div>
 
-                <Link
-                  href={`/admin/finance/transactions/${record.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    // TODO: Navigate to transaction details once Phase 3 is complete
-                  }}
-                >
-                  <Button size="sm" variant="outline" className="h-8 px-2">
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                {record.financialTransactionId ? (
+                  <Link
+                    href={`/admin/finance/transactions?paymentRecordId=${record.id}&highlight=${record.financialTransactionId}`}
+                  >
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-2"
+                      title="Lihat transaksi"
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <span className="text-label-sm text-on-surface-variant">—</span>
+                )}
               </div>
             </div>
           ))}

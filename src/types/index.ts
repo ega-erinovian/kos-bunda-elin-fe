@@ -24,3 +24,22 @@ export type {
   CreatePaymentRecordInput,
   AddPaymentResponse,
 } from "./payment-record";
+
+export type { Pagination, ApiPaginated } from "./pagination";
+export type {
+  FinancialAccount,
+  FinancialCategory,
+  FinancialTransaction,
+  FinancialAccountType,
+  CategoryType,
+  TransactionType,
+  TransactionSource,
+  CreateFinancialAccountInput,
+  UpdateFinancialAccountInput,
+  CreateFinancialCategoryInput,
+  UpdateFinancialCategoryInput,
+  CreateFinancialTransactionInput,
+  UpdateFinancialTransactionInput,
+  FinancialTransactionListParams,
+} from "./finance";
+export type { AuditLogEntry, AuditLogListParams } from "./audit-log";

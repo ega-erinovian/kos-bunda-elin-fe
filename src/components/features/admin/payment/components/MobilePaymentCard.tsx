@@ -11,11 +11,7 @@ type MobilePaymentCardProps = {
   onEdit?: (payment: Payment) => void;
 };
 
-export function MobilePaymentCard({
-  payment,
-  totalDibayar = 0,
-  onEdit,
-}: MobilePaymentCardProps) {
+export function MobilePaymentCard({ payment, totalDibayar = 0, onEdit }: MobilePaymentCardProps) {
   const isPartial =
     payment.status === "partial" && totalDibayar > 0 && totalDibayar < payment.amount;
 

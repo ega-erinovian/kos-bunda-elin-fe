@@ -221,7 +221,7 @@ export function useSettlementRecordForm({
                 return;
               }
             }
-            
+
             if (error.issues?.length) {
               const issueDetail = error.issues
                 .map((i) => (i.path ? `${i.path}: ${i.message}` : i.message))

@@ -6,6 +6,10 @@ import {
   LayoutDashboard,
   User,
   Users,
+  Wallet,
+  Tag,
+  FileText,
+  Shield,
 } from "lucide-react";
 
 export const navItems = [
@@ -13,6 +17,10 @@ export const navItems = [
   { href: "/admin/rooms", label: "Rooms", icon: DoorOpen },
   { href: "/admin/tenants", label: "Tenants", icon: Users },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
+  { href: "/admin/finance/accounts", label: "Finance Accounts", icon: Wallet },
+  { href: "/admin/finance/categories", label: "Finance Categories", icon: Tag },
+  { href: "/admin/finance/transactions", label: "Transactions", icon: FileText },
+  { href: "/admin/finance/audit-log", label: "Audit Log", icon: Shield },
 ];
 
 export const mobileNavItems = [

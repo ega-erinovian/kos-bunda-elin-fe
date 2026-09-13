@@ -29,7 +29,9 @@ function DetailRow({
       {showDivider && <hr className="border-outline-variant/30" />}
       <div className="flex items-center justify-between gap-4">
         <span className="shrink-0 text-label-md text-on-surface-variant">{label}</span>
-        <span className={`text-right text-body-md text-on-surface ${valueClassName ?? ""}`}>{value}</span>
+        <span className={`text-right text-body-md text-on-surface ${valueClassName ?? ""}`}>
+          {value}
+        </span>
       </div>
     </>
   );
@@ -52,7 +54,9 @@ export function PaymentSummaryCard({ payment }: PaymentSummaryCardProps) {
   return (
     <div className="rounded-2xl border border-surface-variant/50 bg-surface-container-low p-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-heading text-label-md font-semibold text-on-surface">Ringkasan Tagihan</h3>
+        <h3 className="font-heading text-label-md font-semibold text-on-surface">
+          Ringkasan Tagihan
+        </h3>
         <span className="inline-flex items-center gap-1 rounded-full bg-surface-container-highest px-2.5 py-1 text-label-sm font-medium text-on-surface-variant">
           <CalendarDays className="h-3.5 w-3.5" />
           {periodeLabel}
@@ -115,7 +119,11 @@ export function PaymentSummaryCard({ payment }: PaymentSummaryCardProps) {
 
       <div className="mt-4 flex flex-col gap-3">
         <DetailRow label="Periode" value={periodeLabel} />
-        <DetailRow label="Jatuh Tempo" value={formatMethodDate(payment.tanggalJatuhTempo)} showDivider />
+        <DetailRow
+          label="Jatuh Tempo"
+          value={formatMethodDate(payment.tanggalJatuhTempo)}
+          showDivider
+        />
         <DetailRow
           label="Tanggal Bayar"
           value={payment.tanggalBayar ? formatMethodDate(payment.tanggalBayar) : "-"}
@@ -127,7 +135,9 @@ export function PaymentSummaryCard({ payment }: PaymentSummaryCardProps) {
           label="Sisa Tagihan"
           value={sisa <= 0 ? "Lunas" : formatCurrency(sisa)}
           showDivider
-          valueClassName={sisa <= 0 ? "font-semibold text-primary" : isOverpaid ? "text-destructive" : ""}
+          valueClassName={
+            sisa <= 0 ? "font-semibold text-primary" : isOverpaid ? "text-destructive" : ""
+          }
         />
         {payment.catatan ? (
           <DetailRow label="Catatan" value={payment.catatan} showDivider />

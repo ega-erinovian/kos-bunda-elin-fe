@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { DoorOpen, Pencil } from "lucide-react";
+import { DoorOpen, MessageCircle, Pencil } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { WhatsAppComposer } from "@/components/features/whatsapp/WhatsAppComposer";
+import { tenantToWhatsAppVars } from "@/lib/whatsapp";
 import { useTenant, useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TenantDetailContentItem } from "./TenantDetailContentItem";
@@ -30,6 +32,10 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
   const { data, isLoading, isError } = useTenant(tenantId);
   const { mutate: markKeluar, isPending: isMarkingKeluar } = useMarkTenantKeluar();
   const [keluarDialogOpen, setKeluarDialogOpen] = useState(false);
+  const [waOpen, setWaOpen] = useState(false);
+
+  const tenantForWa = data?.data ?? null;
+  const waVars = tenantForWa ? tenantToWhatsAppVars(tenantForWa) : null;
 
   if (isLoading) {
     return (
@@ -126,7 +132,15 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
 
       <div className="mt-2 flex flex-col gap-3">
         <Button
+          onClick={() => setWaOpen(true)}
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-whatsapp text-white hover:bg-whatsapp-hover focus-visible:ring-whatsapp/30"
+        >
+          <MessageCircle className="h-4 w-4" />
+          Kirim WhatsApp
+        </Button>
+        <Button
           onClick={() => onEdit(tenant.id)}
+          variant="outline"
           className="flex h-12 w-full items-center justify-center gap-2 rounded-xl"
         >
           <Pencil className="h-4 w-4" />
@@ -143,6 +157,17 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
           </Button>
         )}
       </div>
+
+      {waVars && (
+        <WhatsAppComposer
+          open={waOpen}
+          onOpenChange={setWaOpen}
+          phone={tenant.noHp}
+          vars={waVars}
+          defaultTemplateId="sapaan_umum"
+          title={`WhatsApp — ${tenant.nama}`}
+        />
+      )}
 
       <DeleteAlertDialog
         open={keluarDialogOpen}

@@ -7,9 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { PaymentTrackingCard } from "./components/PaymentTrackingCard";
 import { PaymentFormDialog } from "./components/PaymentFormDialog";
-import { BroadcastCard } from "./components/BroadcastCard";
-import { CommunicationLogsTable } from "./components/CommunicationLogsTable";
-import { dummyBroadcastLogs, PAGE_SIZE } from "./constants";
+import { PAGE_SIZE } from "./constants";
 import { usePayments as usePaymentsHook } from "@/hooks/features/admin/usePayments";
 import { usePayments as useApiPayments } from "@/hooks/api/use-payments";
 import { transformApiPaymentToAdminPayment } from "@/lib/utils";
@@ -81,32 +79,28 @@ export function DesktopPaymentSection() {
             Memuat data pembayaran...
           </div>
         ) : (
-          <>
-            <PaymentTrackingCard
-              activeTab={activeTab}
-              onTabChange={handleTabChange}
-              paginatedPayments={paginatedPayments}
-              filteredPayments={filteredPayments}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-              empty={empty}
-              onEdit={handleEdit}
-              from={from}
-              to={to}
-              headerAction={
-                <Link
-                  href="/admin/payments/tagihan-menunggu"
-                  className="flex shrink-0 items-center gap-1 pb-3 text-label-sm font-semibold text-primary transition-colors hover:text-primary/80"
-                >
-                  Lihat Semua
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              }
-            />
-            <BroadcastCard />
-            <CommunicationLogsTable logs={dummyBroadcastLogs} />
-          </>
+          <PaymentTrackingCard
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            paginatedPayments={paginatedPayments}
+            filteredPayments={filteredPayments}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            empty={empty}
+            onEdit={handleEdit}
+            from={from}
+            to={to}
+            headerAction={
+              <Link
+                href="/admin/payments/tagihan-menunggu"
+                className="flex shrink-0 items-center gap-1 pb-3 text-label-sm font-semibold text-primary transition-colors hover:text-primary/80"
+              >
+                Lihat Semua
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            }
+          />
         )}
       </div>
 

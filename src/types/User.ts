@@ -3,4 +3,5 @@ export default interface User {
   name: string;
   email: string;
   role: "admin" | "tenant";
+  adminRole?: "OWNER" | "STAFF";
 }

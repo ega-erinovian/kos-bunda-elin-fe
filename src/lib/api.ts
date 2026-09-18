@@ -50,6 +50,7 @@ function refreshSession(): Promise<boolean> {
     refreshPromise = fetch(`${API_BASE_URL}/auth/refresh`, {
       method: "POST",
       credentials: "include",
+      cache: "no-store",
     })
       .then((res) => res.ok)
       .catch(() => false)
@@ -86,6 +87,7 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     },
     credentials: "include" as const,
     ...restFetchOptions,
+    cache: "no-store" as const,
   });
 
   const res = await fetch(url, buildInit());

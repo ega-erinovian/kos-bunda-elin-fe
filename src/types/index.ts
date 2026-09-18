@@ -43,3 +43,12 @@ export type {
   FinancialTransactionListParams,
 } from "./finance";
 export type { AuditLogEntry, AuditLogListParams } from "./audit-log";
+export type {
+  ExpenseTransaction,
+  CreateExpenseInput,
+  UpdateExpenseInput,
+  ExpenseListParams,
+  ExpenseListResponse,
+  ExpenseSingleResponse,
+  ReverseExpenseResponse,
+} from "./expense";

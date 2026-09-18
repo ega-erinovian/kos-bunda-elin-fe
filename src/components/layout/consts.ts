@@ -10,6 +10,7 @@ import {
   Tag,
   FileText,
   Shield,
+  Receipt,
 } from "lucide-react";
 
 export const navItems = [
@@ -20,6 +21,7 @@ export const navItems = [
   { href: "/admin/finance/accounts", label: "Finance Accounts", icon: Wallet },
   { href: "/admin/finance/categories", label: "Finance Categories", icon: Tag },
   { href: "/admin/finance/transactions", label: "Transactions", icon: FileText },
+  { href: "/admin/finance/expenses", label: "Expenses", icon: Receipt },
   { href: "/admin/finance/audit-log", label: "Audit Log", icon: Shield },
 ];
 

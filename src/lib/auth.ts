@@ -7,6 +7,7 @@ function toUser(admin: AdminUser): User {
     name: admin.nama,
     email: admin.email,
     role: "admin",
+    adminRole: admin.role,
   };
 }
 

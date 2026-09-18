@@ -1,4 +1,4 @@
-const CACHE_NAME = "kos-bunda-elin-v2";
+const CACHE_NAME = "kos-bunda-elin-v3";
 
 const PRECACHE_URLS = ["/", "/offline"];
 
@@ -23,6 +23,11 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  // API traffic must never be served from cache — NetworkOnly for all methods.
+  // Matches both same-origin /api/* and cross-origin API_BASE_URL (e.g. http://localhost:8000/api/*).
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith("/api")) return;
+
   if (event.request.method !== "GET") return;
 
   // Navigations must be network-first so deploys and code changes (e.g.

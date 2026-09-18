@@ -1,32 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
-import { useFinanceTransactionsSection } from "@/hooks/features/admin/finance/useFinanceTransactionsSection";
-import { FinanceTransactionFormDialog } from "./components/FinanceTransactionFormDialog";
-import { FinanceTransactionFilters } from "./components/FinanceTransactionFilters";
-import { FinanceTransactionCard } from "./components/FinanceTransactionCard";
-import { FinanceTransactionTable } from "./components/FinanceTransactionTable";
-import { FinanceTransactionEditDialog } from "./components/FinanceTransactionEditDialog";
-import { ReverseTransactionDialog } from "@/components/features/admin/expense/components/ReverseTransactionDialog";
+import { useExpensesSection } from "@/hooks/features/admin/expense/useExpensesSection";
+import { ExpenseFormDialog } from "./components/ExpenseFormDialog";
+import { ReverseTransactionDialog } from "./components/ReverseTransactionDialog";
+import { ExpenseCard } from "./components/ExpenseCard";
+import { ExpenseFilters } from "./components/ExpenseFilters";
+import { ExpenseTable } from "./components/ExpenseTable";
 
-export function FinanceTransactionsSection() {
-  const router = useRouter();
+export function ExpensesSection() {
   const {
-    highlightId,
     isOwner,
     page,
     pageSize,
-    type,
-    accountId,
     categoryId,
+    accountId,
     from,
     to,
-    txs,
+    vendorName,
+    expenses,
     pagination,
     totalPages,
     total,
@@ -34,83 +29,56 @@ export function FinanceTransactionsSection() {
     isError,
     refetch,
     accounts,
-    allCats,
+    expenseCats,
     createOpen,
     setCreateOpen,
     editTx,
     setEditTx,
-    deleteId,
-    setDeleteId,
     reverseTx,
     setReverseTx,
     lastReversal,
     setLastReversal,
-    editDesc,
-    setEditDesc,
-    editRef,
-    setEditRef,
-    del,
-    upd,
     reverse,
     handlePageChange,
-    handleTypeChange,
-    handleAccountChange,
     handleCategoryChange,
+    handleAccountChange,
     handleFromChange,
     handleToChange,
+    handleVendorChange,
     handleResetFilters,
-    getCatName,
+    getCatLabel,
     getAccName,
-    openEdit,
-    handleUpdate,
-    handleDelete,
     handleReverse,
     hasActiveFilters,
-  } = useFinanceTransactionsSection();
+  } = useExpensesSection();
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Transaksi Keuangan"
-        subtitle={`${total} transaksi · halaman ${page} dari ${totalPages}`}
+        title="Pengeluaran"
+        subtitle={`${total} pengeluaran · halaman ${page} dari ${totalPages}`}
       >
         <Button onClick={() => setCreateOpen(true)}>
           <Plus className="h-4 w-4" />
-          Tambah Transaksi
+          Tambah Pengeluaran
         </Button>
       </PageHeader>
 
-      {highlightId && (
-        <Card className="border-primary/20 bg-primary/5 p-3">
-          <p className="text-label-sm text-primary">
-            Highlight paymentRecordId: {highlightId} — transaksi terkait disorot di daftar.
-          </p>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="mt-1 h-7"
-            onClick={() => router.push("/admin/finance/transactions")}
-          >
-            Hapus highlight
-          </Button>
-        </Card>
-      )}
-
       {/* Mobile */}
       <div className="space-y-4 md:hidden">
-        <FinanceTransactionFilters
-          type={type}
-          accountId={accountId}
+        <ExpenseFilters
           categoryId={categoryId}
+          accountId={accountId}
           from={from}
           to={to}
+          vendorName={vendorName}
+          expenseCats={expenseCats}
           accounts={accounts}
-          allCats={allCats}
-          onTypeChange={handleTypeChange}
-          onAccountChange={handleAccountChange}
           onCategoryChange={handleCategoryChange}
+          onAccountChange={handleAccountChange}
           onFromChange={handleFromChange}
           onToChange={handleToChange}
+          onVendorChange={handleVendorChange}
           onReset={handleResetFilters}
           hasActive={hasActiveFilters}
         />
@@ -125,37 +93,31 @@ export function FinanceTransactionsSection() {
           </div>
         ) : isError ? (
           <Card className="border-destructive/20 bg-destructive/5 p-6 text-center">
-            <p className="text-label-md text-destructive">Gagal memuat transaksi</p>
+            <p className="text-label-md text-destructive">Gagal memuat pengeluaran</p>
             <Button variant="outline" size="sm" className="mt-3" onClick={() => refetch()}>
               Coba lagi
             </Button>
           </Card>
-        ) : txs.length === 0 ? (
+        ) : expenses.length === 0 ? (
           <Card className="p-8 text-center text-body-md text-on-surface-variant">
-            Tidak ada transaksi.
+            Tidak ada pengeluaran.
           </Card>
         ) : (
           <div className="space-y-3">
-            {txs.map((tx) => {
-              const highlighted =
-                !!highlightId && (tx.paymentRecordId === highlightId || tx.id === highlightId);
-              return (
-                <FinanceTransactionCard
-                  key={tx.id}
-                  tx={tx}
-                  accountName={getAccName(tx.accountId)}
-                  categoryName={getCatName(tx.categoryId)}
-                  isOwner={isOwner}
-                  highlighted={highlighted}
-                  onEdit={() => openEdit(tx)}
-                  onReverse={() => {
-                    setLastReversal(null);
-                    setReverseTx(tx);
-                  }}
-                  onDelete={() => setDeleteId(tx.id)}
-                />
-              );
-            })}
+            {expenses.map((tx) => (
+              <ExpenseCard
+                key={tx.id}
+                tx={tx}
+                accountName={getAccName(tx.accountId)}
+                categoryLabel={getCatLabel(tx.categoryId)}
+                isOwner={isOwner}
+                onEdit={() => setEditTx(tx)}
+                onReverse={() => {
+                  setLastReversal(null);
+                  setReverseTx(tx);
+                }}
+              />
+            ))}
           </div>
         )}
 
@@ -187,19 +149,19 @@ export function FinanceTransactionsSection() {
       {/* Desktop */}
       <div className="hidden space-y-4 md:block">
         <div className="flex flex-wrap items-center gap-3">
-          <FinanceTransactionFilters
-            type={type}
-            accountId={accountId}
+          <ExpenseFilters
             categoryId={categoryId}
+            accountId={accountId}
             from={from}
             to={to}
+            vendorName={vendorName}
+            expenseCats={expenseCats}
             accounts={accounts}
-            allCats={allCats}
-            onTypeChange={handleTypeChange}
-            onAccountChange={handleAccountChange}
             onCategoryChange={handleCategoryChange}
+            onAccountChange={handleAccountChange}
             onFromChange={handleFromChange}
             onToChange={handleToChange}
+            onVendorChange={handleVendorChange}
             onReset={handleResetFilters}
             hasActive={hasActiveFilters}
           />
@@ -218,23 +180,21 @@ export function FinanceTransactionsSection() {
             <div className="border-t border-border/30 p-6 text-center text-body-md text-destructive">
               Gagal memuat
             </div>
-          ) : txs.length === 0 ? (
+          ) : expenses.length === 0 ? (
             <div className="py-12 text-center text-body-md text-muted-foreground">
-              Tidak ada transaksi.
+              Tidak ada pengeluaran.
             </div>
           ) : (
-            <FinanceTransactionTable
-              txs={txs}
+            <ExpenseTable
+              expenses={expenses}
               isOwner={isOwner}
-              highlightId={highlightId}
-              getCatName={getCatName}
+              getCatLabel={getCatLabel}
               getAccName={getAccName}
-              onEdit={openEdit}
+              onEdit={(tx) => setEditTx(tx)}
               onReverse={(tx) => {
                 setLastReversal(null);
                 setReverseTx(tx);
               }}
-              onDelete={(id) => setDeleteId(id)}
             />
           )}
 
@@ -267,26 +227,11 @@ export function FinanceTransactionsSection() {
         </div>
       </div>
 
-      <FinanceTransactionFormDialog open={createOpen} onOpenChange={setCreateOpen} />
-
-      <FinanceTransactionEditDialog
+      <ExpenseFormDialog open={createOpen} onOpenChange={setCreateOpen} />
+      <ExpenseFormDialog
         open={!!editTx}
         onOpenChange={(o) => !o && setEditTx(null)}
-        description={editDesc}
-        reference={editRef}
-        onDescriptionChange={setEditDesc}
-        onReferenceChange={setEditRef}
-        onSave={handleUpdate}
-        isPending={upd.isPending}
-      />
-
-      <DeleteAlertDialog
-        open={!!deleteId}
-        onOpenChange={(o) => !o && setDeleteId(null)}
-        title="Hapus Transaksi"
-        description="Transaksi akan di-soft delete dan tetap tercatat di audit log. Lanjutkan?"
-        isPending={del.isPending}
-        onConfirm={handleDelete}
+        editing={editTx}
       />
 
       <ReverseTransactionDialog

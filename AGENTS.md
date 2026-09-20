@@ -118,3 +118,13 @@ Never start writing before you understand the change. Trace the full flow: every
 6. Followed the feature-folder structure and import conventions (`@/`).
 7. `npm run lint` passes and `npm run format:fix` is clean. TypeScript `strict` compiles.
 8. Left a runnable check for any non-trivial logic (a small test/self-check), per Ponytail.
+
+## 9. Harness — PROGRESS.md & features_list.md
+
+- **Before coding:** read `PROGRESS.md:1` (phase board — what's ✅/🟡/⬜) and `features_list.md:1` (one contract-unit row per frozen endpoint, `PLAN.md` Phases 1–9 + `PLAN_BE.md §2` parity). They are the harness tracker; if they conflict with `PLAN.md`, `PLAN.md` wins, then flag drift vs `PLAN_BE.md §2`.
+- **After landing a phase:** update both in the same PR:
+  1. Flip the phase `Status` in `PROGRESS.md §1`, note the PR/branch in `Notes`, and reconcile `PROGRESS.md §2` (grep `src/app/admin/**` + `src/types/*` + `src/hooks/api/*` + `src/mocks/handlers/*`).
+  2. Flip the matching rows' `Status` in `features_list.md` (§1–§8), fill `Implementation` file:line for each new route/type/hook/component/handler.
+  3. Tick `PLAN.md` acceptance criteria for that phase and verify `PLAN_BE.md §2` parity (path/method/shape/status/role) if the phase maps to a BE phase.
+- **Never mark `✅`** without: route exists + type matches `PLAN.md`/`PLAN_BE.md §2` + hook hits real URL via `src/lib/api.ts` (no mock branching) + mock enforces validation/pagination/`Idempotency-Key`/dedupe/`x-mock-role` OWNER gate + `Pagination` shape + monetary `number` (not string) + mobile (`md:hidden`) + desktop (`hidden md:block`) variants verified.
+- **Next milestone:** `PROGRESS.md:1` shows Phase 2 (Notifications) as the immediate `⬜` — wire `handlers/notification.ts` + `NotificationChannel/Status/Log/MessageTemplate/ReminderConfig` types + `use-message-templates/notification-logs/reminder-config/reminders` hooks before starting Phase 6.

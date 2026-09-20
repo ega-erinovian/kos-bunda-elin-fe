@@ -27,6 +27,16 @@ export type {
 
 export type { Pagination, ApiPaginated } from "./pagination";
 export type {
+  ReceivableByTenant,
+  ReceivableSummary,
+  AgingLabel,
+  AgingBucket,
+  ReceivableListParams,
+  ReceivableListResponse,
+  ReceivableSummaryResponse,
+  ReceivableAgingResponse,
+} from "./receivable";
+export type {
   FinancialAccount,
   FinancialCategory,
   FinancialTransaction,

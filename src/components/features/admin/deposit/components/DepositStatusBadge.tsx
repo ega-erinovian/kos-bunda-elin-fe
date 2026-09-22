@@ -9,7 +9,10 @@ export function DepositStatusBadge({ status }: { status: DepositStatus }) {
   return (
     <Badge
       variant="outline"
-      className={cn("rounded-full px-2.5 py-0.5 text-label-sm text-wrap! max-w-28 h-full", depositStatusBadgeClass(status))}
+      className={cn(
+        "rounded-full px-2.5 py-0.5 text-label-sm text-wrap! max-w-28 h-full",
+        depositStatusBadgeClass(status),
+      )}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
       {depositStatusLabel(status)}

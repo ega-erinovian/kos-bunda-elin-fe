@@ -72,3 +72,18 @@ export type {
   DepositListResponse,
   DepositSingleResponse,
 } from "./deposit";
+export type {
+  RevenueReport,
+  ExpenseReport,
+  CashFlowReport,
+  IncomeStatementReport,
+  DashboardReport,
+  ReportRangeParams,
+  TransactionsReportParams,
+  RevenueReportResponse,
+  ExpenseReportResponse,
+  CashFlowReportResponse,
+  IncomeStatementReportResponse,
+  DashboardReportResponse,
+  TransactionsReportResponse,
+} from "./report";

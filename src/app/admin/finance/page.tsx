@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wallet, Tag, FileText, Shield } from "lucide-react";
+import { Wallet, Tag, FileText, Shield, BarChart3 } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -11,6 +11,12 @@ const links = [
     label: "Transaksi",
     desc: "Pemasukan & pengeluaran manual",
     icon: FileText,
+  },
+  {
+    href: "/admin/finance/reports",
+    label: "Laporan",
+    desc: "Pendapatan, beban, arus kas & laba rugi",
+    icon: BarChart3,
   },
   {
     href: "/admin/finance/audit-log",

@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   CreditCard,
   DoorOpen,
   History,
@@ -26,6 +27,7 @@ export const navItems = [
   { href: "/admin/finance/expenses", label: "Expenses", icon: Receipt },
   { href: "/admin/finance/receivables", label: "Receivables", icon: HandCoins },
   { href: "/admin/finance/deposits", label: "Deposits", icon: PiggyBank },
+  { href: "/admin/finance/reports", label: "Reports", icon: BarChart3 },
   { href: "/admin/finance/audit-log", label: "Audit Log", icon: Shield },
 ];
 

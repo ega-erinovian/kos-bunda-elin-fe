@@ -5,9 +5,10 @@ import { expenseHandlers } from "./handlers/expense";
 
 import { receivableHandlers } from "./handlers/receivable";
 import { depositHandlers } from "./handlers/deposit";
+import { reportHandlers } from "./handlers/report";
 
-// Combine all handlers
 const handlers = [
+  ...reportHandlers,
   ...pembayaranHandlers,
   ...financeHandlers,
   ...expenseHandlers,
@@ -15,5 +16,4 @@ const handlers = [
   ...depositHandlers,
 ];
 
-// Setup MSW worker for browser
 export const worker = setupWorker(...handlers);

@@ -62,3 +62,13 @@ export type {
   ExpenseSingleResponse,
   ReverseExpenseResponse,
 } from "./expense";
+export type {
+  Deposit,
+  DepositStatus,
+  ReceiveDepositInput,
+  DeductDepositInput,
+  RefundDepositInput,
+  DepositListParams,
+  DepositListResponse,
+  DepositSingleResponse,
+} from "./deposit";

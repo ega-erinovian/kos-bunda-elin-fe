@@ -12,6 +12,7 @@ import {
   Shield,
   Receipt,
   HandCoins,
+  PiggyBank,
 } from "lucide-react";
 
 export const navItems = [
@@ -24,6 +25,7 @@ export const navItems = [
   { href: "/admin/finance/transactions", label: "Transactions", icon: FileText },
   { href: "/admin/finance/expenses", label: "Expenses", icon: Receipt },
   { href: "/admin/finance/receivables", label: "Receivables", icon: HandCoins },
+  { href: "/admin/finance/deposits", label: "Deposits", icon: PiggyBank },
   { href: "/admin/finance/audit-log", label: "Audit Log", icon: Shield },
 ];
 

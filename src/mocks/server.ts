@@ -4,6 +4,7 @@ import { financeHandlers } from "./handlers/finance";
 import { expenseHandlers } from "./handlers/expense";
 
 import { receivableHandlers } from "./handlers/receivable";
+import { depositHandlers } from "./handlers/deposit";
 
 // Combine all handlers
 const handlers = [
@@ -11,6 +12,7 @@ const handlers = [
   ...financeHandlers,
   ...expenseHandlers,
   ...receivableHandlers,
+  ...depositHandlers,
 ];
 
 // Setup MSW server for Node (tests)

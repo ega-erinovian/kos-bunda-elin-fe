@@ -12,6 +12,7 @@ import { useTenant, useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TenantDetailContentItem } from "./TenantDetailContentItem";
 import { MobileTenantCardActiveBadge } from "./MobileTenantCardActiveBadge";
+import { DepositSummaryCard } from "@/components/features/admin/deposit/components/DepositSummaryCard";
 import toast from "react-hot-toast";
 
 type TenantDetailContentProps = {
@@ -104,6 +105,8 @@ export function TenantDetailContent({ tenantId, onEdit }: TenantDetailContentPro
       </div>
 
       <MobileTenantCardActiveBadge aktif={isActive} />
+
+      <DepositSummaryCard penyewaId={tenant.id} />
 
       <div className="flex flex-col gap-3 rounded-2xl border border-surface-variant/50 bg-surface-container-low p-4">
         <TenantDetailContentItem

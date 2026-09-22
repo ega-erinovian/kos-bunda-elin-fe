@@ -1,0 +1,106 @@
+import type { Deposit } from "@/types";
+
+const nowIso = () => new Date().toISOString();
+const daysAgo = (n: number) => new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString();
+
+export let deposits: Deposit[] = [
+  {
+    id: "deposit-1",
+    penyewaId: "tenant-1",
+    amountReceived: 1500000,
+    receivedDate: daysAgo(30),
+    deductionAmount: 0,
+    status: "HELD",
+    createdAt: daysAgo(30),
+    updatedAt: daysAgo(30),
+  },
+  {
+    id: "deposit-2",
+    penyewaId: "tenant-2",
+    amountReceived: 2000000,
+    receivedDate: daysAgo(25),
+    deductionAmount: 300000,
+    deductionReason: "Kerusakan pintu",
+    refundAmount: 500000,
+    refundDate: daysAgo(2),
+    status: "PARTIALLY_REFUNDED",
+    createdAt: daysAgo(25),
+    updatedAt: daysAgo(2),
+  },
+  {
+    id: "deposit-3",
+    penyewaId: "tenant-3",
+    amountReceived: 1800000,
+    receivedDate: daysAgo(40),
+    deductionAmount: 200000,
+    deductionReason: "Kebersihan",
+    refundAmount: 1600000,
+    refundDate: daysAgo(1),
+    status: "REFUNDED",
+    createdAt: daysAgo(40),
+    updatedAt: daysAgo(1),
+  },
+  {
+    id: "deposit-4",
+    penyewaId: "tenant-1",
+    amountReceived: 1000000,
+    receivedDate: daysAgo(50),
+    deductionAmount: 1000000,
+    deductionReason: "Hangus - keluar tanpa pemberitahuan",
+    status: "FORFEITED",
+    createdAt: daysAgo(50),
+    updatedAt: daysAgo(5),
+  },
+];
+
+export function resetDeposits() {
+  deposits = [
+    {
+      id: "deposit-1",
+      penyewaId: "tenant-1",
+      amountReceived: 1500000,
+      receivedDate: daysAgo(30),
+      deductionAmount: 0,
+      status: "HELD",
+      createdAt: nowIso(),
+      updatedAt: nowIso(),
+    },
+    {
+      id: "deposit-2",
+      penyewaId: "tenant-2",
+      amountReceived: 2000000,
+      receivedDate: daysAgo(25),
+      deductionAmount: 300000,
+      deductionReason: "Kerusakan pintu",
+      refundAmount: 500000,
+      refundDate: daysAgo(2),
+      status: "PARTIALLY_REFUNDED",
+      createdAt: daysAgo(25),
+      updatedAt: daysAgo(2),
+    },
+    {
+      id: "deposit-3",
+      penyewaId: "tenant-3",
+      amountReceived: 1800000,
+      receivedDate: daysAgo(40),
+      deductionAmount: 200000,
+      deductionReason: "Kebersihan",
+      refundAmount: 1600000,
+      refundDate: daysAgo(1),
+      status: "REFUNDED",
+      createdAt: daysAgo(40),
+      updatedAt: daysAgo(1),
+    },
+    {
+      id: "deposit-4",
+      penyewaId: "tenant-1",
+      amountReceived: 1000000,
+      receivedDate: daysAgo(50),
+      deductionAmount: 1000000,
+      deductionReason: "Hangus - keluar tanpa pemberitahuan",
+      status: "FORFEITED",
+      createdAt: daysAgo(50),
+      updatedAt: daysAgo(5),
+    },
+  ];
+}

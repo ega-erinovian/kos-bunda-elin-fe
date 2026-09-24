@@ -9,6 +9,7 @@ interface MobileMetricCardProps {
   iconWrapper: string;
   className: string;
   accent?: boolean;
+  valueClassName?: string;
 }
 
 interface DesktopMetricCardProps {
@@ -29,6 +30,7 @@ export function MobileMetricCard({
   iconWrapper,
   className,
   accent,
+  valueClassName,
 }: MobileMetricCardProps) {
   return (
     <div
@@ -44,7 +46,7 @@ export function MobileMetricCard({
         </div>
       </div>
       <div className="relative z-10 mt-2">
-        <p className="font-heading text-heading-xl mb-1">{value}</p>
+        <p className={`font-heading mb-1 ${valueClassName ?? "text-heading-xl"}`}>{value}</p>
         <p className={`text-sm ${accent ? "opacity-90" : "text-muted-foreground"}`}>{label}</p>
       </div>
     </div>

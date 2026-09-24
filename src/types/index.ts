@@ -87,3 +87,12 @@ export type {
   DashboardReportResponse,
   TransactionsReportResponse,
 } from "./report";
+export type {
+  DashboardKamarSummary,
+  DashboardPembayaranSummary,
+  DashboardFinanceSummary,
+  DashboardNotificationsSummary,
+  DashboardSummary,
+  DashboardSummaryParams,
+  DashboardSummaryResponse,
+} from "./dashboard";

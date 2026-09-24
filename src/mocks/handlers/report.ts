@@ -3,7 +3,7 @@ import { differenceInCalendarDays, startOfDay, startOfMonth } from "date-fns";
 import { pembayaranList, paymentRecords } from "../fixtures/pembayaran";
 import { financeTransactions } from "../fixtures/finance";
 
-const MAX_REPORT_RANGE_DAYS = 1095;
+export const MAX_REPORT_RANGE_DAYS = 1095;
 
 function parseDateParam(v: string | null): Date | undefined | null {
   if (v === null || v === undefined || v === "") return undefined;
@@ -12,7 +12,9 @@ function parseDateParam(v: string | null): Date | undefined | null {
   return d;
 }
 
-function getEffectiveRange(url: URL): { from: Date; to: Date } | { error: string; status: number } {
+export function getEffectiveRange(
+  url: URL,
+): { from: Date; to: Date } | { error: string; status: number } {
   const rawFrom = url.searchParams.get("from");
   const rawTo = url.searchParams.get("to");
   const fromParsed = parseDateParam(rawFrom);
@@ -71,7 +73,7 @@ function monthsBetween(from: Date, to: Date): string[] {
 
 // ── core calculators ──────────────────────────────────────────────────
 
-function computeRevenue(from: Date, to: Date) {
+export function computeRevenue(from: Date, to: Date) {
   const billedRevenue = pembayaranList
     .filter((p) => {
       const d = new Date(p.tanggalJatuhTempo);
@@ -103,7 +105,7 @@ function computeRevenue(from: Date, to: Date) {
   return { billedRevenue, cashRevenue, expectedRevenue, collectionRate, otherIncome };
 }
 
-function computeExpense(from: Date, to: Date) {
+export function computeExpense(from: Date, to: Date) {
   const rows = financeTransactions.filter(
     (t) =>
       !t.deletedAt &&

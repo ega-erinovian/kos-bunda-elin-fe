@@ -16,6 +16,7 @@ import { useDashboardSummary } from "@/hooks/api/use-dashboard-summary";
 import { formatCurrency } from "@/lib/utils";
 import { MobileMetricCard } from "./metric-card";
 import { QuickActionsMobile } from "./quick-actions";
+import { ActivityFeedMobile } from "./activity-feed";
 
 export function DashboardMobile() {
   const { data, isLoading, isError } = useDashboardSummary();
@@ -84,7 +85,7 @@ export function DashboardMobile() {
         />
       </section>
 
-      <section className="grid grid-cols-2 gap-4">
+      <section className="grid lg:grid-cols-2 gap-4">
         <MobileMetricCard
           label="Pengingat Hari Ini"
           value={remindersValue}
@@ -127,6 +128,7 @@ export function DashboardMobile() {
       </section>
 
       <QuickActionsMobile />
+      <ActivityFeedMobile />
     </div>
   );
 }

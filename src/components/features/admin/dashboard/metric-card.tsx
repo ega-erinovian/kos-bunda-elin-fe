@@ -64,7 +64,7 @@ export function DesktopMetricCard({
   danger,
 }: DesktopMetricCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-3xl border border-transparent bg-surface p-6 shadow-ambient-md transition-colors hover:border-secondary">
+    <div className="group relative overflow-hidden rounded-3xl border bg-surface p-5 shadow-ambient-md transition-colors border-secondary">
       <div
         className={`absolute -right-4 -top-4 h-24 w-24 rounded-bl-[48px] transition-transform group-hover:scale-110 ${decorColor}`}
       />
@@ -74,15 +74,15 @@ export function DesktopMetricCard({
             <Icon className="h-6 w-6" />
           </div>
         </div>
-        <div>
-          <h3 className="mb-1 text-body-md text-on-surface-variant">{label}</h3>
+        <div className="w-full">
+          <h5 className="text-body-sm text-sm font-bold text-on-surface-variant mb-2">{label}</h5>
           <div className="flex items-end gap-2">
             <span
               className={`font-heading text-heading-lg text-on-surface ${danger ? "text-destructive" : ""}`}
             >
               {value}
             </span>
-            {sub && <span className="pb-1 text-body-md text-on-surface-variant">{sub}</span>}
+            {sub && <span className="text-body-md text-on-surface-variant">{sub}</span>}
           </div>
         </div>
         {progress !== undefined && (

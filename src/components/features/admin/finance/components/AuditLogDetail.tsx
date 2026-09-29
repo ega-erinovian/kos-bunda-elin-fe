@@ -276,14 +276,14 @@ export function AuditLogDetail({ beforeValue, afterValue, action, compact }: Pro
   );
 }
 
-export function AuditActionBadge({ action }: { action: string }) {
+export function AuditActionBadge({ action, label }: { action: string; label?: string }) {
   const meta = getActionTone(action);
   const Icon = meta.icon;
   return (
     <Badge variant={meta.variant} className="gap-1.5">
       <span className={cn("h-1.5 w-1.5 rounded-full", meta.dot)} />
       <Icon className="h-3 w-3" />
-      {action}
+      {label ?? action}
     </Badge>
   );
 }

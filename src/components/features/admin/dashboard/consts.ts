@@ -1,13 +1,4 @@
-import {
-  AlertCircle,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  CreditCard,
-  DoorOpen,
-  ReceiptText,
-  UserPlus,
-} from "lucide-react";
+import { AlertCircle, AlertTriangle, CheckCircle, DoorOpen, ReceiptText } from "lucide-react";
 
 export const metrics = [
   {
@@ -38,38 +29,6 @@ export const metrics = [
   },
 ];
 
-export const activities = [
-  {
-    icon: CreditCard,
-    iconWrapper: "bg-secondary-container text-on-secondary-container",
-    name: "Siti Rahmawari (Kamar 102)",
-    desc: "Membayar sewa bulan Oktober",
-    amount: "+Rp 1.500.000",
-    amountClass: "text-primary",
-    time: "Hari ini, 09:45",
-  },
-  {
-    icon: Clock,
-    iconWrapper: "bg-surface-container-high text-on-surface-variant",
-    name: "Budi Santoso (Kamar 205)",
-    desc: "Konfirmasi pembayaran tertunda",
-    badge: "Pending",
-    badgeClass: "bg-secondary-fixed text-on-secondary-fixed-variant",
-    amount: "Rp 1.200.000",
-    amountClass: "text-on-surface",
-    time: "Kemarin",
-  },
-  {
-    icon: CreditCard,
-    iconWrapper: "bg-secondary-container text-on-secondary-container",
-    name: "Dian Sastro (Kamar 105)",
-    desc: "Membayar sewa bulan Oktober",
-    amount: "+Rp 1.500.000",
-    amountClass: "text-primary",
-    time: "Kemarin",
-  },
-];
-
 export const pushLogs = [
   {
     label: "Tagihan Terkirim",
@@ -94,20 +53,5 @@ export const pushLogs = [
     statusClass: "text-primary",
     detail: "Semua Penghuni (Pemeliharaan Air)",
     time: "Kemarin, 15:00",
-  },
-];
-
-export const quickActions = [
-  {
-    label: "Catat Bayar",
-    description: "Input pembayaran bulan ini",
-    icon: CreditCard,
-    iconWrapper: "bg-secondary text-secondary-foreground",
-  },
-  {
-    label: "Tambah Penghuni",
-    description: "Registrasi anak kos baru",
-    icon: UserPlus,
-    iconWrapper: "bg-muted text-muted-foreground",
   },
 ];

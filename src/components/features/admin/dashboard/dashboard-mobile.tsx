@@ -1,28 +1,18 @@
 "use client";
 
-import {
-  AlertCircle,
-  AlertTriangle,
-  CalendarCheck,
-  DoorOpen,
-  Send,
-  TrendingUp,
-  Users,
-  Wallet,
-} from "lucide-react";
-import Link from "next/link";
+import { AlertTriangle, CalendarCheck, DoorOpen, TrendingUp, Users, Wallet } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { useDashboardSummary } from "@/hooks/api/use-dashboard-summary";
 import { formatCurrency } from "@/lib/utils";
 import { MobileMetricCard } from "./metric-card";
-import { QuickActionsMobile } from "./quick-actions";
+import { ActivityFeedMobile } from "./activity-feed";
+import { QuickActionMenu } from "./quick-action-menu";
 
 export function DashboardMobile() {
   const { data, isLoading, isError } = useDashboardSummary();
   const summary = data?.data;
 
   const finance = summary?.finance;
-  const notifications = summary?.notifications;
 
   const receivablesValue = isLoading
     ? "…"
@@ -36,20 +26,13 @@ export function DashboardMobile() {
       ? "—"
       : formatCurrency(finance.netOperatingIncomeThisMonth);
 
-  const remindersValue = isLoading
-    ? "…"
-    : isError || !notifications
-      ? "—"
-      : String(notifications.remindersSentToday);
-
-  const failedValue = isLoading
-    ? "…"
-    : isError || !notifications
-      ? "—"
-      : String(notifications.failedMessagesCount);
-
   return (
     <div className="space-y-8 md:hidden">
+      <section className="space-y-4">
+        <h3 className="font-bold text-heading-sm">Aksi Cepat</h3>
+        <QuickActionMenu />
+      </section>
+
       <PageHeader greeting="Halo, Admin" title="Ringkasan Hari Ini" />
 
       <section className="grid grid-cols-2 gap-4">
@@ -84,29 +67,7 @@ export function DashboardMobile() {
         />
       </section>
 
-      <section className="grid grid-cols-2 gap-4">
-        <MobileMetricCard
-          label="Pengingat Hari Ini"
-          value={remindersValue}
-          icon={Send}
-          className="bg-card text-card-foreground"
-          iconWrapper="bg-primary/10 text-primary"
-          valueClassName="text-heading-lg"
-        />
-        <Link
-          href="/admin/notifications/log?status=FAILED"
-          aria-label="Lihat pesan gagal"
-          className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <MobileMetricCard
-            label="Pesan Gagal"
-            value={failedValue}
-            icon={AlertCircle}
-            className="bg-destructive/10 text-destructive"
-            iconWrapper="bg-white/40 text-destructive"
-            valueClassName="text-heading-lg"
-          />
-        </Link>
+      <section className="grid gap-4">
         <MobileMetricCard
           label="Total Piutang"
           value={receivablesValue}
@@ -125,8 +86,7 @@ export function DashboardMobile() {
           valueClassName="text-heading-lg"
         />
       </section>
-
-      <QuickActionsMobile />
+      <ActivityFeedMobile />
     </div>
   );
 }

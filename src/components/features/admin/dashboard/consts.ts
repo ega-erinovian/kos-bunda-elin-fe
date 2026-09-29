@@ -1,12 +1,4 @@
-import {
-  AlertCircle,
-  AlertTriangle,
-  CheckCircle,
-  CreditCard,
-  DoorOpen,
-  ReceiptText,
-  UserPlus,
-} from "lucide-react";
+import { AlertCircle, AlertTriangle, CheckCircle, DoorOpen, ReceiptText } from "lucide-react";
 
 export const metrics = [
   {
@@ -61,20 +53,5 @@ export const pushLogs = [
     statusClass: "text-primary",
     detail: "Semua Penghuni (Pemeliharaan Air)",
     time: "Kemarin, 15:00",
-  },
-];
-
-export const quickActions = [
-  {
-    label: "Catat Bayar",
-    description: "Input pembayaran bulan ini",
-    icon: CreditCard,
-    iconWrapper: "bg-secondary text-secondary-foreground",
-  },
-  {
-    label: "Tambah Penghuni",
-    description: "Registrasi anak kos baru",
-    icon: UserPlus,
-    iconWrapper: "bg-muted text-muted-foreground",
   },
 ];

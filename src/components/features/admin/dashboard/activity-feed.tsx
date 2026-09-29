@@ -30,7 +30,7 @@ function shortActionLabel(action: string) {
 function AuditRow({ log }: { log: AuditLogEntry }) {
   const { Icon, chip } = tone(log.action);
   return (
-    <div className="flex items-center justify-between gap-3 rounded-xl border border-transparent p-4 transition-colors hover:border-surface-variant hover:bg-primary/5">
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-transparent p-4 transition-colors hover:border-surface-variant bg-primary/5">
       <div className="flex min-w-0 items-center gap-4">
         <div
           className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full", chip)}
@@ -81,7 +81,6 @@ function AuditRowMobile({ log }: { log: AuditLogEntry }) {
 
 function FeedBody({ mobile = false }: { mobile?: boolean }) {
   const { data, isLoading, isError, error, refetch } = useAuditLog({ page: 1, pageSize: 5 });
-  // ponytail: 403 = non-OWNER, hide widget instead of an error card the dashboard can't act on
   if ((error as { status?: number } | null)?.status === 403) return null;
 
   if (isLoading) {
@@ -150,18 +149,28 @@ function FeedHeader({ mobile = false }: { mobile?: boolean }) {
 
 export function ActivityFeedDesktop() {
   return (
-    <div className="rounded-3xl bg-surface p-6 shadow-ambient-md lg:col-span-2">
+    <div className="rounded-3xl bg-surface p-3 shadow-ambient-md">
       <FeedHeader />
-      <FeedBody />
+      <div
+        tabIndex={0}
+        className="max-h-96 overflow-y-auto overscroll-contain rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <FeedBody />
+      </div>
     </div>
   );
 }
 
 export function ActivityFeedMobile() {
   return (
-    <section className="rounded-xl border border-outline-variant bg-surface p-4 shadow-ambient-sm">
+    <section className="rounded-xl bg-surface p-4 shadow-ambient-sm">
       <FeedHeader mobile />
-      <FeedBody mobile />
+      <div
+        tabIndex={0}
+        className="max-h-80 overflow-y-auto overscroll-contain rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <FeedBody mobile />
+      </div>
     </section>
   );
 }

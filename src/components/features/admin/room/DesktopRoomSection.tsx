@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Filter, Layers } from "lucide-react";
+import { Search, X, Plus, Filter, Layers } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,7 @@ export function DesktopRoomSection() {
     filterStatus,
     filterFloor,
     currentPage,
-    filteredRooms,
+    totalItems,
     totalPages,
     paginatedRooms,
     handleSearch,
@@ -74,7 +74,7 @@ export function DesktopRoomSection() {
   return (
     <div className="hidden space-y-6 md:block">
       <PageHeader title="Manajemen Kamar" subtitle="Kelola data kamar kos.">
-        <Button size="lg" onClick={handleAddRoom}>
+        <Button size="lg" onClick={handleAddRoom} className={"cursor-pointer"}>
           <Plus className="h-4 w-4" />
           Tambah Kamar
         </Button>
@@ -87,8 +87,18 @@ export function DesktopRoomSection() {
             placeholder="Cari kamar atau lantai..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-sm"
+            className="w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 pr-9 shadow-sm"
           />
+          {searchQuery && (
+            <button
+              type="button"
+              aria-label="Hapus pencarian"
+              onClick={() => handleSearch("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-on-surface-variant hover:text-on-surface"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <Select
@@ -161,7 +171,7 @@ export function DesktopRoomSection() {
           variant="desktop"
           currentPage={currentPage}
           totalPages={totalPages}
-          totalItems={filteredRooms.length}
+          totalItems={totalItems}
           pageSize={PAGE_SIZE}
           onPageChange={handlePageChange}
         />

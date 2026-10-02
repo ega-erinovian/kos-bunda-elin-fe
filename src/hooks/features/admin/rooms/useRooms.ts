@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRooms as useRoomsApi, type RoomListParams } from "@/hooks/api/use-rooms";
 import type {
   FilterOption,
@@ -15,12 +15,24 @@ const ROOMS_LIMIT = 100;
 
 export function useRooms(pageSize: number = PAGE_SIZE) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterOption>("semua");
   const [filterFloor, setFilterFloor] = useState<FloorFilter>("semua");
   const [currentPage, setCurrentPage] = useState(1);
 
+  useEffect(() => {
+    const timer = setTimeout(
+      () => setDebouncedSearchQuery(searchQuery.trim()),
+      searchQuery ? 300 : 0,
+    );
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   const apiParams = useMemo<RoomListParams>(() => {
-    const params: RoomListParams = { limit: ROOMS_LIMIT };
+    const params: RoomListParams = { page: currentPage, limit: pageSize };
+    if (debouncedSearchQuery) {
+      params.search = debouncedSearchQuery;
+    }
     if (filterStatus !== "semua") {
       params.status = filterStatus.toUpperCase() as ApiRoom["status"];
     }
@@ -28,12 +40,12 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
       params.lantai = String(filterFloor);
     }
     return params;
-  }, [filterStatus, filterFloor]);
+  }, [debouncedSearchQuery, filterStatus, filterFloor, currentPage, pageSize]);
 
   const { data, isLoading, isError, refetch } = useRoomsApi(apiParams);
   const { data: optionsData } = useRoomsApi({ limit: ROOMS_LIMIT });
 
-  const rooms = useMemo(() => (data?.data ?? []).map(mapRoom), [data]);
+  const paginatedRooms = useMemo(() => (data?.data ?? []).map(mapRoom), [data]);
   const allRooms = useMemo(() => (optionsData?.data ?? []).map(mapRoom), [optionsData]);
 
   const floorOptions = useMemo<FloorOption[]>(
@@ -46,19 +58,8 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
     [allRooms],
   );
 
-  const filteredRooms = useMemo(() => {
-    return rooms.filter((room) => {
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        if (!room.number.toLowerCase().includes(q) && !`lantai ${room.floor}`.includes(q))
-          return false;
-      }
-      return true;
-    });
-  }, [rooms, searchQuery]);
-
-  const totalPages = Math.ceil(filteredRooms.length / pageSize);
-  const paginatedRooms = filteredRooms.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const totalPages = data?.meta.totalPages ?? 1;
+  const totalItems = data?.meta.total ?? 0;
 
   function handleSearch(value: string) {
     setSearchQuery(value);
@@ -88,7 +89,6 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
   }
 
   return {
-    rooms,
     floorOptions,
     isLoading,
     isError,
@@ -97,7 +97,7 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
     filterStatus,
     filterFloor,
     currentPage,
-    filteredRooms,
+    totalItems,
     totalPages,
     paginatedRooms,
     handleSearch,

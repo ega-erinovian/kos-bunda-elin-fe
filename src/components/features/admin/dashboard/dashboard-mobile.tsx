@@ -13,6 +13,12 @@ export function DashboardMobile() {
   const summary = data?.data;
 
   const finance = summary?.finance;
+  const kamar = summary?.kamar;
+  const pembayaran = summary?.pembayaran;
+
+  const stat = (v?: number) => (isLoading ? "…" : isError || v === undefined ? "—" : String(v));
+
+  const pendingCount = pembayaran ? pembayaran.belumBayar + pembayaran.sebagian : undefined;
 
   const receivablesValue = isLoading
     ? "…"
@@ -38,14 +44,14 @@ export function DashboardMobile() {
       <section className="grid grid-cols-2 gap-4">
         <MobileMetricCard
           label="Total Kamar"
-          value="20"
+          value={stat(kamar?.total)}
           icon={DoorOpen}
           className="bg-card text-card-foreground"
           iconWrapper="bg-primary/10 text-primary"
         />
         <MobileMetricCard
           label="Terisi"
-          value="18"
+          value={stat(kamar?.terisi)}
           icon={Users}
           className="bg-primary text-primary-foreground"
           iconWrapper="bg-white/20 text-primary-foreground"
@@ -53,14 +59,14 @@ export function DashboardMobile() {
         />
         <MobileMetricCard
           label="Jatuh Tempo"
-          value="3"
+          value={stat(pendingCount)}
           icon={CalendarCheck}
           className="bg-secondary text-secondary-foreground"
           iconWrapper="bg-white/40 text-secondary-foreground"
         />
         <MobileMetricCard
           label="Menunggak"
-          value="1"
+          value={stat(pembayaran?.terlambat)}
           icon={AlertTriangle}
           className="bg-destructive/10 text-destructive"
           iconWrapper="bg-white/40 text-destructive"

@@ -26,6 +26,13 @@ import {
   type WhatsAppVars,
 } from "@/lib/whatsapp";
 
+export type WhatsAppRequest = {
+  phone: string;
+  vars: WhatsAppVars;
+  templateId?: WhatsAppTemplateId;
+  title?: string;
+};
+
 type WhatsAppComposerProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;

@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Filter } from "lucide-react";
+import { Plus, Filter } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -19,6 +18,7 @@ import { useMarkTenantKeluar } from "@/hooks/api/use-tenants";
 import { TenantDetailDialog } from "./components/TenantDetailDialog";
 import { TenantFormDialog } from "./components/TenantFormDialog";
 import { DesktopTenantRow } from "./components/DesktopTenantRow";
+import { SearchInput } from "../../../ui/SearchInput";
 import { Pagination } from "../room/components/Pagination";
 import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
 import { RoomListError } from "../room/components/RoomListError";
@@ -33,7 +33,7 @@ export function DesktopTenantSection() {
     searchQuery,
     filterStatus,
     currentPage,
-    filteredTenants,
+    totalItems,
     totalPages,
     paginatedTenants,
     handleSearch,
@@ -91,22 +91,20 @@ export function DesktopTenantSection() {
         title="Manajemen Penghuni"
         subtitle="Kelola data penghuni kos, status pembayaran, dan informasi kamar."
       >
-        <Button size="lg" onClick={handleAddTenant}>
+        <Button className="cursor-pointer" size="lg" onClick={handleAddTenant}>
           <Plus className="h-4 w-4" />
           Tambah Penghuni
         </Button>
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-4">
-        <div className="relative min-w-0 flex-1 basis-60">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            placeholder="Cari nama atau kamar..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-sm"
-          />
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Cari nama atau kamar..."
+          wrapperClassName="min-w-0 flex-1 basis-60"
+          className="border-outline-variant bg-surface-container-lowest shadow-sm"
+        />
         <div className="flex items-center gap-3">
           <Select
             value={filterStatus}
@@ -137,7 +135,7 @@ export function DesktopTenantSection() {
           <div className="w-44 py-4 text-label-md text-muted-foreground">
             Jatuh Tempo Berikutnya
           </div>
-          <div className="w-24 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
+          <div className="w-32 py-4 text-right text-label-md text-muted-foreground">Aksi</div>
         </div>
 
         {isLoading ? (
@@ -166,7 +164,7 @@ export function DesktopTenantSection() {
           variant="desktop"
           currentPage={currentPage}
           totalPages={totalPages}
-          totalItems={filteredTenants.length}
+          totalItems={totalItems}
           pageSize={PAGE_SIZE}
           onPageChange={handlePageChange}
           itemLabel="penghuni"

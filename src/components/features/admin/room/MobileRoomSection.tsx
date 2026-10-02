@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, X, Plus, Filter } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Plus, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PAGE_SIZE } from "./constants";
 import { useRooms } from "@/hooks/features/admin/rooms/useRooms";
@@ -15,6 +14,7 @@ import { Pagination } from "./components/Pagination";
 import { RoomListSkeleton } from "./components/RoomListSkeleton";
 import { RoomListError } from "./components/RoomListError";
 import { RoomFormDialog } from "./components/RoomFormDialog";
+import { SearchInput } from "../../../ui/SearchInput";
 import toast from "react-hot-toast";
 import type { Room } from "./types";
 
@@ -79,25 +79,14 @@ export function MobileRoomSection() {
       </h1>
 
       <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            placeholder="Cari kamar..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="h-11.5 w-full rounded-xl border-secondary-container pl-10 pr-9 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              aria-label="Hapus pencarian"
-              onClick={() => handleSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-on-surface-variant hover:text-on-surface"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Cari kamar..."
+          wrapperClassName="flex-1"
+          iconClassName="left-3"
+          className="h-11.5 border-secondary-container shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
+        />
         <button
           onClick={() => setFilterOpen(true)}
           className={cn(

@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { FileText } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { WhatsAppComposer } from "@/components/features/whatsapp/WhatsAppComposer";
+import type { WhatsAppRequest } from "@/components/features/whatsapp/WhatsAppComposer";
 import { usePayment } from "@/hooks/api/use-payments";
 import { getInitials } from "@/lib/utils";
 import { paymentToDefaultTemplate, paymentToWhatsAppVars } from "@/lib/whatsapp";
@@ -14,15 +13,13 @@ import { PaymentSummaryCard } from "./PaymentSummaryCard";
 
 type PaymentDetailContentProps = {
   paymentId: string;
+  onWaOpen: (wa: WhatsAppRequest) => void;
 };
 
-export function PaymentDetailContent({ paymentId }: PaymentDetailContentProps) {
+export function PaymentDetailContent({ paymentId, onWaOpen }: PaymentDetailContentProps) {
   const { data, isLoading, isError } = usePayment(paymentId);
-  const [waOpen, setWaOpen] = useState(false);
 
   const payment = (data as Payment | undefined) ?? null;
-  const waVars = payment ? paymentToWhatsAppVars(payment) : null;
-  const waDefaultTemplate = payment ? paymentToDefaultTemplate(payment) : undefined;
 
   if (isLoading) {
     return (
@@ -85,19 +82,15 @@ export function PaymentDetailContent({ paymentId }: PaymentDetailContentProps) {
         isOverpaid={isOverpaid}
         totalDibayar={totalDibayar}
         nominal={payment.nominal}
-        onWaOpen={() => setWaOpen(true)}
+        onWaOpen={() =>
+          onWaOpen({
+            phone: payment.penyewa.noHp,
+            vars: paymentToWhatsAppVars(payment),
+            templateId: paymentToDefaultTemplate(payment),
+            title: `WhatsApp — ${payment.penyewa.nama}`,
+          })
+        }
       />
-
-      {waVars && (
-        <WhatsAppComposer
-          open={waOpen}
-          onOpenChange={setWaOpen}
-          phone={payment.penyewa.noHp}
-          vars={waVars}
-          defaultTemplateId={waDefaultTemplate}
-          title={`WhatsApp — ${payment.penyewa.nama}`}
-        />
-      )}
 
       <PaymentSummaryCard payment={payment} />
 

@@ -217,7 +217,7 @@ export function TenantFormDialog({
 
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Batal
+              Tutup
             </Button>
             <Button type="submit" disabled={isPending || isLoadingTenant}>
               {isPending ? "Menyimpan..." : isLoadingTenant ? "Memuat..." : "Simpan"}

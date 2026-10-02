@@ -17,9 +17,6 @@ export function MobileTenantCard({ tenant, onClick }: MobileTenantCardProps) {
     >
       {isLate && <div className="absolute bottom-0 left-0 top-0 w-1 rounded-l-xl bg-error" />}
       <div className="flex min-w-0 items-center gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-          {tenant.initials}
-        </div>
         <div className="flex min-w-0 flex-col">
           <span className="max-w-36 truncate text-body-md font-semibold text-on-surface sm:max-w-44">
             {tenant.name}

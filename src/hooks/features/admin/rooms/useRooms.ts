@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRooms as useRoomsApi, type RoomListParams } from "@/hooks/api/use-rooms";
+import { usePagedSearch } from "@/hooks/usePagedSearch";
 import type {
   FilterOption,
   FloorFilter,
@@ -14,19 +15,16 @@ import { mapRoom } from "@/components/features/admin/room/mappers";
 const ROOMS_LIMIT = 100;
 
 export function useRooms(pageSize: number = PAGE_SIZE) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterOption>("semua");
   const [filterFloor, setFilterFloor] = useState<FloorFilter>("semua");
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => setDebouncedSearchQuery(searchQuery.trim()),
-      searchQuery ? 300 : 0,
-    );
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
+  const {
+    searchQuery,
+    debouncedSearchQuery,
+    currentPage,
+    handleSearch,
+    handlePageChange,
+    resetPage,
+  } = usePagedSearch();
 
   const apiParams = useMemo<RoomListParams>(() => {
     const params: RoomListParams = { page: currentPage, limit: pageSize };
@@ -61,23 +59,14 @@ export function useRooms(pageSize: number = PAGE_SIZE) {
   const totalPages = data?.meta.totalPages ?? 1;
   const totalItems = data?.meta.total ?? 0;
 
-  function handleSearch(value: string) {
-    setSearchQuery(value);
-    setCurrentPage(1);
-  }
-
-  function handlePageChange(page: number) {
-    setCurrentPage(page);
-  }
-
   function handleFilterStatusChange(value: FilterOption) {
     setFilterStatus(value);
-    setCurrentPage(1);
+    resetPage();
   }
 
   function handleFilterFloorChange(value: FloorFilter) {
     setFilterFloor(value);
-    setCurrentPage(1);
+    resetPage();
   }
 
   function hasActiveFilter() {

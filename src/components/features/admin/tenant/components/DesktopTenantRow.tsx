@@ -1,6 +1,11 @@
-import { Pencil, Trash2 } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { MessageCircle, Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
+import { WhatsAppComposer } from "@/components/features/whatsapp/WhatsAppComposer";
+import { buildWhatsAppVars } from "@/lib/whatsapp";
 import type { Tenant } from "../types";
 
 type DesktopTenantRowProps = {
@@ -16,12 +21,25 @@ export function DesktopTenantRow({
   onEdit,
   onSetKeluar,
 }: DesktopTenantRowProps) {
+  const [waOpen, setWaOpen] = useState(false);
+
   const dueBadgeVariant = {
     default: "default" as const,
     secondary: "secondary" as const,
     destructive: "destructive" as const,
     outline: "outline" as const,
   }[tenant.dueVariant];
+
+  const now = new Date();
+  const waVars = buildWhatsAppVars({
+    nama: tenant.name,
+    kamar: tenant.room,
+    periodeBulan: now.getMonth() + 1,
+    periodeTahun: now.getFullYear(),
+    nominal: tenant.rentCost,
+    totalDibayar: 0,
+    tanggalJatuhTempo: tenant.dueDate,
+  });
 
   return (
     <div className="flex flex-col gap-4 border-t border-border/30 px-6 py-4 transition-colors hover:bg-muted/30 md:flex-row md:items-center md:gap-0">
@@ -30,9 +48,6 @@ export function DesktopTenantRow({
           onClick={onDetailClick}
           className="flex cursor-pointer items-center gap-3 text-left"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-medium text-secondary-foreground">
-            {tenant.initials}
-          </div>
           <span className="text-sm font-semibold text-on-surface transition-colors hover:text-primary">
             {tenant.name}
           </span>
@@ -55,7 +70,15 @@ export function DesktopTenantRow({
         <Badge variant={dueBadgeVariant}>{tenant.dueLabel}</Badge>
       </div>
 
-      <div className="flex w-24 justify-end gap-2">
+      <div className="flex w-32 justify-end gap-1">
+        <button
+          onClick={() => setWaOpen(true)}
+          className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-whatsapp"
+          title="Kirim WhatsApp"
+          aria-label={`Kirim WhatsApp ke ${tenant.name}`}
+        >
+          <MessageCircle className="h-4 w-4" />
+        </button>
         <button
           onClick={onEdit}
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"
@@ -71,6 +94,15 @@ export function DesktopTenantRow({
           <Trash2 className="h-4 w-4" />
         </button>
       </div>
+
+      <WhatsAppComposer
+        open={waOpen}
+        onOpenChange={setWaOpen}
+        phone={tenant.phone}
+        vars={waVars}
+        defaultTemplateId="sapaan_umum"
+        title={`WhatsApp — ${tenant.name}`}
+      />
     </div>
   );
 }

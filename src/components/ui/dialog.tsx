@@ -38,19 +38,20 @@ function DialogOverlay({ className, ...props }: DialogPrimitive.Backdrop.Props) 
 function DialogContent({ className, children, ...props }: DialogPrimitive.Popup.Props) {
   return (
     <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Popup
-        data-slot="dialog-content"
-        className={cn(
-          "fixed left-1/2 top-1/2 z-50 w-[90vw] max-w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-popover p-6 shadow-lg duration-200 data-starting-style:opacity-0 data-starting-style:scale-95 data-ending-style:opacity-0 data-ending-style:scale-95",
-          className,
-        )}
-        {...props}
-      >
+        <DialogOverlay />
+        <DialogPrimitive.Popup
+          data-slot="dialog-content"
+          className={cn(
+            "fixed left-1/2 top-1/2 z-50 w-[90vw] max-w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-popover p-6 shadow-lg duration-200 data-starting-style:opacity-0 data-starting-style:scale-95 data-ending-style:opacity-0 data-ending-style:scale-95",
+            className,
+          )}
+          onPointerDown={(e) => e.stopPropagation()}
+          {...props}
+        >
         {children}
         <DialogPrimitive.Close
           data-slot="dialog-close-button"
-          className="absolute right-4 top-4 rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="absolute right-4 top-4 z-20 rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <X className="h-4 w-4" />
         </DialogPrimitive.Close>

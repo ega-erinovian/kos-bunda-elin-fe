@@ -41,7 +41,7 @@ export function DesktopRoomRow({
         <StatusBadge status={room.status} />
       </div>
 
-      <div className="flex w-full justify-end gap-2 md:w-24">
+      <div className="flex w-full justify-end gap-1 md:w-24">
         <button
           onClick={onEdit}
           className="cursor-pointer rounded-lg p-2 text-on-surface-variant transition-colors hover:text-primary"

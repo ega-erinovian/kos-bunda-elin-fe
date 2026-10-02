@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 import { useTenants } from "@/hooks/features/admin/tenants/useTenants";
 import { MobileTenantCard } from "./components/MobileTenantCard";
 import { TenantDetailDrawer } from "./components/TenantDetailDrawer";
@@ -10,6 +9,7 @@ import { TenantFormDialog } from "./components/TenantFormDialog";
 import { Pagination } from "../room/components/Pagination";
 import { RoomListSkeleton } from "../room/components/RoomListSkeleton";
 import { RoomListError } from "../room/components/RoomListError";
+import { SearchInput } from "../../../ui/SearchInput";
 import { PAGE_SIZE } from "./constants";
 import type { Tenant } from "./types";
 
@@ -20,7 +20,7 @@ export function MobileTenantSection() {
     refetch,
     searchQuery,
     currentPage,
-    filteredTenants,
+    totalItems,
     totalPages,
     paginatedTenants,
     handleSearch,
@@ -56,15 +56,12 @@ export function MobileTenantSection() {
     <div className="space-y-4 md:hidden">
       <h1 className="text-heading-lg-mobile font-bold text-on-surface">Tenants</h1>
 
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
-        <Input
-          placeholder="Cari nama atau kamar..."
-          value={searchQuery}
-          onChange={(e) => handleSearch(e.target.value)}
-          className="h-11.5 w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
-        />
-      </div>
+      <SearchInput
+        value={searchQuery}
+        onChange={handleSearch}
+        placeholder="Cari nama atau kamar..."
+        className="h-11.5 border-outline-variant bg-surface-container-lowest shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
+      />
 
       <div className="flex flex-col gap-3 pb-4">
         {isLoading ? (
@@ -86,7 +83,7 @@ export function MobileTenantSection() {
         variant="mobile"
         currentPage={currentPage}
         totalPages={totalPages}
-        totalItems={filteredTenants.length}
+        totalItems={totalItems}
         pageSize={PAGE_SIZE}
         onPageChange={handlePageChange}
         itemLabel="penghuni"

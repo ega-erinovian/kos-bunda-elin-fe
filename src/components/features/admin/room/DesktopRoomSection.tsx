@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Search, X, Plus, Filter, Layers } from "lucide-react";
+import { Plus, Filter, Layers } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -21,6 +20,7 @@ import { Pagination } from "./components/Pagination";
 import { RoomListSkeleton } from "./components/RoomListSkeleton";
 import { RoomListError } from "./components/RoomListError";
 import { RoomFormDialog } from "./components/RoomFormDialog";
+import { SearchInput } from "../../../ui/SearchInput";
 import toast from "react-hot-toast";
 import type { Room } from "./types";
 
@@ -81,25 +81,13 @@ export function DesktopRoomSection() {
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-4">
-        <div className="relative min-w-0 flex-1 basis-60">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
-          <Input
-            placeholder="Cari kamar atau lantai..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="w-full rounded-xl border-outline-variant bg-surface-container-lowest pl-12 pr-9 shadow-sm"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              aria-label="Hapus pencarian"
-              onClick={() => handleSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-on-surface-variant hover:text-on-surface"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={handleSearch}
+          placeholder="Cari kamar atau lantai..."
+          wrapperClassName="min-w-0 flex-1 basis-60"
+          className="border-outline-variant bg-surface-container-lowest shadow-sm"
+        />
         <div className="flex items-center gap-3">
           <Select
             value={filterStatus}

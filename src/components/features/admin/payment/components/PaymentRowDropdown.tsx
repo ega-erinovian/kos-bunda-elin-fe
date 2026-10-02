@@ -132,22 +132,13 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
           />
         ))}
 
-      {waOpen &&
-        (waVars && apiPayment ? (
-          <WhatsAppComposer
-            open={waOpen}
-            onOpenChange={setWaOpen}
-            phone={apiPayment.penyewa.noHp}
-            vars={waVars}
-            defaultTemplateId={waDefaultTemplate}
-            title={`WhatsApp — ${apiPayment.penyewa.nama}`}
-          />
-        ) : (
-          <WhatsAppComposer
-            open={waOpen}
-            onOpenChange={setWaOpen}
-            phone=""
-            vars={{
+      {waOpen && (
+        <WhatsAppComposer
+          open={waOpen}
+          onOpenChange={setWaOpen}
+          phone={apiPayment?.penyewa.noHp ?? ""}
+          vars={
+            waVars ?? {
               nama: payment.name,
               kamar: payment.room,
               periode: "-",
@@ -155,10 +146,12 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
               sisaTagihan: String(payment.amount - (payment.totalDibayar ?? 0)),
               totalDibayar: String(payment.totalDibayar ?? 0),
               tanggalJatuhTempo: "-",
-            }}
-            defaultTemplateId="reminder_jatuh_tempo"
-          />
-        ))}
+            }
+          }
+          defaultTemplateId={waDefaultTemplate ?? "reminder_jatuh_tempo"}
+          title={apiPayment?.penyewa.nama ? `WhatsApp — ${apiPayment.penyewa.nama}` : undefined}
+        />
+      )}
     </>
   );
 }

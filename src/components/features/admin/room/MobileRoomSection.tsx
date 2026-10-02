@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Filter } from "lucide-react";
+import { Search, X, Plus, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { PAGE_SIZE } from "./constants";
@@ -28,7 +28,7 @@ export function MobileRoomSection() {
     filterStatus,
     filterFloor,
     currentPage,
-    filteredRooms,
+    totalItems,
     totalPages,
     paginatedRooms,
     handleSearch,
@@ -85,8 +85,18 @@ export function MobileRoomSection() {
             placeholder="Cari kamar..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="h-11.5 w-full rounded-xl border-secondary-container pl-10 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
+            className="h-11.5 w-full rounded-xl border-secondary-container pl-10 pr-9 shadow-[0_4px_20px_-2px_rgba(134,167,137,0.08)]"
           />
+          {searchQuery && (
+            <button
+              type="button"
+              aria-label="Hapus pencarian"
+              onClick={() => handleSearch("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-on-surface-variant hover:text-on-surface"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
         <button
           onClick={() => setFilterOpen(true)}
@@ -140,7 +150,7 @@ export function MobileRoomSection() {
         variant="mobile"
         currentPage={currentPage}
         totalPages={totalPages}
-        totalItems={filteredRooms.length}
+        totalItems={totalItems}
         pageSize={PAGE_SIZE}
         onPageChange={handlePageChange}
       />

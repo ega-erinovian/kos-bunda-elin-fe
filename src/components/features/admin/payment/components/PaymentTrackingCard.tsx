@@ -36,8 +36,8 @@ export function PaymentTrackingCard({
   onEdit,
 }: PaymentTrackingCardProps) {
   return (
-    <div className="col-span-12 flex flex-col rounded-xl border border-outline-variant/20 bg-surface p-lg shadow-ambient-md transition-shadow hover:shadow-ambient-lg lg:col-span-8">
-      <div className="mb-6 flex items-center justify-between gap-4 border-b border-outline-variant/30">
+    <div className="col-span-12 flex flex-col rounded-xl shadow-ambient-md transition-shadow hover:shadow-ambient-lg">
+      <div className="mb-6 flex items-center justify-between gap-4 border-b border-outline-variant/50">
         <div
           role="tablist"
           aria-label="Filter pembayaran"

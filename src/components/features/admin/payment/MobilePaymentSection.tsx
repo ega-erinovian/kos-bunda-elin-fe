@@ -63,7 +63,6 @@ export function MobilePaymentSection() {
         />
       </div>
 
-      {/* Tagihan Menunggu */}
       <section>
         <SectionHeader title="Tagihan Menunggu">
           <Link
@@ -85,25 +84,6 @@ export function MobilePaymentSection() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Broadcast Cepat */}
-      <section>
-        <MobileBroadcastForm />
-      </section>
-
-      {/* Log Komunikasi */}
-      <section>
-        <SectionHeader title="Log Komunikasi">
-          <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-primary/5">
-            <Filter className="h-5 w-5 text-on-surface-variant" />
-          </button>
-        </SectionHeader>
-        <div className="space-y-2">
-          {dummyBroadcastLogs.map((log) => (
-            <MobileLogEntry key={log.id} log={log} />
-          ))}
-        </div>
       </section>
 
       <PaymentFormDialog

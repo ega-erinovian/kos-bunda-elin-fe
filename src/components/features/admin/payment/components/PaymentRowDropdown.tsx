@@ -62,7 +62,7 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center justify-center rounded-lg p-1.5 text-on-surface-variant transition-colors hover:bg-primary/10 hover:text-primary data-open:bg-primary/10 data-open:text-primary">
+        <DropdownMenuTrigger className="flex items-center justify-center rounded-lg p-1.5 text-on-surface-variant transition-colors hover:bg-primary/10 hover:text-primary data-open:bg-primary/10 data-open:text-primary cursor-pointer">
           <MoreVertical className="h-5 w-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
@@ -95,13 +95,6 @@ export function PaymentRowDropdown({ payment, onEdit, onBayar }: PaymentRowDropd
               <DropdownMenuItem onClick={() => onEdit?.(payment)}>
                 <Pencil className="h-4 w-4" />
                 Edit Tagihan
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                variant="destructive"
-                onClick={() => console.log("Delete:", payment.id)}
-              >
-                <Trash2 className="h-4 w-4" />
-                Hapus
               </DropdownMenuItem>
             </>
           )}

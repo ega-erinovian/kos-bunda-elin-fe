@@ -16,8 +16,8 @@ export function MobilePaymentCard({ payment, totalDibayar = 0, onEdit }: MobileP
     payment.status === "partial" && totalDibayar > 0 && totalDibayar < payment.amount;
 
   return (
-    <article className="rounded-xl border border-transparent bg-surface-container-lowest p-lg shadow-ambient-md transition-all hover:border-secondary">
-      <div className="mb-sm flex items-start justify-between gap-2">
+    <article className="rounded-xl border bg-surface-container-lowest p-lg shadow-ambient-md transition-all border-secondary">
+      <div className="mb-2 flex items-start justify-between gap-2">
         <div>
           <p className="text-[18px] font-semibold text-on-surface">{payment.name}</p>
           <p className="text-label-md text-on-surface-variant">Kamar {payment.room}</p>
@@ -37,11 +37,8 @@ export function MobilePaymentCard({ payment, totalDibayar = 0, onEdit }: MobileP
           <PaymentRowDropdown payment={payment} onEdit={onEdit} />
         </div>
       </div>
-      <div className="mt-4 flex items-end justify-between">
-        <div>
-          <p className="mb-1 text-label-sm text-on-surface-variant">Jatuh Tempo</p>
-          <p className="text-body-md font-medium text-on-surface">{payment.dueDate}</p>
-        </div>
+      <p className="text-sm font-medium text-secondary-foreground">{payment.dueDate}</p>
+      <div className="mt-4 flex items-end justify-end">
         <div className="text-right">
           <p className="mb-1 text-label-sm text-on-surface-variant">
             {isPartial ? "Sisa Tagihan" : "Jumlah"}

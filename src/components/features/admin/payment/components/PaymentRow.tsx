@@ -14,13 +14,10 @@ export function PaymentRow({ payment, totalDibayar = 0, onEdit }: PaymentRowProp
     payment.status === "partial" && totalDibayar > 0 && totalDibayar < payment.amount;
 
   return (
-    <div className="flex cursor-pointer items-center justify-between rounded-lg border border-outline-variant/30 p-4 transition-colors hover:bg-primary/5 group">
+    <div className="flex items-center justify-between rounded-lg border border-outline-variant/50 p-4 transition-colors hover:bg-primary/5 group">
       <div className="flex items-center gap-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-label-md text-on-surface-variant">
-          {payment.initials}
-        </div>
         <div>
-          <h4 className="text-label-md text-on-surface transition-colors group-hover:text-primary">
+          <h4 className="text-label-lg font-bold text-on-surface transition-colors group-hover:text-primary">
             {payment.name}
           </h4>
           <p className="text-label-sm text-on-surface-variant">

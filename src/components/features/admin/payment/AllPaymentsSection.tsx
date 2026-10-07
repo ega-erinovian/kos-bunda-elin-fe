@@ -77,7 +77,7 @@ export function AllPaymentsSection() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-4 md:px-6 md:py-6 lg:px-8">
+    <div className="mx-auto max-w-6xl space-y-6">
       <div className="flex items-center gap-3 md:gap-4">
         <Link
           href="/admin/payments"
@@ -97,7 +97,7 @@ export function AllPaymentsSection() {
         {!editingPayment && (
           <Button
             onClick={() => setFormOpen(true)}
-            className="ml-auto h-9 shrink-0 rounded-full px-3 text-label-sm font-semibold md:h-10 md:px-5 md:text-label-md"
+            className="ml-auto h-9 shrink-0 rounded-full px-3 text-label-sm font-semibold md:h-10 md:px-5 md:text-label-md text-background"
           >
             <Plus className="h-4 w-4 md:h-5 md:w-5" />
             Input Manual
@@ -118,7 +118,7 @@ export function AllPaymentsSection() {
       <div
         role="tablist"
         aria-label="Filter tagihan"
-        className="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mb-1"
+        className="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-2"
       >
         {tabOptions.map((tab) => (
           <button

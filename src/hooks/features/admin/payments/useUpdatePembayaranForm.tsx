@@ -48,7 +48,7 @@ export function useUpdatePembayaranForm(
     setInitializedId(editingPayment.id);
     setTanggalJatuhTempoRaw(editingPayment.tanggalJatuhTempo);
     setCatatanRaw(editingPayment.catatan ?? "");
-    setFinancialAccountIdRaw((editingPayment as any).financialAccountId ?? "");
+    setFinancialAccountIdRaw(editingPayment.financialAccountId ?? "");
     setErrors({});
     setSubmitted(false);
   }

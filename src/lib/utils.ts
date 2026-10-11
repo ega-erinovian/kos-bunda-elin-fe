@@ -73,7 +73,6 @@ export function getDueDateLabel(dueDate: string): string {
 }
 
 export function transformApiPaymentToAdminPayment(payment: ApiPayment): AdminPayment {
-  // Root cause fix is in src/mocks/handlers/pembayaran.ts:208 which now maps flat fixture to nested penyewa shape.
   // This guard is defensive for live drift / partial cache entries — never throw in render.
   if (!payment || typeof payment !== "object") {
     return {
@@ -141,8 +140,8 @@ export function transformApiPaymentToAdminPayment(payment: ApiPayment): AdminPay
     status,
     tab,
     totalDibayar: payment.totalDibayar,
-    financialAccountId: (payment as any).financialAccountId,
-    financialAccountName: (payment as any).financialAccount?.name ?? undefined,
-    financialAccountType: (payment as any).financialAccount?.type ?? undefined,
+    financialAccountId: payment.financialAccountId,
+    financialAccountName: payment.financialAccount?.name ?? undefined,
+    financialAccountType: payment.financialAccount?.type ?? undefined,
   };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAddPayment } from "@/hooks/api/use-payment-records";
+import { useFinanceAccountsDropdown } from "@/hooks/api/use-finance-accounts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
-import { useFinanceAccounts } from "@/hooks/api/use-finance-accounts";
 import type { PaymentMethod, CreatePaymentRecordInput } from "@/types";
 
 interface PaymentRecordFormProps {
@@ -37,7 +37,7 @@ export function PaymentRecordForm({
     },
   });
 
-  const { data: accounts = [] } = useFinanceAccounts();
+  const { data: accounts = [] } = useFinanceAccountsDropdown();
 
   const remainingBalance = nominal - totalDibayar;
 

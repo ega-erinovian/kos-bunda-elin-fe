@@ -1,13 +1,14 @@
 "use client";
 
 import { usePaymentRecords } from "@/hooks/api/use-payment-records";
+import { useFinanceAccountsDropdown } from "@/hooks/api/use-finance-accounts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { ArrowRight, CreditCard, FileText } from "lucide-react";
+import { ArrowRight, CreditCard, FileText, Wallet } from "lucide-react";
 import Link from "next/link";
 import type { PaymentRecord } from "@/types";
 
@@ -18,6 +19,15 @@ interface PaymentHistoryListProps {
 
 export function PaymentHistoryList({ pembayaranId, nominal }: PaymentHistoryListProps) {
   const { data: records, isLoading, error } = usePaymentRecords(pembayaranId);
+  const { data: accounts = [] } = useFinanceAccountsDropdown();
+
+  const accountMap = new Map(accounts.map((a) => [a.id, a]));
+
+  function getAccountInfo(accountId?: string) {
+    if (!accountId) return { name: "Cash (default)", type: "CASH" as const };
+    const acc = accountMap.get(accountId);
+    return acc ? { name: acc.name, type: acc.type } : { name: "Unknown", type: "OTHER" as const };
+  }
 
   if (error) {
     return (
@@ -74,68 +84,77 @@ export function PaymentHistoryList({ pembayaranId, nominal }: PaymentHistoryList
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {records.map((record: PaymentRecord) => (
-            <div
-              key={record.id}
-              className="flex items-center justify-between rounded-lg border border-outline-variant/30 p-4 transition-colors hover:bg-surface-container-lowest/50"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high">
-                  {getPaymentMethodIcon(record.paymentMethod)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-label-md font-medium text-on-surface truncate">
-                      {getPaymentMethodLabel(record.paymentMethod)}
-                    </span>
-                    {record.referenceNumber && (
-                      <span className="text-label-xs text-on-surface-variant truncate">
-                        {record.referenceNumber}
+          {records.map((record: PaymentRecord) => {
+            const account = getAccountInfo(record.financialAccountId);
+            return (
+              <div
+                key={record.id}
+                className="flex items-center justify-between rounded-lg border border-outline-variant/30 p-4 transition-colors hover:bg-surface-container-lowest/50"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high">
+                    {getPaymentMethodIcon(record.paymentMethod)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-label-md font-medium text-on-surface truncate">
+                        {getPaymentMethodLabel(record.paymentMethod)}
                       </span>
+                      {record.referenceNumber && (
+                        <span className="text-label-xs text-on-surface-variant truncate">
+                          {record.referenceNumber}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-label-xs text-on-surface-variant">
+                      {format(new Date(record.paymentDate), "dd MMM yyyy", {
+                        locale: id,
+                      })}
+                      {record.createdByAdmin && (
+                        <span className="ml-2">oleh {record.createdByAdmin.nama}</span>
+                      )}
+                    </p>
+                    {record.financialAccountId && (
+                      <p className="text-label-xs text-on-surface-variant flex items-center gap-1">
+                        <Wallet className="h-3 w-3" />
+                        {account.name} ({account.type})
+                      </p>
                     )}
                   </div>
-                  <p className="text-label-xs text-on-surface-variant">
-                    {format(new Date(record.paymentDate), "dd MMM yyyy", {
-                      locale: id,
-                    })}
-                    {record.createdByAdmin && (
-                      <span className="ml-2">oleh {record.createdByAdmin.nama}</span>
-                    )}
-                  </p>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <span className="text-body-md font-medium text-on-surface">
-                    {formatCurrency(record.amountPaid)}
-                  </span>
-                  {record.notes && (
-                    <p className="text-label-xs text-on-surface-variant truncate max-w-[120px]">
-                      {record.notes}
-                    </p>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <span className="text-body-md font-medium text-on-surface">
+                      {formatCurrency(record.amountPaid)}
+                    </span>
+                    {record.notes && (
+                      <p className="text-label-xs text-on-surface-variant truncate max-w-[120px]">
+                        {record.notes}
+                      </p>
+                    )}
+                  </div>
+
+                  {record.financialTransactionId ? (
+                    <Link
+                      href={`/admin/finance/transactions?paymentRecordId=${record.id}&highlight=${record.financialTransactionId}`}
+                    >
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-2"
+                        title="Lihat transaksi"
+                      >
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  ) : (
+                    <span className="text-label-sm text-on-surface-variant">—</span>
                   )}
                 </div>
-
-                {record.financialTransactionId ? (
-                  <Link
-                    href={`/admin/finance/transactions?paymentRecordId=${record.id}&highlight=${record.financialTransactionId}`}
-                  >
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-8 px-2"
-                      title="Lihat transaksi"
-                    >
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <span className="text-label-sm text-on-surface-variant">—</span>
-                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {progress > 0 && progress < 100 && (

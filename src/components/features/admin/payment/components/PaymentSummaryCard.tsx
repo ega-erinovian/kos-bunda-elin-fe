@@ -129,6 +129,13 @@ export function PaymentSummaryCard({ payment }: PaymentSummaryCardProps) {
           value={payment.tanggalBayar ? formatMethodDate(payment.tanggalBayar) : "-"}
           showDivider
         />
+        <DetailRow
+          label="Akun Target"
+          value={(payment.financialAccount?.name || payment.financialAccountId)
+            ? `${payment.financialAccount?.name || "Akun Keuangan"}${payment.financialAccount?.type ? ` (${payment.financialAccount.type})` : ""}`
+            : "-"}
+          showDivider
+        />
         <DetailRow label="Nominal" value={formatCurrency(nominal)} showDivider />
         <DetailRow label="Total Dibayar" value={formatCurrency(totalDibayar)} showDivider />
         <DetailRow

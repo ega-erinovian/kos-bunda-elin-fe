@@ -1,6 +1,7 @@
 import { StatusBadge } from "../StatusBadge";
 import { formatCurrency } from "@/lib/utils";
 import { PaymentRowDropdown } from "./PaymentRowDropdown";
+import { Wallet } from "lucide-react";
 import type { Payment } from "../types";
 
 type PaymentRowProps = {
@@ -23,6 +24,13 @@ export function PaymentRow({ payment, totalDibayar = 0, onEdit }: PaymentRowProp
           <p className="text-label-sm text-on-surface-variant">
             Room {payment.room} &middot; {payment.dueDate}
           </p>
+          {(payment.financialAccountName || payment.financialAccountId) && (
+            <p className="text-label-xs text-on-surface-variant mt-0.5 flex items-center gap-1">
+              <Wallet className="h-3 w-3" />
+              {payment.financialAccountName || "Akun Keuangan"}{" "}
+              {payment.financialAccountType ? `(${payment.financialAccountType})` : ""}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-6">

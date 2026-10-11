@@ -11,6 +11,7 @@ import type {
   FinancialCategory,
   FinancialTransaction,
   AuditLogEntry,
+  FinancialAccountDropdownItem,
 } from "@/types";
 
 function nid() {
@@ -26,6 +27,15 @@ function sourceToType(source: string): "INCOME" | "EXPENSE" | null {
 
 export const financeHandlers = [
   // --- Accounts ---
+  // NOTE: specific routes first — MSW matches handlers in order
+  http.get("*/finance/accounts/dropdown", () => {
+    const data: FinancialAccountDropdownItem[] = financeAccounts
+      .filter((a) => a.active)
+      .map((a) => ({ id: a.id, name: a.name, type: a.type }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return HttpResponse.json({ success: true, data }, { status: 200 });
+  }),
+
   http.get("*/finance/accounts", () => {
     const data = [...financeAccounts].sort((a, b) =>
       (a.createdAt || "").localeCompare(b.createdAt || ""),

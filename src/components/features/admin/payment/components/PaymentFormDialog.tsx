@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTenants } from "@/hooks/api/use-tenants";
+import { useFinanceAccountsDropdown } from "@/hooks/api/use-finance-accounts";
 import { useCreatePembayaranForm } from "@/hooks/features/admin/payments/useCreatePembayaranForm";
 import { useUpdatePembayaranForm } from "@/hooks/features/admin/payments/useUpdatePembayaranForm";
 import { monthSelectOptions } from "../constants";
@@ -46,6 +47,7 @@ export function PaymentFormDialog({
   const tenantsQuery = useTenants({ aktif: true, limit: 100 });
   const tenants = tenantsQuery?.data?.data ?? [];
   const noTenants = !tenantsQuery?.isLoading && tenants.length === 0;
+  const { data: accounts = [] } = useFinanceAccountsDropdown();
 
   const formValues = editingPayment
     ? {
@@ -232,7 +234,7 @@ export function PaymentFormDialog({
             </div>
           )}
 
-          <div className="space-y-2">
+        <div className="space-y-2">
             <Label htmlFor="catatan" className="text-label-md text-on-surface-variant">
               Catatan <span className="text-outline">(opsional)</span>
             </Label>
@@ -254,6 +256,62 @@ export function PaymentFormDialog({
               </p>
             )}
           </div>
+
+          {!editingPayment ? (
+            <div className="space-y-2">
+              <Label htmlFor="financialAccountId" className="text-label-md text-on-surface-variant">
+                Akun Keuangan
+              </Label>
+              <Select
+                items={Object.fromEntries(accounts.map((a) => [a.id, `${a.name} — ${a.type}`]))}
+                value={createForm.financialAccountId}
+                onValueChange={(v) => v !== null && createForm.setFinancialAccountId(v)}
+              >
+                <SelectTrigger className={fieldClassName} aria-invalid={!!createForm.errors.financialAccountId}>
+                  <SelectValue placeholder="Pilih akun keuangan" />
+                </SelectTrigger>
+                <SelectContent>
+                  {accounts.map((acc) => (
+                    <SelectItem key={acc.id} value={acc.id}>
+                      {acc.name} — {acc.type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {createForm.errors.financialAccountId && (
+                <p role="alert" className="text-label-sm text-destructive">
+                  {createForm.errors.financialAccountId}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Label htmlFor="financialAccountId" className="text-label-md text-on-surface-variant">
+                Akun Keuangan <span className="text-outline">(opsional)</span>
+              </Label>
+              <Select
+                items={Object.fromEntries(accounts.map((a) => [a.id, `${a.name} — ${a.type}`]))}
+                value={updateForm.financialAccountId}
+                onValueChange={(v) => v !== null && updateForm.setFinancialAccountId(v)}
+              >
+                <SelectTrigger className={fieldClassName} aria-invalid={!!updateForm.errors.financialAccountId}>
+                  <SelectValue placeholder="Biarkan kosong untuk mempertahankan akun saat ini" />
+                </SelectTrigger>
+                <SelectContent>
+                  {accounts.map((acc) => (
+                    <SelectItem key={acc.id} value={acc.id}>
+                      {acc.name} — {acc.type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {updateForm.errors.financialAccountId && (
+                <p role="alert" className="text-label-sm text-destructive">
+                  {updateForm.errors.financialAccountId}
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

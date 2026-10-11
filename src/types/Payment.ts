@@ -29,6 +29,12 @@ export default interface Payment {
   createdAt: string;
   updatedAt: string;
   paymentRecords?: PaymentRecord[];
+  financialAccountId?: string;
+  financialAccount?: {
+    id: string;
+    name: string;
+    type: string;
+  };
 }
 
 export interface CreatePaymentInput {
@@ -38,11 +44,13 @@ export interface CreatePaymentInput {
   tanggalJatuhTempo: string;
   nominal: number;
   catatan?: string;
+  financialAccountId: string;
 }
 
 export interface UpdatePaymentInput {
   tanggalJatuhTempo?: string;
   catatan?: string | null;
+  financialAccountId?: string;
 }
 
 export interface PaymentListParams {

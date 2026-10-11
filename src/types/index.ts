@@ -51,6 +51,7 @@ export type {
   CreateFinancialTransactionInput,
   UpdateFinancialTransactionInput,
   FinancialTransactionListParams,
+  FinancialAccountDropdownItem,
 } from "./finance";
 export type { AuditLogEntry, AuditLogListParams } from "./audit-log";
 export type {

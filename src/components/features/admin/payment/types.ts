@@ -11,6 +11,9 @@ export type Payment = {
   status: PaymentStatus;
   tab: PaymentTab;
   totalDibayar?: number;
+  financialAccountId?: string;
+  financialAccountName?: string;
+  financialAccountType?: string;
 };
 
 export type BroadcastLogStatus = "success" | "failed";

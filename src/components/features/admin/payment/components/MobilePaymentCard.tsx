@@ -3,6 +3,7 @@
 import { formatCurrency } from "@/lib/utils";
 import { StatusBadge } from "../StatusBadge";
 import { PaymentRowDropdown } from "./PaymentRowDropdown";
+import { Wallet } from "lucide-react";
 import type { Payment } from "../types";
 
 type MobilePaymentCardProps = {
@@ -21,6 +22,13 @@ export function MobilePaymentCard({ payment, totalDibayar = 0, onEdit }: MobileP
         <div>
           <p className="text-[18px] font-semibold text-on-surface">{payment.name}</p>
           <p className="text-label-md text-on-surface-variant">Kamar {payment.room}</p>
+          {(payment.financialAccountName || payment.financialAccountId) && (
+            <p className="text-label-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
+              <Wallet className="h-3 w-3" />
+              {payment.financialAccountName || "Akun Keuangan"}
+              {payment.financialAccountType ? ` (${payment.financialAccountType})` : ""}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-1">
           <StatusBadge

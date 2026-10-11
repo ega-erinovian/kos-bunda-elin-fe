@@ -13,11 +13,13 @@ const updatePembayaranSchema = z.object({
     .min(1, "Tanggal jatuh tempo wajib diisi")
     .refine((v) => !Number.isNaN(new Date(v).getTime()), "Tanggal jatuh tempo tidak valid"),
   catatan: z.string().optional(),
+  financialAccountId: z.string().uuid().optional(),
 });
 
 type FieldErrors = {
   tanggalJatuhTempo?: string;
   catatan?: string;
+  financialAccountId?: string;
 };
 
 export function useUpdatePembayaranForm(
@@ -31,6 +33,7 @@ export function useUpdatePembayaranForm(
 
   const [tanggalJatuhTempo, setTanggalJatuhTempoRaw] = useState("");
   const [catatan, setCatatanRaw] = useState("");
+  const [financialAccountId, setFinancialAccountIdRaw] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [prevOpen, setPrevOpen] = useState(open);
@@ -45,11 +48,12 @@ export function useUpdatePembayaranForm(
     setInitializedId(editingPayment.id);
     setTanggalJatuhTempoRaw(editingPayment.tanggalJatuhTempo);
     setCatatanRaw(editingPayment.catatan ?? "");
+    setFinancialAccountIdRaw((editingPayment as any).financialAccountId ?? "");
     setErrors({});
     setSubmitted(false);
   }
 
-  function validate(next: { tanggalJatuhTempo: string }): FieldErrors {
+  function validate(next: { tanggalJatuhTempo: string; financialAccountId?: string }): FieldErrors {
     const result = updatePembayaranSchema.safeParse({ ...next });
     if (result.success) return {};
     const fieldErrors: FieldErrors = {};
@@ -60,12 +64,14 @@ export function useUpdatePembayaranForm(
     return fieldErrors;
   }
 
-  function update(next: { tanggalJatuhTempo?: string }) {
+  function update(next: { tanggalJatuhTempo?: string; financialAccountId?: string }) {
     if (next.tanggalJatuhTempo !== undefined) setTanggalJatuhTempoRaw(next.tanggalJatuhTempo);
+    if (next.financialAccountId !== undefined) setFinancialAccountIdRaw(next.financialAccountId);
     if (submitted) {
       setErrors(
         validate({
           tanggalJatuhTempo: next.tanggalJatuhTempo ?? tanggalJatuhTempo,
+          financialAccountId: next.financialAccountId ?? financialAccountId,
         }),
       );
     }
@@ -73,11 +79,12 @@ export function useUpdatePembayaranForm(
 
   const setTanggalJatuhTempo = (v: string) => update({ tanggalJatuhTempo: v });
   const setCatatan = (v: string) => setCatatanRaw(v);
+  const setFinancialAccountId = (v: string) => update({ financialAccountId: v });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitted(true);
-    const nextErrors = validate({ tanggalJatuhTempo });
+    const nextErrors = validate({ tanggalJatuhTempo, financialAccountId });
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0 || !pembayaranId || !editingPayment) return;
 
@@ -86,6 +93,7 @@ export function useUpdatePembayaranForm(
         id: pembayaranId,
         tanggalJatuhTempo,
         ...(catatan.trim() ? { catatan: catatan.trim() } : {}),
+        ...(financialAccountId.trim() ? { financialAccountId: financialAccountId.trim() } : {}),
       },
       {
         onSuccess: () => {
@@ -111,6 +119,8 @@ export function useUpdatePembayaranForm(
     setTanggalJatuhTempo,
     catatan,
     setCatatan,
+    financialAccountId,
+    setFinancialAccountId,
     errors,
     isPending,
     isLoading: false,

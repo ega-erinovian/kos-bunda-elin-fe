@@ -77,8 +77,8 @@ export function FinanceAccountsSection() {
         ) : (
           <div className="space-y-3">
             {filtered.map((acc) => (
-              <Card key={acc.id} variant="bordered" className="p-4">
-                <div className="flex items-start justify-between gap-3">
+              <Card key={acc.id} variant="bordered" className="p-3 px-4">
+                <div className="flex items-center justify-between gap-3">
                   <div className="flex gap-3">
                     <div
                       className={`flex h-10 w-10 items-center justify-center rounded-full ${acc.type === "BANK" ? "bg-secondary-container text-on-secondary-container" : "bg-primary/10 text-primary"}`}
@@ -92,14 +92,12 @@ export function FinanceAccountsSection() {
                     <div>
                       <p className="text-label-md font-semibold text-on-surface">{acc.name}</p>
                       <p className="text-label-sm text-on-surface-variant">
-                        {accountTypeLabel(acc.type)} {acc.bankName ? `· ${acc.bankName}` : ""}
+                        {accountTypeLabel(acc.type)} {acc.bankName ? `· ${acc.bankName}` : ""}{" "}
+                        {`· ${acc.accountNumber ?? "-"}`}
                       </p>
                       <p className="mt-1 text-label-sm font-medium text-on-surface">
                         {formatCurrency(acc.openingBalance)}
                       </p>
-                      {acc.accountNumber && (
-                        <p className="text-label-sm text-on-surface-variant">{acc.accountNumber}</p>
-                      )}
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">

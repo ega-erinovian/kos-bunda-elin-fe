@@ -45,6 +45,10 @@ export function ReceivablesFilters({
       />
       <Select
         value={sortKey}
+        items={[
+          { value: "outstanding", label: "Nominal terbesar" },
+          { value: "unpaidPeriods", label: "Periode terbanyak" },
+        ]}
         onValueChange={(v) => {
           if (v !== null) onSortKeyChange(v as ReceivableSortKey);
         }}

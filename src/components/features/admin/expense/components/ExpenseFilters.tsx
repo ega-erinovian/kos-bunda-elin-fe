@@ -49,6 +49,10 @@ export function ExpenseFilters({
     <div className="flex flex-wrap items-center gap-2">
       <Select
         value={categoryId}
+        items={[
+          { value: "semua", label: "Semua Kategori" },
+          ...expenseCats.map((c) => ({ value: c.id, label: c.name })),
+        ]}
         onValueChange={(v) => {
           if (v !== null) onCategoryChange(v);
         }}
@@ -61,7 +65,7 @@ export function ExpenseFilters({
           <SelectItem value="semua">Semua Kategori</SelectItem>
           {expenseCats.map((c) => (
             <SelectItem key={c.id} value={c.id}>
-              {c.code}
+              {c.name}
             </SelectItem>
           ))}
         </SelectContent>
@@ -69,6 +73,10 @@ export function ExpenseFilters({
 
       <Select
         value={accountId}
+        items={[
+          { value: "semua", label: "Semua Akun" },
+          ...accounts.map((a) => ({ value: a.id, label: a.name })),
+        ]}
         onValueChange={(v) => {
           if (v !== null) onAccountChange(v);
         }}

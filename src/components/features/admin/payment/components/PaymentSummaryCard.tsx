@@ -131,9 +131,11 @@ export function PaymentSummaryCard({ payment }: PaymentSummaryCardProps) {
         />
         <DetailRow
           label="Akun Target"
-          value={(payment.financialAccount?.name || payment.financialAccountId)
-            ? `${payment.financialAccount?.name || "Akun Keuangan"}${payment.financialAccount?.type ? ` (${payment.financialAccount.type})` : ""}`
-            : "-"}
+          value={
+            payment.financialAccount?.name || payment.financialAccountId
+              ? `${payment.financialAccount?.name || "Akun Keuangan"}${payment.financialAccount?.type ? ` (${payment.financialAccount.type})` : ""}`
+              : "-"
+          }
           showDivider
         />
         <DetailRow label="Nominal" value={formatCurrency(nominal)} showDivider />

@@ -71,6 +71,7 @@ export function DesktopLogsSection() {
         <div className="flex items-center gap-3">
           <Select
             value={filterType}
+            items={typeFilterOptions.map((o) => ({ value: o.key, label: o.label }))}
             onValueChange={(v) => handleTypeFilterChange(v as typeof filterType)}
           >
             <SelectTrigger className="w-36 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
@@ -87,6 +88,7 @@ export function DesktopLogsSection() {
           </Select>
           <Select
             value={filterStatus}
+            items={statusFilterOptions.map((o) => ({ value: o.key, label: o.label }))}
             onValueChange={(v) => handleStatusFilterChange(v as BroadcastLogStatus | "all")}
           >
             <SelectTrigger className="w-36 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">

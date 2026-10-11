@@ -68,7 +68,15 @@ export function TransactionsReportPanel({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Select value={typeFilter} onValueChange={(v) => v && onTypeChange(v)}>
+        <Select
+          value={typeFilter}
+          items={[
+            { value: "semua", label: "Semua tipe" },
+            { value: "INCOME", label: "Pemasukan" },
+            { value: "EXPENSE", label: "Pengeluaran" },
+          ]}
+          onValueChange={(v) => v && onTypeChange(v)}
+        >
           <SelectTrigger className="w-36 border-border bg-background">
             <SelectValue placeholder="Tipe" />
           </SelectTrigger>
@@ -79,7 +87,14 @@ export function TransactionsReportPanel({
           </SelectContent>
         </Select>
 
-        <Select value={categoryFilter} onValueChange={(v) => v && onCategoryChange(v)}>
+        <Select
+          value={categoryFilter}
+          items={[
+            { value: "semua", label: "Semua kategori" },
+            ...allCats.map((c) => ({ value: c.id, label: c.name })),
+          ]}
+          onValueChange={(v) => v && onCategoryChange(v)}
+        >
           <SelectTrigger className="w-44 border-border bg-background">
             <SelectValue placeholder="Kategori" />
           </SelectTrigger>

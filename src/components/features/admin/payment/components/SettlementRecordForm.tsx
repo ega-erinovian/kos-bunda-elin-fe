@@ -71,7 +71,6 @@ export function SettlementRecordForm({
             {formatCurrency(form.remainingBalance)}
           </DialogDescription>
         </DialogHeader>
-
         <form onSubmit={form.handleSubmit} className="space-y-4">
           <div className="flex gap-4">
             <div className="flex-1 space-y-2">

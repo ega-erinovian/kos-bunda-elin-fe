@@ -25,6 +25,7 @@ const createPembayaranSchema = z.object({
     .min(1, "Nominal wajib diisi")
     .refine((v) => Number(v) > 0, "Nominal harus lebih dari 0"),
   catatan: z.string().optional(),
+  financialAccountId: z.string().min(1, "financialAccountId wajib diisi"),
 });
 
 type FieldErrors = {
@@ -34,6 +35,7 @@ type FieldErrors = {
   tanggalJatuhTempo?: string;
   nominal?: string;
   catatan?: string;
+  financialAccountId?: string;
 };
 
 type FormValues = {
@@ -42,6 +44,7 @@ type FormValues = {
   tahun: string;
   tanggalJatuhTempo: string;
   nominal: string;
+  financialAccountId: string;
 };
 
 export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: boolean) => void) {
@@ -54,6 +57,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
   const [tanggalJatuhTempo, setTanggalJatuhTempoRaw] = useState("");
   const [nominal, setNominalRaw] = useState("");
   const [catatan, setCatatanRaw] = useState("");
+  const [financialAccountId, setFinancialAccountIdRaw] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [prevOpen, setPrevOpen] = useState(open);
@@ -67,6 +71,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
       setTanggalJatuhTempoRaw("");
       setNominalRaw("");
       setCatatanRaw("");
+      setFinancialAccountIdRaw("");
       setErrors({});
       setSubmitted(false);
     }
@@ -80,6 +85,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
       tanggalJatuhTempo: next.tanggalJatuhTempo,
       nominal: next.nominal,
       catatan: next.catatan.trim() || undefined,
+      financialAccountId: next.financialAccountId,
     });
     if (result.success) return {};
     const fieldErrors: FieldErrors = {};
@@ -97,6 +103,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
     if (next.tanggalJatuhTempo !== undefined) setTanggalJatuhTempoRaw(next.tanggalJatuhTempo);
     if (next.nominal !== undefined) setNominalRaw(next.nominal);
     if (next.catatan !== undefined) setCatatanRaw(next.catatan);
+    if (next.financialAccountId !== undefined) setFinancialAccountIdRaw(next.financialAccountId);
     if (submitted) {
       setErrors(
         validate({
@@ -106,6 +113,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
           tanggalJatuhTempo: next.tanggalJatuhTempo ?? tanggalJatuhTempo,
           nominal: next.nominal ?? nominal,
           catatan: next.catatan ?? catatan,
+          financialAccountId: next.financialAccountId ?? financialAccountId,
         }),
       );
     }
@@ -117,11 +125,12 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
   const setTanggalJatuhTempo = (v: string) => update({ tanggalJatuhTempo: v });
   const setNominal = (v: string) => update({ nominal: v });
   const setCatatan = (v: string) => update({ catatan: v });
+  const setFinancialAccountId = (v: string) => update({ financialAccountId: v });
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitted(true);
-    const nextErrors = validate({ penyewaId, bulan, tahun, tanggalJatuhTempo, nominal, catatan });
+    const nextErrors = validate({ penyewaId, bulan, tahun, tanggalJatuhTempo, nominal, catatan, financialAccountId });
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -133,6 +142,7 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
         tanggalJatuhTempo,
         nominal: Number(nominal),
         ...(catatan.trim() ? { catatan: catatan.trim() } : {}),
+        financialAccountId,
       },
       {
         onSuccess: () => {
@@ -163,6 +173,8 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
     setNominal,
     catatan,
     setCatatan,
+    financialAccountId,
+    setFinancialAccountId,
     errors,
     isPending,
     handleSubmit,

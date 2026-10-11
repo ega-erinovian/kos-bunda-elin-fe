@@ -105,3 +105,9 @@ export interface FinancialTransactionListParams {
   page?: number;
   pageSize?: number;
 }
+
+export interface FinancialAccountDropdownItem {
+  id: string;
+  name: string;
+  type: FinancialAccountType;
+}

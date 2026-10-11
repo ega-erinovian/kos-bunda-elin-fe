@@ -46,6 +46,13 @@ export function PaymentDetailHeader({
             <Phone className="h-3.5 w-3.5" />
             {payment.penyewa.noHp}
           </span>
+          {(payment.financialAccount?.name || payment.financialAccountId) && (
+            <span className="inline-flex items-center gap-1">
+              <Building2 className="h-3.5 w-3.5" />
+              {payment.financialAccount?.name || "Akun Keuangan"}
+              {payment.financialAccount?.type ? ` (${payment.financialAccount.type})` : ""}
+            </span>
+          )}
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <StatusBadge status={payment.status} />

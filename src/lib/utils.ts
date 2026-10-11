@@ -141,5 +141,8 @@ export function transformApiPaymentToAdminPayment(payment: ApiPayment): AdminPay
     status,
     tab,
     totalDibayar: payment.totalDibayar,
+    financialAccountId: (payment as any).financialAccountId,
+    financialAccountName: (payment as any).financialAccount?.name ?? undefined,
+    financialAccountType: (payment as any).financialAccount?.type ?? undefined,
   };
 }

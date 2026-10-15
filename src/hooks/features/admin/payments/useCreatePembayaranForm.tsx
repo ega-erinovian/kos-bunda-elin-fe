@@ -130,7 +130,15 @@ export function useCreatePembayaranForm(open: boolean, onOpenChange: (open: bool
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitted(true);
-    const nextErrors = validate({ penyewaId, bulan, tahun, tanggalJatuhTempo, nominal, catatan, financialAccountId });
+    const nextErrors = validate({
+      penyewaId,
+      bulan,
+      tahun,
+      tanggalJatuhTempo,
+      nominal,
+      catatan,
+      financialAccountId,
+    });
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 

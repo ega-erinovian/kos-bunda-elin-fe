@@ -32,7 +32,14 @@ export function DepositFilters({
 }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Select value={penyewaId} onValueChange={(v) => v && onPenyewaChange(v)}>
+      <Select
+        value={penyewaId}
+        items={[
+          { value: "semua", label: "Semua Penghuni" },
+          ...tenants.map((t) => ({ value: t.id, label: t.nama })),
+        ]}
+        onValueChange={(v) => v && onPenyewaChange(v)}
+      >
         <SelectTrigger className="w-44 border-border bg-background">
           <SelectValue placeholder="Penghuni" />
         </SelectTrigger>
@@ -46,7 +53,11 @@ export function DepositFilters({
         </SelectContent>
       </Select>
 
-      <Select value={status} onValueChange={(v) => v && onStatusChange(v)}>
+      <Select
+        value={status}
+        items={DEPOSIT_STATUS_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+        onValueChange={(v) => v && onStatusChange(v)}
+      >
         <SelectTrigger className="w-44 border-border bg-background">
           <SelectValue placeholder="Status" />
         </SelectTrigger>

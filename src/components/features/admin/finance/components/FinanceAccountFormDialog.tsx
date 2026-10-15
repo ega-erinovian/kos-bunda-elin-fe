@@ -123,7 +123,11 @@ export function FinanceAccountFormDialog({ open, onOpenChange, editing }: Props)
 
           <div className="space-y-2">
             <Label className="text-label-md text-on-surface-variant">Tipe</Label>
-            <Select value={type} onValueChange={(v) => setType(v as FinancialAccountType)}>
+            <Select
+              value={type}
+              items={ACCOUNT_TYPE_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+              onValueChange={(v) => setType(v as FinancialAccountType)}
+            >
               <SelectTrigger className={fieldCls}>
                 <SelectValue />
               </SelectTrigger>

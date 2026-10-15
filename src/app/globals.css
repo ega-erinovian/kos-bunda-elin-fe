@@ -192,6 +192,16 @@ body {
   &::-webkit-scrollbar { display: none; }
 }
 
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-stagger-in {
+  animation: slideUpFade 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  opacity: 0;
+}
+
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { @apply font-sans; }

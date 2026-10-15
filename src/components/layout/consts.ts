@@ -14,6 +14,8 @@ import {
   Receipt,
   HandCoins,
   PiggyBank,
+  LogOut,
+  Settings,
 } from "lucide-react";
 
 export const navItems = [
@@ -31,10 +33,19 @@ export const navItems = [
   { href: "/admin/finance/audit-log", label: "Audit Log", icon: Shield },
 ];
 
+export const financeNavItems = navItems.filter((item) => item.href.startsWith("/admin/finance"));
+
+export const profileNavItems = [
+  { label: "Profile", href: "/admin/profile", icon: User },
+  { label: "Settings", href: "/admin/settings", icon: Settings },
+  { label: "Logout", icon: LogOut, variant: "destructive" as const, requiresAction: true },
+];
+
 export const mobileNavItems = [
   { href: "/admin/dashboard", label: "Home", icon: Home },
   { href: "/admin/rooms", label: "Rooms", icon: DoorOpen },
   { href: "/admin/tenants", label: "Tenants", icon: Users },
   { href: "/admin/payments", label: "History", icon: History },
+  { href: "#", label: "Finance", icon: Wallet },
   { href: "#", label: "Profile", icon: User },
 ];

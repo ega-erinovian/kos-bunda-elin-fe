@@ -234,7 +234,7 @@ export function PaymentFormDialog({
             </div>
           )}
 
-        <div className="space-y-2">
+          <div className="space-y-2">
             <Label htmlFor="catatan" className="text-label-md text-on-surface-variant">
               Catatan <span className="text-outline">(opsional)</span>
             </Label>
@@ -267,7 +267,10 @@ export function PaymentFormDialog({
                 value={createForm.financialAccountId}
                 onValueChange={(v) => v !== null && createForm.setFinancialAccountId(v)}
               >
-                <SelectTrigger className={fieldClassName} aria-invalid={!!createForm.errors.financialAccountId}>
+                <SelectTrigger
+                  className={fieldClassName}
+                  aria-invalid={!!createForm.errors.financialAccountId}
+                >
                   <SelectValue placeholder="Pilih akun keuangan" />
                 </SelectTrigger>
                 <SelectContent>
@@ -294,7 +297,10 @@ export function PaymentFormDialog({
                 value={updateForm.financialAccountId}
                 onValueChange={(v) => v !== null && updateForm.setFinancialAccountId(v)}
               >
-                <SelectTrigger className={fieldClassName} aria-invalid={!!updateForm.errors.financialAccountId}>
+                <SelectTrigger
+                  className={fieldClassName}
+                  aria-invalid={!!updateForm.errors.financialAccountId}
+                >
                   <SelectValue placeholder="Biarkan kosong untuk mempertahankan akun saat ini" />
                 </SelectTrigger>
                 <SelectContent>

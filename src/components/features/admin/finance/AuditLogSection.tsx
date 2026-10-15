@@ -53,6 +53,12 @@ export function AuditLogSection() {
     <div className="flex flex-wrap items-center gap-2">
       <Select
         value={entity}
+        items={[
+          { value: "semua", label: "Semua Entity" },
+          { value: "FinancialTransaction", label: "FinancialTransaction" },
+          { value: "FinancialAccount", label: "FinancialAccount" },
+          { value: "FinancialCategory", label: "FinancialCategory" },
+        ]}
         onValueChange={(v) => {
           if (v !== null) setEntity(v);
           resetPage();

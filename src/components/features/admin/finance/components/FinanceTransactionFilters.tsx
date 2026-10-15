@@ -49,6 +49,11 @@ export function FinanceTransactionFilters({
     <div className="flex flex-wrap items-center gap-2">
       <Select
         value={type}
+        items={[
+          { value: "semua", label: "Semua Tipe" },
+          { value: "INCOME", label: "Pemasukan" },
+          { value: "EXPENSE", label: "Pengeluaran" },
+        ]}
         onValueChange={(v) => {
           if (v !== null) onTypeChange(v);
         }}
@@ -66,6 +71,10 @@ export function FinanceTransactionFilters({
 
       <Select
         value={accountId}
+        items={[
+          { value: "semua", label: "Semua Akun" },
+          ...accounts.map((a) => ({ value: a.id, label: a.name })),
+        ]}
         onValueChange={(v) => {
           if (v !== null) onAccountChange(v);
         }}
@@ -85,6 +94,10 @@ export function FinanceTransactionFilters({
 
       <Select
         value={categoryId}
+        items={[
+          { value: "semua", label: "Semua Kategori" },
+          ...allCats.map((c) => ({ value: c.id, label: c.name })),
+        ]}
         onValueChange={(v) => {
           if (v !== null) onCategoryChange(v);
         }}
@@ -96,7 +109,7 @@ export function FinanceTransactionFilters({
           <SelectItem value="semua">Semua Kategori</SelectItem>
           {allCats.map((c) => (
             <SelectItem key={c.id} value={c.id}>
-              {c.code}
+              {c.name}
             </SelectItem>
           ))}
         </SelectContent>

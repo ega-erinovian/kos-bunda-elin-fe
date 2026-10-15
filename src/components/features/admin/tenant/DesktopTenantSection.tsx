@@ -108,6 +108,7 @@ export function DesktopTenantSection() {
         <div className="flex items-center gap-3">
           <Select
             value={filterStatus}
+            items={filterOptions.map((o) => ({ value: o.key, label: o.label }))}
             onValueChange={(v) => handleFilterStatusChange(v as typeof filterStatus)}
           >
             <SelectTrigger className="w-38.75 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">

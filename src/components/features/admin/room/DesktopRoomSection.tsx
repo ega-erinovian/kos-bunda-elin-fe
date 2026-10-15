@@ -91,6 +91,7 @@ export function DesktopRoomSection() {
         <div className="flex items-center gap-3">
           <Select
             value={filterStatus}
+            items={statusFilterOptions.map((o) => ({ value: o.key, label: o.label }))}
             onValueChange={(v) => handleFilterStatusChange(v as typeof filterStatus)}
           >
             <SelectTrigger className="w-35 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">
@@ -107,6 +108,7 @@ export function DesktopRoomSection() {
           </Select>
           <Select
             value={filterFloor === "semua" ? "semua" : String(filterFloor)}
+            items={floorOptions.map((o) => ({ value: String(o.key), label: o.label }))}
             onValueChange={(v) => handleFilterFloorChange(v === "semua" ? "semua" : Number(v))}
           >
             <SelectTrigger className="w-38.75 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground">

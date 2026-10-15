@@ -70,7 +70,18 @@ export function PaymentRecordForm({
               <Label htmlFor="paymentMethod" className="text-label-sm font-medium">
                 Metode Pembayaran
               </Label>
-              <Select name="paymentMethod" required defaultValue="CASH">
+              <Select
+                name="paymentMethod"
+                required
+                defaultValue="CASH"
+                items={[
+                  { value: "CASH", label: "Tunai / Cash" },
+                  { value: "BANK_TRANSFER", label: "Transfer Bank" },
+                  { value: "QRIS", label: "QRIS" },
+                  { value: "E_WALLET", label: "E-Wallet" },
+                  { value: "OTHER", label: "Lainnya" },
+                ]}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -152,7 +163,13 @@ export function PaymentRecordForm({
             <Label htmlFor="financialAccountId" className="text-label-sm font-medium">
               Akun Keuangan (Opsional)
             </Label>
-            <Select name="financialAccountId">
+            <Select
+              name="financialAccountId"
+              items={accounts.map((acc) => ({
+                value: acc.id,
+                label: `${acc.name} — ${acc.type}`,
+              }))}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Pilih akun (default: Cash)" />
               </SelectTrigger>

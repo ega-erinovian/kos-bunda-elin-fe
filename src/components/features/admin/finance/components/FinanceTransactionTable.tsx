@@ -32,7 +32,7 @@ export function FinanceTransactionTable({
     <>
       <div className="flex bg-muted/50 px-6 text-label-md text-muted-foreground">
         <div className="w-32 py-4">Tanggal</div>
-        <div className="w-28 py-4">Tipe / Sumber</div>
+        <div className="w-40 py-4">Tipe / Sumber</div>
         <div className="w-32 py-4">Akun</div>
         <div className="w-36 py-4">Kategori</div>
         <div className="w-36 py-4">Nominal</div>
@@ -60,7 +60,7 @@ export function FinanceTransactionTable({
                 </Badge>
               )}
             </div>
-            <div className="w-28">
+            <div className="w-40">
               <Badge
                 variant={tx.type === "INCOME" ? "secondary" : "destructive"}
                 className="text-label-sm"
@@ -76,14 +76,14 @@ export function FinanceTransactionTable({
             <div className="w-36 text-label-md font-semibold text-on-surface">
               {formatCurrency(tx.amount)}
             </div>
-            <div className="flex-1 truncate pr-4 text-label-sm text-on-surface-variant">
+            <div className="flex-1 text-wrap pr-4 text-label-sm text-on-surface-variant">
               {tx.description || "-"}
               {tx.referenceNumber ? ` · ${tx.referenceNumber}` : ""}
             </div>
             <div className="flex w-28 justify-end gap-1">
               <button
                 onClick={() => onEdit(tx)}
-                className="rounded-lg p-2 text-on-surface-variant hover:text-primary"
+                className="rounded-lg p-2 text-on-surface-variant hover:text-primary cursor-pointer"
                 aria-label="Edit"
               >
                 <Pencil className="h-4 w-4" />
@@ -92,7 +92,7 @@ export function FinanceTransactionTable({
                 <button
                   onClick={() => onReverse(tx)}
                   disabled={reversed}
-                  className="rounded-lg p-2 text-on-surface-variant hover:text-destructive disabled:opacity-40"
+                  className="rounded-lg p-2 text-on-surface-variant hover:text-destructive disabled:opacity-40 cursor-pointer"
                   aria-label="Reversal"
                   title={reversed ? "Sudah direversal" : "Reversal (OWNER)"}
                 >
@@ -101,7 +101,7 @@ export function FinanceTransactionTable({
               ) : null}
               <button
                 onClick={() => onDelete(tx.id)}
-                className="rounded-lg p-2 text-on-surface-variant hover:text-destructive"
+                className="rounded-lg p-2 text-on-surface-variant hover:text-destructive cursor-pointer"
                 title={isOwner ? "Hapus (OWNER)" : "Hapus"}
                 aria-label="Hapus"
               >

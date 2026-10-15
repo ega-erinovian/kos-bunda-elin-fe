@@ -85,7 +85,11 @@ export function DepositReceiveDialog({ open, onOpenChange, tenants }: Props) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label className="text-label-md text-on-surface-variant">Penghuni *</Label>
-            <Select value={penyewaId} onValueChange={(v) => v && setPenyewaId(v)}>
+            <Select
+              value={penyewaId}
+              items={sorted.map((t) => ({ value: t.id, label: t.nama }))}
+              onValueChange={(v) => v && setPenyewaId(v)}
+            >
               <SelectTrigger className={fieldCls}>
                 <SelectValue placeholder="Pilih penghuni" />
               </SelectTrigger>

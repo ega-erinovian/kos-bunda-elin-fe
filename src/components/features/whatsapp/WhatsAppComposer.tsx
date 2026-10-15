@@ -143,6 +143,10 @@ export function WhatsAppComposer({
               <label className="text-label-md font-medium text-on-surface">Template Pesan</label>
               <Select
                 value={templateId}
+                items={[
+                  ...WHATSAPP_TEMPLATES.map((t) => ({ value: t.id, label: t.label })),
+                  { value: "custom", label: "Custom — tulis manual" },
+                ]}
                 onValueChange={(v) => setTemplateId(v as WhatsAppTemplateId)}
               >
                 <SelectTrigger className="w-full border-outline-variant bg-surface-container-lowest">

@@ -116,6 +116,10 @@ export function FinanceTransactionFormDialog({ open, onOpenChange }: Props) {
             <Label className="text-label-md text-on-surface-variant">Sumber</Label>
             <Select
               value={source}
+              items={[
+                { value: "MANUAL_INCOME", label: "Pemasukan Manual" },
+                { value: "MANUAL_EXPENSE", label: "Pengeluaran Manual" },
+              ]}
               onValueChange={(v) => {
                 if (v !== null) setSource(v as any);
               }}
@@ -135,6 +139,7 @@ export function FinanceTransactionFormDialog({ open, onOpenChange }: Props) {
               <Label className="text-label-md text-on-surface-variant">Akun</Label>
               <Select
                 value={accountId}
+                items={sortedAccounts.map((a) => ({ value: a.id, label: a.name }))}
                 onValueChange={(v) => {
                   if (v !== null) setAccountId(v);
                 }}
@@ -157,6 +162,7 @@ export function FinanceTransactionFormDialog({ open, onOpenChange }: Props) {
               </Label>
               <Select
                 value={categoryId}
+                items={sortedCats.map((c) => ({ value: c.id, label: `${c.code} — ${c.name}` }))}
                 onValueChange={(v) => {
                   if (v !== null) setCategoryId(v);
                 }}

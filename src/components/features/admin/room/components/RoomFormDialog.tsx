@@ -81,7 +81,11 @@ export function RoomFormDialog({ open, onOpenChange, editingRoomId = null }: Roo
 
           <div className="space-y-2">
             <Label className="text-label-md text-on-surface-variant">Lantai</Label>
-            <Select value={lantai} onValueChange={(v) => v !== null && setLantai(v)}>
+            <Select
+              value={lantai}
+              items={floorSelectOptions.map((o) => ({ value: o.key, label: o.label }))}
+              onValueChange={(v) => v !== null && setLantai(v)}
+            >
               <SelectTrigger className={fieldClassName}>
                 <SelectValue />
               </SelectTrigger>
@@ -118,7 +122,11 @@ export function RoomFormDialog({ open, onOpenChange, editingRoomId = null }: Roo
 
           <div className="space-y-2">
             <Label className="text-label-md text-on-surface-variant">Status</Label>
-            <Select value={status} onValueChange={(v) => v !== null && setStatus(v as RoomStatus)}>
+            <Select
+              value={status}
+              items={statusSelectOptions.map((o) => ({ value: o.key, label: o.label }))}
+              onValueChange={(v) => v !== null && setStatus(v as RoomStatus)}
+            >
               <SelectTrigger className={fieldClassName}>
                 <SelectValue />
               </SelectTrigger>

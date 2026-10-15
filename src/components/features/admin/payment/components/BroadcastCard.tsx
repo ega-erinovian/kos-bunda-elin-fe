@@ -22,7 +22,10 @@ export function BroadcastCard() {
       <form className="flex flex-1 flex-col space-y-4" onSubmit={(e) => e.preventDefault()}>
         <div className="space-y-2">
           <label className="text-label-md text-on-surface-variant">Target Audience</label>
-          <Select defaultValue="semua">
+          <Select
+            defaultValue="semua"
+            items={targetAudienceOptions.map((opt) => ({ value: opt.value, label: opt.label }))}
+          >
             <SelectTrigger className="w-full border-outline-variant bg-surface-container-lowest">
               <SelectValue />
             </SelectTrigger>

@@ -180,7 +180,11 @@ export function ExpenseFormDialog({ open, onOpenChange, editing }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label className="text-label-md text-on-surface-variant">Akun *</Label>
-                  <Select value={accountId} onValueChange={(v) => v && setAccountId(v)}>
+                  <Select
+                    value={accountId}
+                    items={sortedAccounts.map((a) => ({ value: a.id, label: a.name }))}
+                    onValueChange={(v) => v && setAccountId(v)}
+                  >
                     <SelectTrigger className={fieldCls}>
                       <SelectValue placeholder="Pilih akun" />
                     </SelectTrigger>
@@ -197,7 +201,11 @@ export function ExpenseFormDialog({ open, onOpenChange, editing }: Props) {
                   <Label className="text-label-md text-on-surface-variant">
                     Kategori (EXPENSE) *
                   </Label>
-                  <Select value={categoryId} onValueChange={(v) => v && setCategoryId(v)}>
+                  <Select
+                    value={categoryId}
+                    items={sortedCats.map((c) => ({ value: c.id, label: `${c.code} — ${c.name}` }))}
+                    onValueChange={(v) => v && setCategoryId(v)}
+                  >
                     <SelectTrigger className={fieldCls}>
                       <SelectValue placeholder="Pilih kategori" />
                     </SelectTrigger>

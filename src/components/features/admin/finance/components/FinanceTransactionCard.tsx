@@ -34,9 +34,9 @@ export function FinanceTransactionCard({
   return (
     <Card variant="bordered" className={`p-4 ${highlighted ? "ring-2 ring-primary" : ""}`}>
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
+        <div className="min-w-0 space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant={tx.type === "INCOME" ? "secondary" : "destructive"}>{tx.type}</Badge>
+            <Badge variant={tx.type === "INCOME" ? "secondary" : "destructive"}>{tx.type}</Badge> -
             <span className="text-label-sm text-on-surface-variant">
               {transactionSourceLabel(tx.source)}
             </span>
@@ -46,7 +46,7 @@ export function FinanceTransactionCard({
               </Badge>
             )}
           </div>
-          <p className="mt-2 text-label-md font-semibold text-on-surface">
+          <p className="mt-2 text-lg font-semibold text-on-surface">
             {formatCurrency(tx.amount)}
           </p>
           <p className="text-label-sm text-on-surface-variant">
@@ -62,7 +62,7 @@ export function FinanceTransactionCard({
             </p>
           )}
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 self-end">
           <button
             onClick={onEdit}
             className="rounded-lg p-2 text-on-surface-variant hover:text-primary"

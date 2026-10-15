@@ -116,7 +116,14 @@ export function FinanceCategoryFormDialog({
           {!isEditing && (
             <div className="space-y-2">
               <Label className="text-label-md text-on-surface-variant">Tipe</Label>
-              <Select value={type} onValueChange={(v) => setType(v as CategoryType)}>
+              <Select
+                value={type}
+                items={[
+                  { value: "INCOME", label: "Pemasukan" },
+                  { value: "EXPENSE", label: "Pengeluaran" },
+                ]}
+                onValueChange={(v) => setType(v as CategoryType)}
+              >
                 <SelectTrigger className={fieldCls}>
                   <SelectValue />
                 </SelectTrigger>

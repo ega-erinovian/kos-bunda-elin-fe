@@ -20,7 +20,7 @@ export function ReceivablesSummaryCards({ summary, isLoading }: Props) {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">
         {Array.from({ length: 3 }).map((_, i) => (
           <Card key={i} className="animate-pulse p-6">
-            <div className="h-4 w-24 rounded bg-surface-container-highest" />
+            <div className="h-4 w-24 rounded bg-red-50" />
           </Card>
         ))}
       </div>
@@ -29,21 +29,21 @@ export function ReceivablesSummaryCards({ summary, isLoading }: Props) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 md:hidden">
+      <div className="grid gap-3 md:hidden">
         <MobileMetricCard
           label="Total Piutang"
           value={formatCurrency(summary?.totalOutstanding ?? 0)}
           icon={Wallet}
           iconWrapper="bg-error-container text-on-error-container"
-          className="bg-card"
+          className="bg-red-50 border border-red-200"
           accent={false}
         />
         <MobileMetricCard
           label="Periode Belum Bayar"
           value={`${summary?.unpaidPeriodCount ?? 0}`}
           icon={CalendarClock}
-          iconWrapper="bg-surface-container-high text-on-surface-variant"
-          className="bg-card"
+          iconWrapper="bg-primary/20 text-on-surface-variant"
+          className="bg-primary/15 border border-primary/20"
           accent={false}
         />
       </div>
